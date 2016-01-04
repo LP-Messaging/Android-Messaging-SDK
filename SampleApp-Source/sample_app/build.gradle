@@ -1,0 +1,37 @@
+apply plugin: 'com.android.application'
+apply plugin: 'testfairy'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
+
+    defaultConfig {
+        applicationId "com.messaging.sample.app"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+dependencies {
+    compile(name: 'lp_messaging', ext: 'aar')
+//    compile project(':messaging_sdk')
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.koushikdutta.async:androidasync:2.1.6'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.google.android.gms:play-services-gcm:8.1.0'
+    compile 'com.facebook.fresco:fresco:0.8.0'
+}
