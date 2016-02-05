@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="brand_name">T-Mobile</string>
+
+    <color name="conversation_background">#ffffff</color>
+
+    <!-- agent bubble-->
+    <dimen name="agent_bubble_stroke_width">2px</dimen>
+    <color name="agent_bubble_stroke_color">#E20074</color>
+    <color name="agent_bubble_message_text_color">#ffffff</color>
+    <color name="agent_bubble_message_link_text_color">#0000ee</color>
+    <color name="agent_bubble_timestamp_text_color">#9B9B9B</color>
+    <color name="agent_bubble_background_color">#E20074</color>
+
+    <!--visitor bubble-->
+    <!--<item name="visitor_bubble_stroke_width" format="integer" type="dimen">2</item>
+    <color name="visitor_bubble_stroke_color">#CECECE</color>-->
+    <color name="visitor_bubble_message_text_color">#555555</color>
+    <color name="visitor_bubble_message_link_text_color">#0000ee</color>
+    <color name="visitor_bubble_timestamp_text_color">#9B9B9B</color>
+    <color name="visitor_bubble_background_color">#CECECE</color>
+
+    <!-- system bubble-->
+    <color name="system_bubble_text_color">#555555</color>
+
+    <!-- icons visibility -->
+    <integer name="message_receive_icons">0</integer>
+
+    <color name="visitor_bubble_state_text_color">#555555</color>
+
+    <integer name="time_out">40000</integer>
+
+    <string name="custom_button_icon_name">t_mobile_call_icon</string>
+    <string name="custom_button_icon_description">call</string>
+
+    <string name="notification_large_icon_name">ic_launcher</string>
+    <!--When you send a message there is a popup that tells you how long it will take the agent to respond.-->
+    <!--There are two options: Show the popup as the message is sent(TRUE) or only show the message when user return to the screen(FALSE).-->
+    <bool name="disableTTRPopup">false</bool>
+
+    <string name="language">en</string>
+    <string name="country"></string>
+
+</resources>
