@@ -1,4 +1,4 @@
-package com.liveperson.messaging.sdk.bootstrap;
+package com.liveperson.messaging.sdk.api;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,14 +7,18 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.liveperson.api.LivePersonCallback;
+import com.liveperson.infra.ICallback;
 import com.liveperson.infra.InfraController;
+import com.liveperson.infra.database.DataBaseCommand;
 import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.infra.messaging_ui.MessagingUiController;
 import com.liveperson.infra.model.Notifications;
 import com.liveperson.messaging.MessagingController;
 import com.liveperson.messaging.model.Conversation;
+import com.liveperson.messaging.model.MessagingUserProfile;
 import com.liveperson.messaging.model.UserProfileBundle;
 import com.liveperson.messaging.sdk.BuildConfig;
+import com.liveperson.messaging.model.AgentData;
 
 /**
  * LivePerson Messaging SDK entry point.
@@ -207,30 +211,50 @@ public class LivePerson {
      *
      * @return
      */
-    //TODO [dudu] - getConv with target
-    public static boolean checkActiveConversation() {
+    public static void checkActiveConversation(final ICallback<Boolean, Exception> callback) {
         if (!isValidState()) {
-            return false;
+            callback.onError(new Exception("SDK not initialized"));
+            return;
+        }else {
+            MessagingController.getInstance().checkActiveConversation(mBrandId, callback);
         }
-        Conversation conversation = MessagingController.getInstance().amsConversations.getConversation(mBrandId);
-        return conversation != null && conversation.isConversationOpen();
+    }
+
+    /**
+     * return the agent data(first name, last name, email, avatarURL) in case we have an active conversation
+     * or null otherwise
+     *
+     * @param callback
+     */
+    public static void checkAgentID(final ICallback<AgentData, Exception> callback){
+        if (!isValidState()) {
+            callback.onError(new Exception("SDK not initialized"));
+            return;
+        }else {
+            MessagingController.getInstance().checkAgentID(mBrandId, callback);
+        }
+    }
+
+    public static void markConversationAsUrgent() {
+        if (!isValidState()) {
+            return;
+        }
+        MessagingController.getInstance().markConversationAsUrgent(mBrandId);
+    }
+
+    public static void markConversationAsNormal() {
+        if (!isValidState()) {
+            return;
+        }
+        MessagingController.getInstance().markConversationAsNormal(mBrandId);
     }
 
 
-    //  public static void checkAgentID(ICallback<AgentData, Throwable> callback){}
-    public static boolean markConversationAsUrgent() {
+    public static void resolveConversation() {
         if (!isValidState()) {
-            return false;
-        }
-        return MessagingController.getInstance().toggleTtrType(mBrandId);
-    }
-
-    public static boolean resolveConversation() {
-        if (!isValidState()) {
-            return false;
+            return;
         }
         MessagingController.getInstance().resolveConversation(mBrandId);
-        return true;
     }
 
     private static boolean isValidState() {
