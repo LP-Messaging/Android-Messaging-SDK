@@ -15,7 +15,7 @@
  */
 
 
-package com.liveperson.messagingtest.pusher;
+package com.liveperson.sample.app.pusher;
 
 import android.content.Intent;
 

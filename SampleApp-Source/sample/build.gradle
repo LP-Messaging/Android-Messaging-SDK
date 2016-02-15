@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId "com.liveperson.messagingtest"
+        applicationId "com.liveperson.sample.app"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
@@ -18,10 +18,9 @@ android {
     }
     productFlavors {
     }
-
     repositories {
         flatDir {
-            dirs project(':lp_messaging').file('aars')
+            dirs project(':lp_messaging_sdk').file('aars')
         }
     }
 }
@@ -31,5 +30,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.google.android.gms:play-services-gcm:8.1.0'
-    compile project(':lp_messaging')
+    compile project(':lp_messaging_sdk')
 }

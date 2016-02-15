@@ -1,7 +1,10 @@
-package com.liveperson.messagingtest;
+package com.liveperson.sample.app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -9,40 +12,34 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.liveperson.api.LivePersonCallback;
+import com.liveperson.infra.InternetConnectionService;
+import com.liveperson.infra.LocalBroadcastReceiver;
 import com.liveperson.messaging.TaskType;
-import com.liveperson.messaging.sdk.bootstrap.LivePerson;
-import com.liveperson.messagingtest.account.AccountStorage;
-import com.liveperson.messagingtest.account.UserProfileStorage;
-import com.liveperson.messagingtest.pusher.RegistrationIntentService;
+import com.liveperson.messaging.sdk.api.LivePerson;
+import com.liveperson.sample.app.account.AccountStorage;
+import com.liveperson.sample.app.account.UserProfileStorage;
+import com.liveperson.sample.app.pusher.RegistrationIntentService;
 
-public class MessagingTestActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = CustomActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private EditText mAccountTextView;
     private EditText mFirstNameView;
     private EditText mLastNameView;
     private EditText mPhoneNumberView;
     private CheckBox mIdpCheckBox;
-
     private TextView mSdkVersion;
+    private LocalBroadcastReceiver mLocalBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         initAccount();
         initOpenConversationButton();
         initStartFragmentButton();
-    }
-
-    private void initPusher() {
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
     }
 
     private void initAccount() {
@@ -62,7 +59,7 @@ public class MessagingTestActivity extends AppCompatActivity {
         mIdpCheckBox = (CheckBox) findViewById(R.id.idp_checkbox);
 
         String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
-        mSdkVersion = (TextView)findViewById(R.id.sdk_version);
+        mSdkVersion = (TextView) findViewById(R.id.sdk_version);
         mSdkVersion.setText(sdkVersion);
     }
 
@@ -75,42 +72,28 @@ public class MessagingTestActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onInAppMessageReceived(String agentName, String brandId, String message) {
-
-            }
-
-            @Override
-            public void onInitProcessFailed(InitFailedReasons error) {
-
-            }
-
-            @Override
-            public void onServerConnectionError() {
-
-            }
-
-            @Override
-            public void onTokenRequestError() {
-
-            }
-
-            @Override
-            public void logEvent(String log) {
-
-            }
-
-            @Override
-            public void onSdkVersionNotCompatible() {
-
-            }
-
-            @Override
             public void onError(TaskType type, String message) {
-                Toast.makeText(MessagingTestActivity.this, type.name() + " problem ", Toast.LENGTH_LONG);
+                Toast.makeText(MainActivity.this, type.name() + " problem ", Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onInvalidToken() {
+                Toast.makeText(MainActivity.this, "onInvalidToken", Toast.LENGTH_LONG).show();
+            }
+
+/*            @Override
+            public void onConversationStarted() {
+                Toast.makeText(MainActivity.this, "onConversationStarted", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onConversationResolved() {
+                Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
+            }*/
         });
         // you can't register pusher before initialization
-        initPusher();
+        handleGCMRegistration();
+        registerConnection();
     }
 
     private void saveAccount() {
@@ -121,6 +104,7 @@ public class MessagingTestActivity extends AppCompatActivity {
         String phoneNumber = mPhoneNumberView.getText().toString().trim();
 
         LivePerson.initialize(this, account);
+
         AccountStorage.getInstance(this).setAccount(account);
         UserProfileStorage.getInstance(this).setFirstName(firstName);
         UserProfileStorage.getInstance(this).setLastName(lastName);
@@ -132,10 +116,12 @@ public class MessagingTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 prepare();
-                if(mIdpCheckBox.isChecked()){
-                    LivePerson.showConversation(MessagingTestActivity.this, AccountStorage.getInstance(MessagingTestActivity.this).getAccount());
-                }else{
-                    LivePerson.showConversation(MessagingTestActivity.this);
+
+                if (mIdpCheckBox.isChecked()) {
+                    ////authenticated flow
+                    LivePerson.showConversation(MainActivity.this, AccountStorage.getInstance(MainActivity.this).getAccount());
+                } else {
+                    LivePerson.showConversation(MainActivity.this);
                 }
                 LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, mFirstNameView.getText().toString(), mLastNameView.getText().toString(), mPhoneNumberView.getText().toString());
             }
@@ -147,11 +133,33 @@ public class MessagingTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 prepare();
-                Intent in = new Intent(MessagingTestActivity.this, CustomActivity.class);
-                in.putExtra(CustomActivity.ACCOUNT_ID, AccountStorage.getInstance(MessagingTestActivity.this).getAccount());
+                Intent in = new Intent(MainActivity.this, CustomActivity.class);
+                in.putExtra(CustomActivity.ACCOUNT_ID, AccountStorage.getInstance(MainActivity.this).getAccount());
                 startActivity(in);
                 LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, mFirstNameView.getText().toString(), mLastNameView.getText().toString(), mPhoneNumberView.getText().toString());
             }
         });
+    }
+
+
+    private void registerConnection() {
+        mLocalBroadcastReceiver = new LocalBroadcastReceiver.Builder()
+                .addAction(InternetConnectionService.BROADCAST_INTERNET_CONNECTION_CONNECTED)
+                .build(new LocalBroadcastReceiver.IOnReceive() {
+                    @Override
+                    public void onBroadcastReceived(Context context, Intent intent) {
+                        handleGCMRegistration();
+                    }
+                });
+    }
+
+
+    private void handleGCMRegistration(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isTokenSent = sharedPreferences.getBoolean(RegistrationIntentService.SENT_TOKEN_TO_SERVER, false);
+        if(!isTokenSent){
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
     }
 }

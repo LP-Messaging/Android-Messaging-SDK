@@ -15,7 +15,7 @@
  */
 
 
-package com.liveperson.messagingtest.pusher;
+package com.liveperson.sample.app.pusher;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -26,13 +26,13 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.liveperson.messaging.sdk.bootstrap.LivePerson;
-import com.liveperson.messagingtest.account.AccountStorage;
+import com.liveperson.messaging.sdk.api.LivePerson;
+import com.liveperson.sample.app.account.AccountStorage;
 
 public class RegistrationIntentService extends IntentService {
 
-    private static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
-    private static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};

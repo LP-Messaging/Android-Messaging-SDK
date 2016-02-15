@@ -1,4 +1,4 @@
-package com.liveperson.messagingtest.account;
+package com.liveperson.sample.app.account;
 
 import android.content.Context;
 import android.content.SharedPreferences;
