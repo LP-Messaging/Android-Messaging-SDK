@@ -8,17 +8,15 @@ import android.text.TextUtils;
 
 import com.liveperson.api.LivePersonCallback;
 import com.liveperson.infra.ICallback;
-import com.liveperson.infra.InfraController;
-import com.liveperson.infra.database.DataBaseCommand;
+import com.liveperson.infra.Infra;
+import com.liveperson.infra.InitLivePersonCallBack;
 import com.liveperson.infra.log.LPMobileLog;
-import com.liveperson.infra.messaging_ui.MessagingUiController;
+import com.liveperson.infra.messaging_ui.MessagingUi;
 import com.liveperson.infra.model.Notifications;
-import com.liveperson.messaging.MessagingController;
-import com.liveperson.messaging.model.Conversation;
-import com.liveperson.messaging.model.MessagingUserProfile;
+import com.liveperson.messaging.Messaging;
+import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.model.UserProfileBundle;
 import com.liveperson.messaging.sdk.BuildConfig;
-import com.liveperson.messaging.model.AgentData;
 
 /**
  * LivePerson Messaging SDK entry point.
@@ -42,21 +40,22 @@ public class LivePerson {
      *
      * @param context Application or activity context
      */
-    public static void initialize(Context context, String brandId) {
+    public static void initialize(Context context, String brandId, InitLivePersonCallBack initCallBack) {
         if (initialized) {
+            initCallBack.onInitSucceed();
             return;
         }
         initialized = true;
         mBrandId = brandId;
-        InfraController.instance.init(context, SdkEntryPointProcess.class);
+        Infra.instance.init(context, SdkEntryPointProcess.class, initCallBack);
     }
 
-    public static class SdkEntryPointProcess extends InfraController.EntryPoint {
+    public static class SdkEntryPointProcess extends Infra.EntryPoint {
 
         @Override
         protected void init() {
-            MessagingController.getInstance().init();
-            MessagingUiController.getInstance().init(getContext());
+            Messaging.getInstance().init();
+            MessagingUi.getInstance().init(getContext());
         }
     }
 
@@ -82,7 +81,7 @@ public class LivePerson {
         if (!isValidState()) {
             return false;
         }
-        return MessagingUiController.getInstance().showConversation(activity, mBrandId, authenticationKey);
+        return MessagingUi.getInstance().showConversation(activity, mBrandId, authenticationKey);
     }
 
     /**
@@ -94,7 +93,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingUiController.getInstance().hideConversation(activity);
+        MessagingUi.getInstance().hideConversation(activity);
     }
 
     /**
@@ -114,7 +113,7 @@ public class LivePerson {
         if (!isValidState()) {
             return null;
         }
-        return MessagingUiController.getInstance().getConversationFragment(mBrandId, authKey);
+        return MessagingUi.getInstance().getConversationFragment(mBrandId, authKey);
     }
 
     /**
@@ -127,7 +126,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingController.getInstance().registerPusher(brandId, appId, gcmToken);
+        Messaging.getInstance().registerPusher(brandId, appId, gcmToken);
     }
 
     /**
@@ -140,7 +139,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingController.getInstance().unregisterPusher(brandId, appId);
+        Messaging.getInstance().unregisterPusher(brandId, appId);
     }
 
     /**
@@ -165,7 +164,7 @@ public class LivePerson {
             return;
         }
 
-        InfraController.instance.init(ctx, SdkEntryPointProcess.class);
+        Infra.instance.init(ctx, SdkEntryPointProcess.class, null);
         String message = data.getString("message");
 
         //TODO: Need to init only the push receiver and context
@@ -182,7 +181,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingController.getInstance().setCallback(listener);
+        Messaging.getInstance().setCallback(listener);
     }
 
     /**
@@ -192,7 +191,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingController.getInstance().removeCallback();
+        Messaging.getInstance().removeCallback();
     }
 
     /**
@@ -203,7 +202,7 @@ public class LivePerson {
             return;
         }
         UserProfileBundle userProfileBundle = new UserProfileBundle(firstName, lastName, phone);
-        MessagingController.getInstance().sendUserProfile(mBrandId, appId, userProfileBundle);
+        Messaging.getInstance().sendUserProfile(mBrandId, appId, userProfileBundle);
     }
 
     /**
@@ -216,7 +215,7 @@ public class LivePerson {
             callback.onError(new Exception("SDK not initialized"));
             return;
         }else {
-            MessagingController.getInstance().checkActiveConversation(mBrandId, callback);
+            Messaging.getInstance().checkActiveConversation(mBrandId, callback);
         }
     }
 
@@ -231,7 +230,7 @@ public class LivePerson {
             callback.onError(new Exception("SDK not initialized"));
             return;
         }else {
-            MessagingController.getInstance().checkAgentID(mBrandId, callback);
+            Messaging.getInstance().checkAgentID(mBrandId, callback);
         }
     }
 
@@ -239,14 +238,14 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingController.getInstance().markConversationAsUrgent(mBrandId);
+        Messaging.getInstance().markConversationAsUrgent(mBrandId);
     }
 
     public static void markConversationAsNormal() {
         if (!isValidState()) {
             return;
         }
-        MessagingController.getInstance().markConversationAsNormal(mBrandId);
+        Messaging.getInstance().markConversationAsNormal(mBrandId);
     }
 
 
@@ -254,7 +253,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingController.getInstance().resolveConversation(mBrandId);
+        Messaging.getInstance().resolveConversation(mBrandId);
     }
 
     private static boolean isValidState() {
@@ -263,12 +262,30 @@ public class LivePerson {
 
     /**
      * Close LivePerson Messaging SDK
+     * Uninitialized SDK without cleaning data.
+     * This does not handle the screen. To close the Activity call @hideConversation BEFORE shutdown
      */
     public static void shutDown() {
-        //TODO: Need to fully implement
+        if (!initialized) {
+            return;
+        }
+        Messaging.getInstance().shutDown();
+        MessagingUi.getInstance().shutDown();
+        Infra.instance.shutDown();
+        mBrandId = null;
         initialized = false;
-        MessagingController.getInstance().shutDown();
-        MessagingUiController.getInstance().shutDown();
-        InfraController.instance.shutDown();
+        LPMobileLog.d(TAG, "Finished ShutDown");
+    }
+
+    /**
+     * Clean LivePerson Messaging SDK data
+     * This does not handle the screen. To close the Activity call @hideConversation BEFORE logout
+     */
+    private static void logOut(String appID){
+        unregisterLPPusher(mBrandId, appID);
+      /*  MessagingController.getInstance().clear();
+        MessagingUiController.getInstance().clear();*/
+        shutDown();
+        Infra.instance.clear();
     }
 }
