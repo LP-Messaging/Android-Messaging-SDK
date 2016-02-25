@@ -116,7 +116,20 @@ public class LivePerson {
         return MessagingUi.getInstance().getConversationFragment(mBrandId, authKey);
     }
 
-    /**
+	/**
+	 * Reconnect with new authentication key
+	 * @param authKey the authentication key to connect with
+	 */
+	public static void reconnect(String authKey) {
+
+		if (!isValidState()) {
+			return;
+		}
+
+		Messaging.getInstance().reconnect(mBrandId, authKey);
+	}
+
+	/**
      * Register LivePerson pusher service
      *
      * @param brandId

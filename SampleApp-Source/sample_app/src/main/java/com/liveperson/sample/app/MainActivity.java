@@ -17,6 +17,7 @@ import com.liveperson.infra.InitLivePersonCallBack;
 import com.liveperson.infra.InternetConnectionService;
 import com.liveperson.infra.LocalBroadcastReceiver;
 import com.liveperson.messaging.TaskType;
+import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.account.AccountStorage;
 import com.liveperson.sample.app.account.UserProfileStorage;
@@ -75,12 +76,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onError(TaskType type, String message) {
                 Toast.makeText(MainActivity.this, type.name() + " problem ", Toast.LENGTH_LONG).show();
-            }
+
+			}
 
             @Override
-            public void onInvalidToken() {
-                Toast.makeText(MainActivity.this, "onInvalidToken", Toast.LENGTH_LONG).show();
-            }
+            public void onTokenExpired(String brandId) {
+                Toast.makeText(MainActivity.this, "onTokenExpired brand " + brandId, Toast.LENGTH_LONG).show();
+
+				// Change authentication key here
+				LivePerson.reconnect(AccountStorage.getInstance(MainActivity.this).getAccount());
+			}
 
             @Override
             public void onConversationStarted() {
@@ -90,6 +95,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onConversationResolved() {
                 Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAgentDetailsChanged(AgentData agentData) {
+                Toast.makeText(MainActivity.this, "Agent Details Changed "+ agentData, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCsatDismissed() {
+                Toast.makeText(MainActivity.this, "on Csat Dismissed", Toast.LENGTH_LONG).show();
             }
         });
         // you can't register pusher before initialization
@@ -104,12 +119,13 @@ public class MainActivity extends AppCompatActivity {
         String lastName = mLastNameView.getText().toString().trim();
         String phoneNumber = mPhoneNumberView.getText().toString().trim();
 
-        LivePerson.initialize(this, account, callBack);
-
         AccountStorage.getInstance(this).setAccount(account);
         UserProfileStorage.getInstance(this).setFirstName(firstName);
         UserProfileStorage.getInstance(this).setLastName(lastName);
         UserProfileStorage.getInstance(this).setPhoneNumber(phoneNumber);
+
+        LivePerson.initialize(this, account, callBack);
+
     }
 
     private void initOpenConversationButton() {
@@ -131,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
             private void openActivity() {
                 if (mIdpCheckBox.isChecked()) {
+					// Change authentication key here
                     LivePerson.showConversation(MainActivity.this, AccountStorage.getInstance(MainActivity.this).getAccount());
                 } else {
                     LivePerson.showConversation(MainActivity.this);
