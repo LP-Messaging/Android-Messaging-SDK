@@ -106,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
             public void onCsatDismissed() {
                 Toast.makeText(MainActivity.this, "on Csat Dismissed", Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onConversationMarkedAsUrgent() {
+                Toast.makeText(MainActivity.this, "Conversation Marked As Urgent", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onConversationMarkedAsNormal() {
+                Toast.makeText(MainActivity.this, "Conversation Marked As Normal", Toast.LENGTH_LONG).show();
+            }
         });
         // you can't register pusher before initialization
         handleGCMRegistration();

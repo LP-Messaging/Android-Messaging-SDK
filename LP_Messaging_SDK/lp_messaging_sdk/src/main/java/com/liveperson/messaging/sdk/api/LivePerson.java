@@ -170,7 +170,7 @@ public class LivePerson {
      *
      * @param data
      */
-    public static void handlePush(Context ctx, Bundle data, String brandId) {
+    public static void handlePush(Context ctx, Bundle data, String brandId, boolean showNotification) {
 
         if (TextUtils.isEmpty(brandId)) {
             LPMobileLog.e(TAG, "No Brand! ignoring push message?");
@@ -182,7 +182,7 @@ public class LivePerson {
 
         //TODO: Need to init only the push receiver and context
 
-        Notifications.instance.addMessage(brandId, message);
+        Notifications.instance.addMessage(brandId, message, showNotification);
     }
 
     /**
@@ -229,6 +229,20 @@ public class LivePerson {
             return;
         }else {
             Messaging.getInstance().checkActiveConversation(mBrandId, callback);
+        }
+    }
+
+    /**
+     * Checks whether there is an active (unresolved) conversation and returns a if it marked as urgent
+     *
+     * @return
+     */
+    public static void checkConversationIsMarkedAsUrgent(final ICallback<Boolean, Exception> callback) {
+        if (!isValidState()) {
+            callback.onError(new Exception("SDK not initialized"));
+            return;
+        }else {
+            Messaging.getInstance().checkConversationIsMarkedAsUrgent(mBrandId, callback);
         }
     }
 

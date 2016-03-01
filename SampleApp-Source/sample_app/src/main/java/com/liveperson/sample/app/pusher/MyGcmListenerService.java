@@ -39,6 +39,6 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         Log.d(TAG, "From: " + from);
-        LivePerson.handlePush(this, data, AccountStorage.getInstance(this).getAccount());
+        LivePerson.handlePush(this, data, AccountStorage.getInstance(this).getAccount(), true);
     }
 }
