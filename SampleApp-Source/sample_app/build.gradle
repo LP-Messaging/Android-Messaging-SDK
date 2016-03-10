@@ -1,13 +1,11 @@
 apply plugin: 'com.android.application'
-apply plugin: 'testfairy'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
-
+    buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId "com.messaging.sample.app"
-        minSdkVersion 14
+        applicationId "com.liveperson.sample.app"
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -18,20 +16,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    productFlavors {
+    }
     repositories {
         flatDir {
-            dirs 'libs'
+            dirs project(':lp_messaging_sdk').file('aars')
         }
     }
 }
 
 dependencies {
-    compile(name: 'lp_messaging', ext: 'aar')
-//    compile project(':messaging_sdk')
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.koushikdutta.async:androidasync:2.1.6'
-    compile 'com.android.support:design:23.1.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.google.android.gms:play-services-gcm:8.1.0'
-    compile 'com.facebook.fresco:fresco:0.8.0'
+    compile project(':lp_messaging_sdk')
 }
