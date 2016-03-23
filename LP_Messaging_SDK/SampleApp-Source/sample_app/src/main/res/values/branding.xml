@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="brand_name">T-Mobile</string>
+
+    <color name="conversation_background">#ffffff</color>
+
+    <!-- all bubbles -->
+    <color name="bubble_selected_background_color">#5597a7e3</color>
+
+    <!-- agent bubble-->
+    <dimen name="agent_bubble_stroke_width">2px</dimen>
+    <color name="agent_bubble_stroke_color">#E20074</color>
+    <color name="agent_bubble_message_text_color">#ffffff</color>
+    <color name="agent_bubble_message_link_text_color">#0000ee</color>
+    <color name="agent_bubble_timestamp_text_color">#9B9B9B</color>
+    <color name="agent_bubble_background_color">#E20074</color>
+
+    <!--consumer bubble-->
+    <dimen name="consumer_bubble_stroke_width">0dp</dimen>
+    <color name="consumer_bubble_stroke_color">#CECECE</color>-->
+    <color name="consumer_bubble_message_text_color">#555555</color>
+    <color name="consumer_bubble_message_link_text_color">#0000ee</color>
+    <color name="consumer_bubble_timestamp_text_color">#9B9B9B</color>
+    <color name="consumer_bubble_background_color">#CECECE</color>
+    <color name="consumer_bubble_state_text_color">#555555</color>
+
+    <!-- system bubble-->
+    <color name="system_bubble_text_color">#555555</color>
+
+    <!-- icons visibility -->
+    <integer name="message_receive_icons">0</integer>
+    <string-array name="message_receive_text">
+        <item>"Sent"</item>
+        <item>"Delivered"</item>
+        <item>"Read"</item>
+        <item>"Not delivered"</item>
+    </string-array>
+
+    <!--Feedback Fragment-->
+    <color name="feedback_fragment_background_color">#F0F0F0</color>
+    <color name="feedback_fragment_title_question">#565656</color>
+    <color name="feedback_fragment_star">#229A49</color>
+    <color name="feedback_fragment_rate_text">#A0A0A0</color>
+
+    <color name="feedback_fragment_title_yesno">#565656</color>
+    <color name="feedback_fragment_yesno_btn_selected_background">#229A49</color>
+    <color name="feedback_fragment_yesno_btn_default_background">#FFFFFF</color>
+    <color name="feedback_fragment_yesno_btn_text_selected">#FFFFFF</color>
+    <color name="feedback_fragment_yesno_btn_text_default">#A0A0A0</color>
+    <color name="feedback_fragment_yesno_btn_stroke_default">#E2E2E3</color>
+    <color name="feedback_fragment_yesno_btn_stroke_selected">#229A49</color>
+    <dimen name="feedback_fragment_yesno_btn_stroke_width_default">1dp</dimen>
+    <dimen name="feedback_fragment_yesno_btn_stroke_width_selected">1dp</dimen>
+
+    <color name="feedback_fragment_submit_message">#565656</color>
+
+    <color name="feedback_fragment_submit_btn_enabled">#229A49</color>
+    <color name="feedback_fragment_submit_btn_text_enabled">#FFFFFF</color>
+    <color name="feedback_fragment_submit_btn_disabled">#FFFFFF</color>
+    <color name="feedback_fragment_submit_btn_text_disabled">#BDBDBD</color>
+
+    <color name="feedback_fragment_submit_btn_stroke_enabled">#229A49</color>
+    <color name="feedback_fragment_submit_btn_stroke_disabled">#E2E2E3</color>
+    <dimen name="feedback_fragment_submit_btn_stroke_width_enabled">1dp</dimen>
+    <dimen name="feedback_fragment_submit_btn_stroke_width_disabled">1dp</dimen>
+
+    <bool name="show_yes_no_question">true</bool>
+    <!--Feedback Fragment-->
+
+    <bool name="disableTTRPopup">false</bool>
+
+    <string name="custom_button_icon_name">t_mobile_call_icon</string>
+    <string name="custom_button_icon_description">call</string>
+
+    <bool name="contextual_menu_on_toolbar">true</bool>
+
+    <string name="notification_large_icon_name">ic_launcher</string>
+
+    <string name="language">en</string>
+    <string name="country"></string>
+
+    <integer name="encryptionVersion">1</integer>
+
+    <string name="csds_url">adminlogin.liveperson.net</string>
+    <integer name="idp_num_history_conversation">2</integer>
+
+    <bool name="show_timestamp_in_ttr_notification">true</bool>
+    <bool name="show_urgent_button_in_ttr_notification">true</bool>
+
+    <!--Edit Text-->
+    <color name="edit_text_underline_color">#90CAF9</color>
+
+</resources>
