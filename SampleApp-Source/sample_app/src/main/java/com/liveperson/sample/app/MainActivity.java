@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepare(InitLivePersonCallBack callBack) {
         saveAccount(callBack);
+    }
+
+    private void setCallBack() {
         LivePerson.setCallback(new LivePersonCallback() {
             @Override
             public void onCustomGuiTapped() {
@@ -77,15 +81,15 @@ public class MainActivity extends AppCompatActivity {
             public void onError(TaskType type, String message) {
                 Toast.makeText(MainActivity.this, type.name() + " problem ", Toast.LENGTH_LONG).show();
 
-			}
+            }
 
             @Override
             public void onTokenExpired(String brandId) {
                 Toast.makeText(MainActivity.this, "onTokenExpired brand " + brandId, Toast.LENGTH_LONG).show();
 
-				// Change authentication key here
-				LivePerson.reconnect(AccountStorage.getInstance(MainActivity.this).getAccount());
-			}
+                // Change authentication key here
+                LivePerson.reconnect(AccountStorage.getInstance(MainActivity.this).getAccount());
+            }
 
             @Override
             public void onConversationStarted() {
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAgentDetailsChanged(AgentData agentData) {
-                Toast.makeText(MainActivity.this, "Agent Details Changed "+ agentData, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Agent Details Changed " + agentData, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -117,9 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Conversation Marked As Normal", Toast.LENGTH_LONG).show();
             }
         });
-        // you can't register pusher before initialization
-        handleGCMRegistration();
-        registerConnection();
     }
 
     private void saveAccount(InitLivePersonCallBack callBack) {
@@ -145,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
                 prepare(new InitLivePersonCallBack() {
                     @Override
                     public void onInitSucceed() {
+                        Log.i(TAG, "onInitSucceed");
+                        setCallBack();
+                        // you can't register pusher before initialization
+                        handleGCMRegistration();
+                        registerConnection();
                         openActivity();
                     }
 
@@ -174,6 +180,11 @@ public class MainActivity extends AppCompatActivity {
                 prepare(new InitLivePersonCallBack() {
                     @Override
                     public void onInitSucceed() {
+                        Log.i(TAG, "onInitSucceed");
+                        setCallBack();
+                        // you can't register pusher before initialization
+                        handleGCMRegistration();
+                        registerConnection();
                         openFragment();
                     }
 
