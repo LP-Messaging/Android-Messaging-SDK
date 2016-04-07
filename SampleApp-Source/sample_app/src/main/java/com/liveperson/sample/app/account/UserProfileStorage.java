@@ -10,9 +10,11 @@ import android.preference.PreferenceManager;
 public class UserProfileStorage {
 
     private static final String TAG = UserProfileStorage.class.getSimpleName();
-    public static final String FIRST_NAME = "first_name";
-    public static final String LAST_NAME = "last_name";
-    public static final String PHONE_NUMBER = "phone_number";
+    private static final String FIRST_NAME = "first_name";
+    private static final String LAST_NAME = "last_name";
+    private static final String PHONE_NUMBER = "phone_number";
+    private static final String AUTH_CODE = "auth_code";
+
     private SharedPreferences mDefaultSharedPreferences;
     private static volatile UserProfileStorage Instance = null;
 
@@ -43,6 +45,10 @@ public class UserProfileStorage {
         mDefaultSharedPreferences.edit().putString(PHONE_NUMBER, phoneNumber).apply();
     }
 
+    public void setAuthCode(String authCode) {
+        mDefaultSharedPreferences.edit().putString(AUTH_CODE, authCode).apply();
+    }
+
     public String getLastName() {
         return mDefaultSharedPreferences.getString(LAST_NAME, "");
     }
@@ -53,5 +59,9 @@ public class UserProfileStorage {
 
     public String getPhoneNumber() {
         return mDefaultSharedPreferences.getString(PHONE_NUMBER, "");
+    }
+
+    public String getAuthCode() {
+        return mDefaultSharedPreferences.getString(AUTH_CODE, "");
     }
 }

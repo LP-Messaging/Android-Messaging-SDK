@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.liveperson.sample.app.pusher;
+package com.liveperson.sample.app.push;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.liveperson.infra.Infra;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.account.AccountStorage;
 

@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.liveperson.api.LivePersonCallback;
 import com.liveperson.infra.ICallback;
@@ -69,7 +70,7 @@ public class LivePerson {
 
 
     private static void setLogDebugMode(Context context) {
-        boolean isDebuggable = ( 0 != ( context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+        boolean isDebuggable = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         LPMobileLog.setDebugMode(isDebuggable);
     }
 
@@ -125,6 +126,7 @@ public class LivePerson {
      */
     public static Fragment getConversationFragment(String authKey) {
         if (!isValidState()) {
+            Log.e(TAG, "getConversationFragment- not initialized! mBrandId = "+ mBrandId);
             return null;
         }
         return MessagingUi.getInstance().getConversationFragment(mBrandId, authKey);
