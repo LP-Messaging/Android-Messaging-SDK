@@ -31,6 +31,12 @@ public class CustomActivity extends AppCompatActivity {
             public void onInitSucceed() {
                 Log.e(TAG, "onInitSucceed");
                 initFragment();
+
+                String firstName = UserProfileStorage.getInstance(CustomActivity.this).getFirstName();
+                String lastName = UserProfileStorage.getInstance(CustomActivity.this).getLastName();
+                String phoneNumber = UserProfileStorage.getInstance(CustomActivity.this).getPhoneNumber();
+
+                LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, firstName, lastName, phoneNumber);
             }
 
             @Override
@@ -38,10 +44,6 @@ public class CustomActivity extends AppCompatActivity {
                 Log.e(TAG, "onInitFailed : " + e.getMessage());
             }
         });
-        String firstName = UserProfileStorage.getInstance(this).getFirstName();
-        String lastName = UserProfileStorage.getInstance(this).getLastName();
-        String phoneNumber = UserProfileStorage.getInstance(this).getPhoneNumber();
-        LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, firstName, lastName, phoneNumber);
     }
 
     @Override

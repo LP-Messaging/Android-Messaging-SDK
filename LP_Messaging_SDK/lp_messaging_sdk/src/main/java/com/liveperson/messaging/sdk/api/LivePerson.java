@@ -50,7 +50,7 @@ public class LivePerson {
         initialized = true;
         mBrandId = brandId;
         setLogDebugMode(context);
-        Infra.instance.init(context, SdkEntryPointProcess.class, initCallBack);
+        Infra.instance.init(context, new SdkEntryPointProcess(), initCallBack);
     }
 
     public static class SdkEntryPointProcess extends Infra.EntryPoint {

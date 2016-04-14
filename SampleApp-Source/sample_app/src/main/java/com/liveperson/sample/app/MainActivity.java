@@ -74,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onConnectionChanged(boolean isConnected) {
+                Toast.makeText(MainActivity.this, "onConnectionChanged : " + isConnected, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
             public void onError(TaskType type, String message) {
                 Toast.makeText(MainActivity.this, type.name() + " problem ", Toast.LENGTH_LONG).show();
             }

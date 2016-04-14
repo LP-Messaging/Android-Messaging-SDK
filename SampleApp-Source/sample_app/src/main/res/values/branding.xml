@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="brand_name">T-Mobile</string>
+    <string name="brand_name">My Brand</string>
 
     <color name="conversation_background">#ffffff</color>
 
@@ -66,6 +66,9 @@
     <dimen name="feedback_fragment_submit_btn_stroke_width_disabled">1dp</dimen>
 
     <bool name="show_yes_no_question">true</bool>
+    <bool name="show_feedback">true</bool>
+    <string name="default_agent_name">@string/lp_default_agent_name</string>
+
     <!--Feedback Fragment-->
 
     <bool name="disableTTRPopup">false</bool>
