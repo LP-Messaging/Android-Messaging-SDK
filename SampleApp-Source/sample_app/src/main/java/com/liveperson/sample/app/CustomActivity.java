@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.liveperson.infra.InitLivePersonCallBack;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.account.AccountStorage;
-
+import com.liveperson.sample.app.account.UserProfileStorage;
 
 /**
  * Created by shiranr on 11/11/2015.
@@ -15,14 +17,39 @@ import com.liveperson.sample.app.account.AccountStorage;
 public class CustomActivity extends AppCompatActivity {
 
     private static final String TAG = CustomActivity.class.getSimpleName();
-    public static final String IS_AUTH = "is_auth";
+    public static final String IS_AUTH = "IS_AUTH";
     private static final String MY_CUSTOM_FRAGMENT = "MyCustomFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
-        initFragment();
+        Log.i(TAG, "onCreate");
+        LivePerson.initialize(this, AccountStorage.getInstance(this).getAccount(), new InitLivePersonCallBack() {
+
+            @Override
+            public void onInitSucceed() {
+                Log.e(TAG, "onInitSucceed");
+                initFragment();
+
+                String firstName = UserProfileStorage.getInstance(CustomActivity.this).getFirstName();
+                String lastName = UserProfileStorage.getInstance(CustomActivity.this).getLastName();
+                String phoneNumber = UserProfileStorage.getInstance(CustomActivity.this).getPhoneNumber();
+
+                LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, firstName, lastName, phoneNumber);
+            }
+
+            @Override
+            public void onInitFailed(Exception e) {
+                Log.e(TAG, "onInitFailed : " + e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
     }
 
     private void initFragment() {
@@ -32,7 +59,8 @@ public class CustomActivity extends AppCompatActivity {
             if (chatBundle != null) {
                 boolean is_auth = getIntent().getBooleanExtra(IS_AUTH, false);
                 if(is_auth){
-                    fragment = LivePerson.getConversationFragment(AccountStorage.getInstance(CustomActivity.this).getAccount());
+                    String authCode = UserProfileStorage.getInstance(CustomActivity.this).getAuthCode();
+                    fragment = LivePerson.getConversationFragment(authCode);
                 }else{
                     fragment = LivePerson.getConversationFragment();
                 }
@@ -42,4 +70,16 @@ public class CustomActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(TAG1));
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(TAG, "onDestroy");
+        LivePerson.shutDown();
+        super.onDestroy();
+    }
 }

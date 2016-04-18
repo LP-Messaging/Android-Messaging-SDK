@@ -2,9 +2,11 @@ package com.liveperson.messaging.sdk.api;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.liveperson.api.LivePersonCallback;
 import com.liveperson.infra.ICallback;
@@ -12,7 +14,7 @@ import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonCallBack;
 import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.infra.messaging_ui.MessagingUi;
-import com.liveperson.infra.model.Notifications;
+import com.liveperson.infra.messaging_ui.notification.NotificationController;
 import com.liveperson.messaging.Messaging;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.model.UserProfileBundle;
@@ -47,7 +49,8 @@ public class LivePerson {
         }
         initialized = true;
         mBrandId = brandId;
-        Infra.instance.init(context, SdkEntryPointProcess.class, initCallBack);
+        setLogDebugMode(context);
+        Infra.instance.init(context, new SdkEntryPointProcess(), initCallBack);
     }
 
     public static class SdkEntryPointProcess extends Infra.EntryPoint {
@@ -57,6 +60,18 @@ public class LivePerson {
             Messaging.getInstance().init();
             MessagingUi.getInstance().init(getContext());
         }
+
+        @Override
+        protected String getHostVersion() {
+            return getSDKVersion();
+        }
+    }
+
+
+
+    private static void setLogDebugMode(Context context) {
+        boolean isDebuggable = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
+        LPMobileLog.setDebugMode(isDebuggable);
     }
 
 
@@ -111,25 +126,26 @@ public class LivePerson {
      */
     public static Fragment getConversationFragment(String authKey) {
         if (!isValidState()) {
+            Log.e(TAG, "getConversationFragment- not initialized! mBrandId = "+ mBrandId);
             return null;
         }
         return MessagingUi.getInstance().getConversationFragment(mBrandId, authKey);
     }
 
-	/**
-	 * Reconnect with new authentication key
-	 * @param authKey the authentication key to connect with
-	 */
-	public static void reconnect(String authKey) {
+    /**
+     * Reconnect with new authentication key
+     * @param authKey the authentication key to connect with
+     */
+    public static void reconnect(String authKey) {
 
-		if (!isValidState()) {
-			return;
-		}
+        if (!isValidState()) {
+            return;
+        }
 
-		Messaging.getInstance().reconnect(mBrandId, authKey);
-	}
+        Messaging.getInstance().reconnect(mBrandId, authKey);
+    }
 
-	/**
+    /**
      * Register LivePerson pusher service
      *
      * @param brandId
@@ -170,19 +186,16 @@ public class LivePerson {
      *
      * @param data
      */
-    public static void handlePush(Context ctx, Bundle data, String brandId, boolean showNotification) {
+    public static void handlePush(Context context, Bundle data, String brandId, boolean showNotification) {
 
         if (TextUtils.isEmpty(brandId)) {
             LPMobileLog.e(TAG, "No Brand! ignoring push message?");
             return;
         }
 
-        Infra.instance.init(ctx, SdkEntryPointProcess.class, null);
         String message = data.getString("message");
 
-        //TODO: Need to init only the push receiver and context
-
-        Notifications.instance.addMessage(brandId, message, showNotification);
+        NotificationController.instance.addMessageAndDisplayNotification(context, brandId, message, showNotification);
     }
 
     /**
@@ -314,5 +327,6 @@ public class LivePerson {
         MessagingUiController.getInstance().clear();*/
         shutDown();
         Infra.instance.clear();
+        NotificationController.instance.clear();
     }
 }

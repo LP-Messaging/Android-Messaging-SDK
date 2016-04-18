@@ -41,7 +41,7 @@
 
         <!-- [START gcm_listener] -->
         <service
-            android:name="com.liveperson.sample.app.pusher.MyGcmListenerService"
+            android:name="com.liveperson.sample.app.push.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -50,7 +50,7 @@
         <!-- [END gcm_listener] -->
         <!-- [START instanceId_listener] -->
         <service
-            android:name="com.liveperson.sample.app.pusher.MyInstanceIDListenerService"
+            android:name="com.liveperson.sample.app.push.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
@@ -58,7 +58,7 @@
         </service>
         <!-- [END instanceId_listener] -->
         <service
-            android:name="com.liveperson.sample.app.pusher.RegistrationIntentService"
+            android:name="com.liveperson.sample.app.push.RegistrationIntentService"
             android:exported="false">
         </service>
 
