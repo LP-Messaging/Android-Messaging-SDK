@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1032
-        versionName "1.0.32"
+        versionCode 1034
+        versionName "1.0.34"
     }
 
     defaultConfig {
