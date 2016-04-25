@@ -16,6 +16,7 @@ import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.infra.messaging_ui.MessagingUi;
 import com.liveperson.infra.messaging_ui.notification.NotificationController;
 import com.liveperson.messaging.Messaging;
+import com.liveperson.messaging.commands.onPrepareUnregisterPushFinishedListener;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.model.UserProfileBundle;
 import com.liveperson.messaging.sdk.BuildConfig;
@@ -168,7 +169,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().unregisterPusher(brandId, appId);
+        Messaging.getInstance().unregisterPusher(brandId, appId, null);
     }
 
     /**
@@ -321,12 +322,42 @@ public class LivePerson {
      * Clean LivePerson Messaging SDK data
      * This does not handle the screen. To close the Activity call @hideConversation BEFORE logout
      */
-    private static void logOut(String appID){
-        unregisterLPPusher(mBrandId, appID);
-      /*  MessagingController.getInstance().clear();
-        MessagingUiController.getInstance().clear();*/
-        shutDown();
-        Infra.instance.clear();
-        NotificationController.instance.clear();
+    public static void logOut(Context context, final String brandId, final String appId, final LogoutLivePersonCallback logoutCallback){
+        initialize(context, brandId, new InitLivePersonCallBack() {
+            @Override
+            public void onInitSucceed() {
+                runUnregisterPushAndClear();
+            }
+
+            @Override
+            public void onInitFailed(Exception e) {
+                if (logoutCallback != null){
+                    logoutCallback.onLogoutFailed();
+                }
+            }
+
+            private void runUnregisterPushAndClear() {
+                Messaging.getInstance().unregisterPusher(brandId, appId, new onPrepareUnregisterPushFinishedListener() {
+
+                    @Override
+                    public void onPreparePushFinished() {
+                        shutDown();
+                        clear();
+                        if (logoutCallback != null) {
+                            logoutCallback.onLogoutSucceed();
+                        }
+                    }
+                });
+            }
+        });
+
     }
+
+    private static void clear() {
+        NotificationController.instance.clear();
+        Messaging.getInstance().clear();
+        MessagingUi.getInstance().clear();
+        Infra.instance.clear();
+    }
+
 }
