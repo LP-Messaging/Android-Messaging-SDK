@@ -1,5 +1,6 @@
 package com.liveperson.sample.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +11,7 @@ import com.liveperson.infra.InitLivePersonCallBack;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.account.AccountStorage;
 import com.liveperson.sample.app.account.UserProfileStorage;
+import com.liveperson.sample.app.push.RegistrationIntentService;
 
 /**
  * Created by shiranr on 11/11/2015.
@@ -37,6 +39,7 @@ public class CustomActivity extends AppCompatActivity {
                 String phoneNumber = UserProfileStorage.getInstance(CustomActivity.this).getPhoneNumber();
 
                 LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, firstName, lastName, phoneNumber);
+                handleGCMRegistration();
             }
 
             @Override
@@ -81,5 +84,10 @@ public class CustomActivity extends AppCompatActivity {
         Log.i(TAG, "onDestroy");
         LivePerson.shutDown();
         super.onDestroy();
+    }
+
+    private void handleGCMRegistration() {
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
     }
 }
