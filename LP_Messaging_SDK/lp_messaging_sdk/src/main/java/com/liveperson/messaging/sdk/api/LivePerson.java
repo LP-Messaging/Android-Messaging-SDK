@@ -51,7 +51,7 @@ public class LivePerson {
         initialized = true;
         mBrandId = brandId;
         setLogDebugMode(context);
-        Infra.instance.init(context, new SdkEntryPointProcess(), initCallBack);
+        Infra.instance.init(context, SdkEntryPointProcess.class, initCallBack);
     }
 
     public static class SdkEntryPointProcess extends Infra.EntryPoint {
@@ -301,7 +301,20 @@ public class LivePerson {
         return initialized && !TextUtils.isEmpty(mBrandId);
     }
 
-    /**
+	/**
+	 * Clear all messages and conversations for the current brand.
+	 * This method will clear only if there is no open conversation active.
+	 *
+	 * @return <code>true</code> if messages cleared, <code>false</code> if messages were not cleared (due to open conversation, or no current brand)
+	 */
+	public static boolean clearHistory() {
+		if (!isValidState()) {
+			return false;
+		}
+		return Messaging.getInstance().clearHistory(mBrandId);
+	}
+
+	/**
      * Close LivePerson Messaging SDK
      * Uninitialized SDK without cleaning data.
      * This does not handle the screen. To close the Activity call @hideConversation BEFORE shutdown
@@ -331,9 +344,7 @@ public class LivePerson {
 
             @Override
             public void onInitFailed(Exception e) {
-                if (logoutCallback != null){
-                    logoutCallback.onLogoutFailed();
-                }
+                logoutCallback.onLogoutFailed();
             }
 
             private void runUnregisterPushAndClear() {
@@ -343,9 +354,7 @@ public class LivePerson {
                     public void onPreparePushFinished() {
                         shutDown();
                         clear();
-                        if (logoutCallback != null) {
-                            logoutCallback.onLogoutSucceed();
-                        }
+                        logoutCallback.onLogoutSucceed();
                     }
                 });
             }
@@ -359,5 +368,4 @@ public class LivePerson {
         MessagingUi.getInstance().clear();
         Infra.instance.clear();
     }
-
 }

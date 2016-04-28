@@ -6,26 +6,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liveperson.api.LivePersonCallback;
-import com.liveperson.infra.ICallback;
 import com.liveperson.infra.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.messaging.sdk.api.LogoutLivePersonCallback;
 import com.liveperson.sample.app.account.AccountStorage;
 import com.liveperson.sample.app.account.UserProfileStorage;
 import com.liveperson.sample.app.push.RegistrationIntentService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         initAccount();
         initOpenConversationButton();
         initStartFragmentButton();
-
-        initSpinner();
     }
 
     private void initAccount() {
@@ -201,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 saveAccountAndUserSettings();
-                Log.i(TAG, "initStartFragmentButton");
+                Log.i(TAG, "onInitSucceed");
                 setCallBack();
                 handleGCMRegistration();
                 openFragment();
@@ -222,116 +213,5 @@ public class MainActivity extends AppCompatActivity {
     private void handleGCMRegistration() {
         Intent intent = new Intent(this, RegistrationIntentService.class);
         startService(intent);
-    }
-
-
-    private void initSpinner() {
-        final List<String> list = new ArrayList<String>();
-        list.add("ShutDown");
-        list.add("LogOut");
-        list.add("Init");
-        list.add("checkActiveConversation");
-        list.add("checkConversationIsMarkedAsUrgent");
-        list.add("checkAgentID");
-        list.add("markConversationAsUrgent");
-        list.add("markConversationAsNormal");
-        list.add("resolveConversation");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        final Spinner spinner = (Spinner) findViewById(R.id.api_spinner);
-        spinner.setAdapter(dataAdapter);
-
-        (findViewById(R.id.api_go)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkValidAccount()){
-                    return;
-                }
-                String selectedItem = (String) spinner.getSelectedItem();
-                Log.d(TAG, selectedItem + " button pressed");
-                switch (selectedItem){
-                    case "ShutDown":
-                        LivePerson.shutDown();
-                        break;
-                    case "LogOut":
-                        LivePerson.logOut(MainActivity.this, account, AccountStorage.SDK_SAMPLE_APP_ID, new LogoutLivePersonCallback() {
-                            @Override
-                            public void onLogoutSucceed() {
-                                Toast.makeText(MainActivity.this, "onLogoutSucceed", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onLogoutFailed() {
-                                Toast.makeText(MainActivity.this, "onLogoutFailed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        break;
-                    case "Init":
-                        LivePerson.initialize(MainActivity.this, account, new InitLivePersonCallBack() {
-                            @Override
-                            public void onInitSucceed() {
-                                Toast.makeText(MainActivity.this, "Init Succeed", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onInitFailed(Exception e) {
-                                Toast.makeText(MainActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        break;
-                    case "checkActiveConversation":
-                        LivePerson.checkActiveConversation(new ICallback<Boolean, Exception>() {
-                            @Override
-                            public void onSuccess(Boolean value) {
-                                Toast.makeText(MainActivity.this, value + "", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onError(Exception exception) {
-                                Toast.makeText(MainActivity.this, "Error! " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        break;
-                    case "checkConversationIsMarkedAsUrgent":
-                        LivePerson.checkConversationIsMarkedAsUrgent(new ICallback<Boolean, Exception>() {
-                            @Override
-                            public void onSuccess(Boolean value) {
-                                Toast.makeText(MainActivity.this, value + "", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onError(Exception exception) {
-                                Toast.makeText(MainActivity.this, "Error! " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        break;
-                    case "checkAgentID":
-                        LivePerson.checkAgentID(new ICallback<AgentData, Exception>() {
-                            @Override
-                            public void onSuccess(AgentData value) {
-                                Toast.makeText(MainActivity.this, value != null ? value.toString() : " No data!", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onError(Exception exception) {
-                                Toast.makeText(MainActivity.this, "Error! " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        break;
-                    case "markConversationAsUrgent":
-                        LivePerson.markConversationAsUrgent();
-                        break;
-                    case "markConversationAsNormal":
-                        LivePerson.markConversationAsNormal();
-                        break;
-                    case "resolveConversation":
-                        LivePerson.resolveConversation();
-                        break;
-                }
-
-
-            }
-        });
     }
 }
