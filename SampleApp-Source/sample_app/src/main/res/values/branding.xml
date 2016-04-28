@@ -93,5 +93,6 @@
 
     <!--Edit Text-->
     <color name="edit_text_underline_color">#90CAF9</color>
+    <bool name="send_agent_profile_updates_when_conversation_closed">true</bool>
 
 </resources>
