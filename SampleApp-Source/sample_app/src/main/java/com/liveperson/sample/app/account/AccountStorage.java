@@ -12,6 +12,7 @@ public class AccountStorage {
     private static final String TAG = AccountStorage.class.getSimpleName();
     public static final String BRAND_ID = "brand_id";
     public static final String SDK_SAMPLE_APP_ID = "com.liveperson.sdksample";
+    public static final String SDK_SAMPLE_APP_ID_ALT = "com.liveperson.sdksample.Altered";
     private SharedPreferences mDefaultSharedPreferences;
     private static volatile AccountStorage Instance = null;
 

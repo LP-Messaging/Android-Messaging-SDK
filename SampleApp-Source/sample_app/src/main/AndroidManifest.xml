@@ -25,7 +25,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.liveperson.sample.app.CustomActivity"/>
+        <activity
+            android:name="com.liveperson.sample.app.CustomActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
 
         <!-- [START gcm_receiver] -->
         <receiver

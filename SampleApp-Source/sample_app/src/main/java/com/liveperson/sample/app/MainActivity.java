@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         initAccount();
         initOpenConversationButton();
         initStartFragmentButton();
-
-        initSpinner();
     }
 
     private void initAccount() {
@@ -156,182 +154,80 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initOpenConversationButton() {
-        findViewById(R.id.button_start).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkValidAccount()) {
-                    return;
-                }
+        View viewById = findViewById(R.id.button_start);
+        if (viewById != null) {
 
-                saveAccountAndUserSettings();
-                LivePerson.initialize(MainActivity.this, AccountStorage.getInstance(MainActivity.this).getAccount(), new InitLivePersonCallBack() {
-                    @Override
-                    public void onInitSucceed() {
-                        Log.i(TAG, "onInitSucceed");
-                        setCallBack();
-                        handleGCMRegistration();
-                        openActivity();
+            viewById.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!checkValidAccount()) {
+                        return;
                     }
 
-                    @Override
-                    public void onInitFailed(Exception e) {
-                        Toast.makeText(MainActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                    saveAccountAndUserSettings();
+                    LivePerson.initialize(MainActivity.this, AccountStorage.getInstance(MainActivity.this).getAccount(), new InitLivePersonCallBack() {
+                        @Override
+                        public void onInitSucceed() {
+                            Log.i(TAG, "onInitSucceed");
+                            setCallBack();
+                            handleGCMRegistration();
+                            openActivity();
+                        }
 
-            private void openActivity() {
-                if (mIdpCheckBox.isChecked()) {
-                    // Change authentication key here
-                    LivePerson.showConversation(MainActivity.this, UserProfileStorage.getInstance(MainActivity.this).getAuthCode());
-                } else {
-                    LivePerson.showConversation(MainActivity.this);
+                        @Override
+                        public void onInitFailed(Exception e) {
+                            Toast.makeText(MainActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-                LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, mFirstNameView.getText().toString(), mLastNameView.getText().toString(), mPhoneNumberView.getText().toString());
-            }
-        });
+
+                private void openActivity() {
+                    if (mIdpCheckBox.isChecked()) {
+                        // Change authentication key here
+                        LivePerson.showConversation(MainActivity.this, UserProfileStorage.getInstance(MainActivity.this).getAuthCode());
+                    } else {
+                        LivePerson.showConversation(MainActivity.this);
+                    }
+                    LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, mFirstNameView.getText().toString(), mLastNameView.getText().toString(), mPhoneNumberView.getText().toString());
+                }
+            });
+
+        }
     }
 
     private void initStartFragmentButton() {
-        findViewById(R.id.button_start_fragment).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkValidAccount()) {
-                    return;
+        View viewById = findViewById(R.id.button_start_fragment);
+        if (viewById != null) {
+            viewById.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!checkValidAccount()) {
+                        return;
+                    }
+
+                    saveAccountAndUserSettings();
+                    Log.i(TAG, "initStartFragmentButton");
+                    setCallBack();
+                    // will be handled by the CustomActivity after init
+                    // handleGCMRegistration();
+                    openFragment();
                 }
 
-                saveAccountAndUserSettings();
-                Log.i(TAG, "initStartFragmentButton");
-                setCallBack();
-                handleGCMRegistration();
-                openFragment();
-            }
-
-            private void openFragment() {
-                Intent in = new Intent(MainActivity.this, CustomActivity.class);
-                if (mIdpCheckBox.isChecked()) {
-                    in.putExtra(CustomActivity.IS_AUTH, true);
-                } else {
-                    in.putExtra(CustomActivity.IS_AUTH, false);
+                private void openFragment() {
+                    Intent in = new Intent(MainActivity.this, CustomActivity.class);
+                    if (mIdpCheckBox.isChecked()) {
+                        in.putExtra(CustomActivity.IS_AUTH, true);
+                    } else {
+                        in.putExtra(CustomActivity.IS_AUTH, false);
+                    }
+                    startActivity(in);
                 }
-                startActivity(in);
-            }
-        });
+            });
+        }
     }
 
     private void handleGCMRegistration() {
         Intent intent = new Intent(this, RegistrationIntentService.class);
         startService(intent);
-    }
-
-
-    private void initSpinner() {
-        final List<String> list = new ArrayList<String>();
-        list.add("ShutDown");
-        list.add("LogOut");
-        list.add("Init");
-        list.add("checkActiveConversation");
-        list.add("checkConversationIsMarkedAsUrgent");
-        list.add("checkAgentID");
-        list.add("markConversationAsUrgent");
-        list.add("markConversationAsNormal");
-        list.add("resolveConversation");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        final Spinner spinner = (Spinner) findViewById(R.id.api_spinner);
-        spinner.setAdapter(dataAdapter);
-
-        (findViewById(R.id.api_go)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkValidAccount()){
-                    return;
-                }
-                String selectedItem = (String) spinner.getSelectedItem();
-                Log.d(TAG, selectedItem + " button pressed");
-                switch (selectedItem){
-                    case "ShutDown":
-                        LivePerson.shutDown();
-                        break;
-                    case "LogOut":
-                        LivePerson.logOut(MainActivity.this, account, AccountStorage.SDK_SAMPLE_APP_ID, new LogoutLivePersonCallback() {
-                            @Override
-                            public void onLogoutSucceed() {
-                                Toast.makeText(MainActivity.this, "onLogoutSucceed", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onLogoutFailed() {
-                                Toast.makeText(MainActivity.this, "onLogoutFailed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        break;
-                    case "Init":
-                        LivePerson.initialize(MainActivity.this, account, new InitLivePersonCallBack() {
-                            @Override
-                            public void onInitSucceed() {
-                                Toast.makeText(MainActivity.this, "Init Succeed", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onInitFailed(Exception e) {
-                                Toast.makeText(MainActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        break;
-                    case "checkActiveConversation":
-                        LivePerson.checkActiveConversation(new ICallback<Boolean, Exception>() {
-                            @Override
-                            public void onSuccess(Boolean value) {
-                                Toast.makeText(MainActivity.this, value + "", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onError(Exception exception) {
-                                Toast.makeText(MainActivity.this, "Error! " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        break;
-                    case "checkConversationIsMarkedAsUrgent":
-                        LivePerson.checkConversationIsMarkedAsUrgent(new ICallback<Boolean, Exception>() {
-                            @Override
-                            public void onSuccess(Boolean value) {
-                                Toast.makeText(MainActivity.this, value + "", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onError(Exception exception) {
-                                Toast.makeText(MainActivity.this, "Error! " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        break;
-                    case "checkAgentID":
-                        LivePerson.checkAgentID(new ICallback<AgentData, Exception>() {
-                            @Override
-                            public void onSuccess(AgentData value) {
-                                Toast.makeText(MainActivity.this, value != null ? value.toString() : " No data!", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onError(Exception exception) {
-                                Toast.makeText(MainActivity.this, "Error! " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        break;
-                    case "markConversationAsUrgent":
-                        LivePerson.markConversationAsUrgent();
-                        break;
-                    case "markConversationAsNormal":
-                        LivePerson.markConversationAsNormal();
-                        break;
-                    case "resolveConversation":
-                        LivePerson.resolveConversation();
-                        break;
-                }
-
-
-            }
-        });
     }
 }
