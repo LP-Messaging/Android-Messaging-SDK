@@ -71,7 +71,6 @@
 
     <!--Feedback Fragment-->
 
-    <bool name="disableTTRPopup">false</bool>
 
     <string name="custom_button_icon_name">t_mobile_call_icon</string>
     <string name="custom_button_icon_description">call</string>
@@ -88,8 +87,12 @@
     <string name="csds_url">adminlogin.liveperson.net</string>
     <integer name="idp_num_history_conversation">2</integer>
 
+    <!-- TTR Snack bar -->
     <bool name="show_timestamp_in_ttr_notification">true</bool>
     <bool name="show_urgent_button_in_ttr_notification">true</bool>
+    <integer name="ttr_duration">3000</integer>
+    <bool name="disableTTRPopup">false</bool>
+    <!-- TTR Snack bar -->
 
     <!--Edit Text-->
     <color name="edit_text_underline_color">#90CAF9</color>
