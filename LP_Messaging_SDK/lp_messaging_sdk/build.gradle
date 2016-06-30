@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1211
-        versionName "1.2.1.1"
+        versionCode 1202
+        versionName "1.2.2"
     }
 
     defaultConfig {
@@ -28,10 +28,11 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.3.0'
 
     compile 'com.facebook.fresco:fresco:0.9.0'
-    compile 'com.neovisionaries:nv-websocket-client:1.26'
+    compile 'com.neovisionaries:nv-websocket-client:1.27'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile(name: 'infra', ext: 'aar')
     compile(name: 'messaging', ext: 'aar')
     compile(name: 'messaging_ui', ext: 'aar')
     compile(name: 'ui', ext: 'aar')
+
 }

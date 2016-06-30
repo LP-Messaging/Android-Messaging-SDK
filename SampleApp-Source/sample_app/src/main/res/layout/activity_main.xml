@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,15 +22,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
-            android:hint="Please enter a brand ID"
-            />
+            android:hint="Please enter a brand ID" />
 
         <Button
             android:id="@+id/button_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Open Conversation"/>
+            android:text="Open Conversation" />
 
         <Button
             android:id="@+id/button_start_fragment"
@@ -39,7 +37,17 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="Open Fragment"/>
+            android:text="Open Fragment" />
+
+        <Switch
+            android:id="@+id/switchMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text6"
+            android:layout_gravity="center_horizontal"
+            android:showText="true"
+            android:textOff="Activity"
+            android:textOn="Fragment" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,12 +64,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="First name:"/>
+                    android:text="First name:" />
 
                 <EditText
                     android:id="@+id/first_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -72,12 +80,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Last name:"/>
+                    android:text="Last name:" />
 
                 <EditText
                     android:id="@+id/last_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -88,12 +96,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phone number:"/>
+                    android:text="Phone number:" />
 
                 <EditText
                     android:id="@+id/phone_number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -104,23 +112,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Auth code:"/>
+                    android:text="Auth code:" />
 
                 <EditText
                     android:id="@+id/auth_code"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-
         </LinearLayout>
-
-        <CheckBox
-            android:id="@+id/idp_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="idp"
-            android:layout_gravity="center_horizontal"/>
-
     </LinearLayout>
 
 
@@ -130,6 +129,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="VERSION"/>
+        android:text="VERSION" />
 
 </RelativeLayout>
