@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,7 +17,6 @@ import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.infra.messaging_ui.MessagingUi;
 import com.liveperson.infra.messaging_ui.notification.NotificationController;
 import com.liveperson.messaging.Messaging;
-import com.liveperson.messaging.commands.onPrepareUnregisterPushFinishedListener;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.model.UserProfileBundle;
 import com.liveperson.messaging.sdk.BuildConfig;
@@ -32,7 +32,6 @@ public class LivePerson {
     private static final String TAG = LivePerson.class.getSimpleName();
     private static boolean initialized;
     private static String mBrandId;
-
 
     private LivePerson() {
     }
@@ -51,7 +50,7 @@ public class LivePerson {
         initialized = true;
         mBrandId = brandId;
         setLogDebugMode(context);
-        Infra.instance.init(context, SdkEntryPointProcess.class, initCallBack);
+        Infra.instance.init(context, new SdkEntryPointProcess(), initCallBack);
     }
 
     public static class SdkEntryPointProcess extends Infra.EntryPoint {
@@ -169,7 +168,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().unregisterPusher(brandId, appId, null);
+        Messaging.getInstance().unregisterPusher(brandId, appId, null, false);
     }
 
     /**
@@ -332,11 +331,17 @@ public class LivePerson {
     }
 
     /**
-     * Clean LivePerson Messaging SDK data
+     * Clear LivePerson Messaging SDK data and unregistering push.
+     * Will fail
      * This does not handle the screen. To close the Activity call @hideConversation BEFORE logout
      */
-    public static void logOut(Context context, final String brandId, final String appId, final LogoutLivePersonCallback logoutCallback){
+    public static void logOut(final Context context, final String brandId, final String appId, final LogoutLivePersonCallback logoutCallback){
+        //Handler to call the host app with the callback on the same thread.
+        final Handler logoutHandler = new Handler();
+
+        //need to initialized so we can run unregister push.
         initialize(context, brandId, new InitLivePersonCallBack() {
+
             @Override
             public void onInitSucceed() {
                 runUnregisterPushAndClear();
@@ -344,19 +349,47 @@ public class LivePerson {
 
             @Override
             public void onInitFailed(Exception e) {
-                logoutCallback.onLogoutFailed();
+                notifyLogoutFailed();
             }
 
             private void runUnregisterPushAndClear() {
-                Messaging.getInstance().unregisterPusher(brandId, appId, new onPrepareUnregisterPushFinishedListener() {
-
+                //if we are not connected = unregister will fail.
+                Messaging.getInstance().unregisterPusher(brandId, appId, new ICallback<Void, Exception>() {
                     @Override
-                    public void onPreparePushFinished() {
+                    public void onSuccess(Void value) {
                         shutDown();
                         clear();
-                        logoutCallback.onLogoutSucceed();
+                        notifyLogoutSucceed();
                     }
-                });
+
+                    @Override
+                    public void onError(Exception exception) {
+                        LPMobileLog.w(TAG, "LivePerson Logout: Error: " + exception.getMessage());
+                        notifyLogoutFailed();
+                    }
+                }, true);
+            }
+
+            private void notifyLogoutFailed() {
+                if (logoutCallback != null){
+                    logoutHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            logoutCallback.onLogoutFailed();
+                        }
+                    });
+                }
+            }
+
+            private void notifyLogoutSucceed() {
+                if (logoutCallback != null) {
+                    logoutHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            logoutCallback.onLogoutSucceed();
+                        }
+                    });
+                }
             }
         });
 
@@ -368,4 +401,5 @@ public class LivePerson {
         MessagingUi.getInstance().clear();
         Infra.instance.clear();
     }
+
 }

@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.liveperson.infra.Infra;
+import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.account.AccountStorage;
 
@@ -39,7 +40,14 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        Log.d(TAG, "From: " + from);
-        LivePerson.handlePush(this, data, AccountStorage.getInstance(this).getAccount(), true);
+        Log.d(TAG, "data: " + data);
+
+        //Parse the bundle in case it's related to LivePerson messages
+        PushMessageParser message = new PushMessageParser(data);
+
+        //Code snippet to add push UI notification
+        NotificationUI.showNotification(this, message);
+
+        LivePerson.handlePush(this, data, AccountStorage.getInstance(this).getAccount(), false);
     }
 }

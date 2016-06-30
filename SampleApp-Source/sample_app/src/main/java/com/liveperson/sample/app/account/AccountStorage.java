@@ -10,7 +10,8 @@ import android.preference.PreferenceManager;
 public class AccountStorage {
 
     private static final String TAG = AccountStorage.class.getSimpleName();
-    public static final String BRAND_ID = "brand_id";
+    private static final String BRAND_ID = "brand_id";
+    private static final String SDK_MODE = "sdk_mode";
     public static final String SDK_SAMPLE_APP_ID = "com.liveperson.sdksample";
     private SharedPreferences mDefaultSharedPreferences;
     private static volatile AccountStorage Instance = null;
@@ -36,5 +37,13 @@ public class AccountStorage {
 
     public String getAccount() {
         return mDefaultSharedPreferences.getString(BRAND_ID, "");
+    }
+
+    public void setIsFragmentMode(boolean isFragment){
+        mDefaultSharedPreferences.edit().putBoolean(SDK_MODE, isFragment).apply();
+    }
+
+    public boolean getIsFragmentMode() {
+        return mDefaultSharedPreferences.getBoolean(SDK_MODE, false);
     }
 }
