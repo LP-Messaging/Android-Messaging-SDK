@@ -9,10 +9,8 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
-import com.liveperson.sample.app.FragmentContainerActivity;
 import com.liveperson.sample.app.MainActivity;
 import com.liveperson.sample.app.R;
-import com.liveperson.sample.app.account.AccountStorage;
 
 /**
  * Created by ofira on 6/26/16.
@@ -28,7 +26,7 @@ public class NotificationUI {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx).
                 setContentIntent(getPendingIntent(ctx)).
-                setContentTitle(messageParser.getAgentName()).
+                setContentTitle(messageParser.getMessage()).
                 setAutoCancel(true).
                 setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
                 setSmallIcon(R.mipmap.ic_launcher).
