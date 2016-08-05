@@ -40,14 +40,14 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        Log.d(TAG, "data: " + data);
+		Log.d(TAG, "data: " + data);
 
-        //Parse the bundle in case it's related to LivePerson messages
-        PushMessageParser message = new PushMessageParser(data);
+		//Parse the bundle in case it's related to LivePerson messages
+		PushMessageParser message = new PushMessageParser(data);
 
-        //Code snippet to add push UI notification
-        NotificationUI.showNotification(this, message);
+		//Code snippet to add push UI notification
+		NotificationUI.showNotification(this, message);
 
-        LivePerson.handlePush(this, data, AccountStorage.getInstance(this).getAccount(), false);
+		LivePerson.handlePush(this, data, AccountStorage.getInstance(this).getAccount(), false);
     }
 }

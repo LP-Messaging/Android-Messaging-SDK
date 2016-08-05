@@ -8,14 +8,24 @@
     <!-- all bubbles -->
     <color name="bubble_selected_background_color">#5597a7e3</color>
 
+    <!-- brand bubble-->
+    <dimen name="brand_bubble_stroke_width">0dp</dimen>
+    <color name="brand_bubble_stroke_color">#004DC9</color>
+    <color name="brand_bubble_message_text_color">#FFFFFF</color>
+    <color name="brand_bubble_message_link_text_color">#0000ee</color>
+    <color name="brand_bubble_timestamp_text_color">#9B9B9B</color>
+    <color name="brand_bubble_background_color">#004DC9</color>
+    <color name="brand_logo_background_color">#4C82D9</color>
+
     <!-- agent bubble-->
     <dimen name="agent_bubble_stroke_width">2px</dimen>
-    <color name="agent_bubble_stroke_color">#E20074</color>
+    <color name="agent_bubble_stroke_color">#EF6C00</color>
     <color name="agent_bubble_message_text_color">#ffffff</color>
     <color name="agent_bubble_message_link_text_color">#0000ee</color>
     <color name="agent_bubble_timestamp_text_color">#9B9B9B</color>
-    <color name="agent_bubble_background_color">#E20074</color>
-
+    <color name="agent_bubble_background_color">#EF6C00</color>
+    <color name="agent_avatar_background_color">#000000</color>
+    <color name="agent_avatar_icon_color">#FFFFFF</color>
     <!--consumer bubble-->
     <dimen name="consumer_bubble_stroke_width">0dp</dimen>
     <color name="consumer_bubble_stroke_color">#CECECE</color>-->
@@ -66,11 +76,11 @@
     <dimen name="feedback_fragment_submit_btn_stroke_width_disabled">1dp</dimen>
 
     <bool name="show_yes_no_question">true</bool>
-    <bool name="show_feedback">true</bool>
-    <string name="default_agent_name">@string/lp_default_agent_name</string>
-
     <!--Feedback Fragment-->
 
+    <!--TTR-->
+    <bool name="disableTTRPopup">false</bool>
+    <integer name="ttrShowFrequencyInSeconds">8</integer>
 
     <string name="custom_button_icon_name">t_mobile_call_icon</string>
     <string name="custom_button_icon_description">call</string>
@@ -87,23 +97,18 @@
     <string name="csds_url">adminlogin.liveperson.net</string>
     <integer name="idp_num_history_conversation">2</integer>
 
-    <!-- TTR Snack bar -->
+    <!--Credit card masking-->
+    <bool name="enable_credit_card_masking">true</bool>
+    <string name="credit_card_regex">(?:4[0-9]{3}((([-\s.]*[0-9]{4}){3})|(([-\s.]*[0-9]{3}){3}))|5[1-5][0-9]{2}([-\s.]*[0-9]{4}){3}|6(?:011|5[0-9]{2})([-\s.]*[0-9]{4}){3}|3[47][0-9]{2}[-\s.]*[0-9]{6}[-\s.]*[0-9]{5}|3(?:0[0-5]|[68][0-9])[0-9][-\s.]*[0-9]{6}[-\s.]*[0-9]{4}|((?:2131|1800)[-\s.]*[0-9]{6}[-\s.]*[0-9]{5})|(35[0-9]{2}([-\s.]*[0-9]{4}){3}))</string>
+    <string name="mask_character">*</string>
+
     <bool name="show_timestamp_in_ttr_notification">true</bool>
     <bool name="show_urgent_button_in_ttr_notification">true</bool>
-    <integer name="ttr_duration">3000</integer>
-    <bool name="disableTTRPopup">false</bool>
-    <!-- TTR Snack bar -->
 
     <!--Edit Text-->
     <color name="edit_text_underline_color">#90CAF9</color>
-    <bool name="send_agent_profile_updates_when_conversation_closed">true</bool>
 
-    <bool name="ttr_message_off_hours_enabled">true</bool>
-    <string name="lp_ttr_message_off_hours_time_zone_id">US/Pacific</string>
+    <!--Clear History-->
+    <bool name="clear_history_show_confirm_dialog">true</bool>
 
-    <!-- masking -->
-    <bool name="enable_client_only_masking">false</bool>
-    <bool name="enable_real_time_masking">false</bool>
-    <string name="client_only_masking_regex"></string>
-    <string name="real_time_masking_regex"></string>
 </resources>

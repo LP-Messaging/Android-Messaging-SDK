@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -34,7 +33,6 @@ public class RegistrationIntentService extends IntentService {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
-    public static final String EXTRA_APP_ID = "EXTRA_APP_ID";
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
@@ -65,11 +63,7 @@ public class RegistrationIntentService extends IntentService {
                 Log.i(TAG, "GCM Registration Token: " + token);
 
                 String account = AccountStorage.getInstance(this).getAccount();
-                String appid = intent.getStringExtra(EXTRA_APP_ID);
-                if(TextUtils.isEmpty(appid)){
-                    appid = AccountStorage.SDK_SAMPLE_APP_ID;
-                }
-                LivePerson.registerLPPusher(account, appid, token);
+                LivePerson.registerLPPusher(account, AccountStorage.SDK_SAMPLE_APP_ID, token);
 
                 // You should store a boolean that indicates whether the generated token has been
                 // sent to your server. If the boolean is false, send the token to your server,

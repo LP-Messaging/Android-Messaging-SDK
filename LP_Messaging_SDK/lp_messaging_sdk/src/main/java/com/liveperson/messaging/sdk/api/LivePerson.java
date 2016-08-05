@@ -11,15 +11,18 @@ import android.util.Log;
 
 import com.liveperson.api.LivePersonCallback;
 import com.liveperson.infra.ICallback;
-import com.liveperson.infra.Infra;
-import com.liveperson.infra.InitLivePersonCallBack;
+import com.liveperson.infra.InitLivePersonProperties;
+import com.liveperson.infra.callbacks.InitLivePersonCallBack;
+import com.liveperson.infra.callbacks.LogoutLivePersonCallBack;
 import com.liveperson.infra.log.LPMobileLog;
-import com.liveperson.infra.messaging_ui.MessagingUi;
+import com.liveperson.infra.messaging_ui.MessagingUIFactory;
+import com.liveperson.infra.messaging_ui.MessagingUiInitData;
 import com.liveperson.infra.messaging_ui.notification.NotificationController;
-import com.liveperson.messaging.Messaging;
+import com.liveperson.messaging.MessagingFactory;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.model.UserProfileBundle;
 import com.liveperson.messaging.sdk.BuildConfig;
+import com.liveperson.messaging.sdk.R;
 
 /**
  * LivePerson Messaging SDK entry point.
@@ -30,7 +33,6 @@ import com.liveperson.messaging.sdk.BuildConfig;
 public class LivePerson {
 
     private static final String TAG = LivePerson.class.getSimpleName();
-    private static boolean initialized;
     private static String mBrandId;
 
     private LivePerson() {
@@ -39,34 +41,38 @@ public class LivePerson {
 
     /**
      * Initialize the framework
-     *
+	 * @deprecated - need to have app id in order to enable some features.
+	 * use {@link #initialize(Context, InitLivePersonProperties)} instead
      * @param context Application or activity context
      */
-    public static void initialize(Context context, String brandId, InitLivePersonCallBack initCallBack) {
-        if (initialized) {
-            initCallBack.onInitSucceed();
-            return;
-        }
-        initialized = true;
-        mBrandId = brandId;
-        setLogDebugMode(context);
-        Infra.instance.init(context, new SdkEntryPointProcess(), initCallBack);
+	@Deprecated
+    public static void initialize(final Context context, final String brandId, final InitLivePersonCallBack initCallBack) {
+		initialize(context, new InitLivePersonProperties(brandId, context.getApplicationInfo().packageName, initCallBack));
     }
 
-    public static class SdkEntryPointProcess extends Infra.EntryPoint {
-
-        @Override
-        protected void init() {
-            Messaging.getInstance().init();
-            MessagingUi.getInstance().init(getContext());
-        }
-
-        @Override
-        protected String getHostVersion() {
-            return getSDKVersion();
-        }
+	/**
+	 * Initialize the framework
+	 *
+	 * @param context Application or activity context
+	 */
+    public static void initialize(final Context context, final InitLivePersonProperties initProperties) {
+		//check if initProperties contains all the mandatory params.
+		if (!InitLivePersonProperties.isValid(initProperties)){
+			if (initProperties != null && initProperties.getInitCallBack() != null){
+				initProperties.getInitCallBack().onInitFailed(new Exception("InitLivePersonProperties not valid or missing parameters."));
+			}
+			Log.w(TAG, "Invalid InitLivePersonProperties!");
+			return;
+		}
+		//try to initialized
+		if (!isValidState()) {
+			mBrandId = initProperties.getBrandId();
+			setLogDebugMode(context);
+			MessagingUIFactory.getInstance().init(context, new MessagingUiInitData(initProperties, getSDKVersion()));
+		} else {
+			initProperties.getInitCallBack().onInitSucceed();
+		}
     }
-
 
 
     private static void setLogDebugMode(Context context) {
@@ -96,7 +102,7 @@ public class LivePerson {
         if (!isValidState()) {
             return false;
         }
-        return MessagingUi.getInstance().showConversation(activity, mBrandId, authenticationKey);
+        return MessagingUIFactory.getInstance().showConversation(activity, mBrandId, authenticationKey);
     }
 
     /**
@@ -108,7 +114,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        MessagingUi.getInstance().hideConversation(activity);
+        MessagingUIFactory.getInstance().hideConversation(activity);
     }
 
     /**
@@ -129,7 +135,7 @@ public class LivePerson {
             Log.e(TAG, "getConversationFragment- not initialized! mBrandId = "+ mBrandId);
             return null;
         }
-        return MessagingUi.getInstance().getConversationFragment(mBrandId, authKey);
+        return MessagingUIFactory.getInstance().getConversationFragment(mBrandId, authKey);
     }
 
     /**
@@ -142,8 +148,8 @@ public class LivePerson {
             return;
         }
 
-        Messaging.getInstance().reconnect(mBrandId, authKey);
-    }
+        MessagingFactory.getInstance().getController().reconnect(mBrandId, authKey);
+	}
 
     /**
      * Register LivePerson pusher service
@@ -155,7 +161,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().registerPusher(brandId, appId, gcmToken);
+        MessagingFactory.getInstance().getController().registerPusher(brandId, appId, gcmToken);
     }
 
     /**
@@ -168,7 +174,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().unregisterPusher(brandId, appId, null, false);
+        MessagingFactory.getInstance().getController().unregisterPusher(brandId, appId, null, false);
     }
 
     /**
@@ -195,7 +201,7 @@ public class LivePerson {
 
         String message = data.getString("message");
 
-        NotificationController.instance.addMessageAndDisplayNotification(context, brandId, message, showNotification);
+        NotificationController.instance.addMessageAndDisplayNotification(context, brandId, message, showNotification, R.drawable.liveperson_icon);
     }
 
     /**
@@ -207,7 +213,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().setCallback(listener);
+        MessagingFactory.getInstance().getController().setCallback(listener);
     }
 
     /**
@@ -217,7 +223,7 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().removeCallback();
+        MessagingFactory.getInstance().getController().removeCallback();
     }
 
     /**
@@ -228,7 +234,7 @@ public class LivePerson {
             return;
         }
         UserProfileBundle userProfileBundle = new UserProfileBundle(firstName, lastName, phone);
-        Messaging.getInstance().sendUserProfile(mBrandId, appId, userProfileBundle);
+        MessagingFactory.getInstance().getController().sendUserProfile(mBrandId, appId, userProfileBundle);
     }
 
     /**
@@ -241,7 +247,7 @@ public class LivePerson {
             callback.onError(new Exception("SDK not initialized"));
             return;
         }else {
-            Messaging.getInstance().checkActiveConversation(mBrandId, callback);
+            MessagingFactory.getInstance().getController().checkActiveConversation(mBrandId, callback);
         }
     }
 
@@ -255,7 +261,7 @@ public class LivePerson {
             callback.onError(new Exception("SDK not initialized"));
             return;
         }else {
-            Messaging.getInstance().checkConversationIsMarkedAsUrgent(mBrandId, callback);
+            MessagingFactory.getInstance().getController().checkConversationIsMarkedAsUrgent(mBrandId, callback);
         }
     }
 
@@ -270,7 +276,7 @@ public class LivePerson {
             callback.onError(new Exception("SDK not initialized"));
             return;
         }else {
-            Messaging.getInstance().checkAgentID(mBrandId, callback);
+            MessagingFactory.getInstance().getController().checkAgentID(mBrandId, callback);
         }
     }
 
@@ -278,14 +284,14 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().markConversationAsUrgent(mBrandId);
+        MessagingFactory.getInstance().getController().markConversationAsUrgent(mBrandId, mBrandId);
     }
 
     public static void markConversationAsNormal() {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().markConversationAsNormal(mBrandId);
+        MessagingFactory.getInstance().getController().markConversationAsNormal(mBrandId, mBrandId);
     }
 
 
@@ -293,11 +299,11 @@ public class LivePerson {
         if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().resolveConversation(mBrandId);
+        MessagingFactory.getInstance().getController().resolveConversation(mBrandId, mBrandId);
     }
 
     private static boolean isValidState() {
-        return initialized && !TextUtils.isEmpty(mBrandId);
+        return MessagingUIFactory.getInstance().isInitialized() && !TextUtils.isEmpty(mBrandId);
     }
 
 	/**
@@ -307,99 +313,63 @@ public class LivePerson {
 	 * @return <code>true</code> if messages cleared, <code>false</code> if messages were not cleared (due to open conversation, or no current brand)
 	 */
 	public static boolean clearHistory() {
-		if (!isValidState()) {
-			return false;
-		}
-		return Messaging.getInstance().clearHistory(mBrandId);
+        if (!isValidState()) {
+            return false;
+        }
+		return MessagingFactory.getInstance().getController().clearHistory(mBrandId);
 	}
 
-	/**
+    /**
      * Close LivePerson Messaging SDK
      * Uninitialized SDK without cleaning data.
      * This does not handle the screen. To close the Activity call @hideConversation BEFORE shutdown
      */
     public static void shutDown() {
-        if (!initialized) {
+
+        if (!isValidState()) {
             return;
         }
-        Messaging.getInstance().shutDown();
-        MessagingUi.getInstance().shutDown();
-        Infra.instance.shutDown();
-        mBrandId = null;
-        initialized = false;
-        LPMobileLog.d(TAG, "Finished ShutDown");
+
+        MessagingUIFactory.getInstance().shutDown();
+        reset();
     }
+    private static void reset() {
+        mBrandId = null;
+    }
+
 
     /**
      * Clear LivePerson Messaging SDK data and unregistering push.
      * Will fail
      * This does not handle the screen. To close the Activity call @hideConversation BEFORE logout
      */
-    public static void logOut(final Context context, final String brandId, final String appId, final LogoutLivePersonCallback logoutCallback){
+    public static void logOut(final Context context, final String brandId, final String appId, final LogoutLivePersonCallback logoutCallback) {
+
+        mBrandId = brandId;
         //Handler to call the host app with the callback on the same thread.
         final Handler logoutHandler = new Handler();
-
-        //need to initialized so we can run unregister push.
-        initialize(context, brandId, new InitLivePersonCallBack() {
+        InitLivePersonProperties initProperties = new InitLivePersonProperties(brandId, appId, null);
+        MessagingUiInitData ui = new MessagingUiInitData(initProperties, getSDKVersion());
+        MessagingUIFactory.getInstance().logout(context, ui, new LogoutLivePersonCallBack() {
+            @Override
+            public void onLogoutSucceed() {
+                logoutHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        logoutCallback.onLogoutSucceed();
+                    }
+                });
+            }
 
             @Override
-            public void onInitSucceed() {
-                runUnregisterPushAndClear();
-            }
-
-            @Override
-            public void onInitFailed(Exception e) {
-                notifyLogoutFailed();
-            }
-
-            private void runUnregisterPushAndClear() {
-                //if we are not connected = unregister will fail.
-                Messaging.getInstance().unregisterPusher(brandId, appId, new ICallback<Void, Exception>() {
+            public void onLogoutFailed(final Exception e) {
+                logoutHandler.post(new Runnable() {
                     @Override
-                    public void onSuccess(Void value) {
-                        shutDown();
-                        clear();
-                        notifyLogoutSucceed();
+                    public void run() {
+                        logoutCallback.onLogoutFailed();
                     }
-
-                    @Override
-                    public void onError(Exception exception) {
-                        LPMobileLog.w(TAG, "LivePerson Logout: Error: " + exception.getMessage());
-                        notifyLogoutFailed();
-                    }
-                }, true);
-            }
-
-            private void notifyLogoutFailed() {
-                if (logoutCallback != null){
-                    logoutHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            logoutCallback.onLogoutFailed();
-                        }
-                    });
-                }
-            }
-
-            private void notifyLogoutSucceed() {
-                if (logoutCallback != null) {
-                    logoutHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            logoutCallback.onLogoutSucceed();
-                        }
-                    });
-                }
+                });
             }
         });
-
     }
-
-    private static void clear() {
-        NotificationController.instance.clear();
-        Messaging.getInstance().clear();
-        MessagingUi.getInstance().clear();
-        Infra.instance.clear();
-    }
-
 }
