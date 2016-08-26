@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
@@ -15,14 +16,13 @@ android {
         consumerProguardFiles 'proguard.cfg'
     }
 
-    repositories {
-        flatDir {
-            dirs 'aars'
-        }
+    lintOptions {
+        abortOnError false
     }
 }
 
 dependencies {
+
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
@@ -31,8 +31,29 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.11.0'
     compile 'com.neovisionaries:nv-websocket-client:1.28'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
     compile(name: 'infra', ext: 'aar')
     compile(name: 'messaging', ext: 'aar')
     compile(name: 'messaging_ui', ext: 'aar')
     compile(name: 'ui', ext: 'aar')
+}
+
+repositories {
+    flatDir { dirs 'aars' }
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+}
+
+buildscript {
+
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+    }
 }
