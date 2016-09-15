@@ -31,7 +31,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button_start"
+            android:id="@+id/button_start_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

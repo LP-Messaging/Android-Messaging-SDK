@@ -13,16 +13,20 @@ import com.liveperson.sample.app.MainActivity;
 import com.liveperson.sample.app.R;
 
 /**
- * Created by ofira on 6/26/16.
+ * ***** Sample app class - Not related to Messaging SDK *****
+ *
+ * Used as an example of how to create push notification in terms of UI.
+ * As best practise each host app needs to handle the push notifications UI implementation.
+ *
  */
 public class NotificationUI {
 
     private static final String TAG = NotificationUI.class.getSimpleName();
-    private static final int NOTIFICATION_ID = 143434567;
+    public static final int NOTIFICATION_ID = 143434567;
     public static final String PUSH_NOTIFICATION = "push_notification";
 
 
-    public static void showNotification(Context ctx, PushMessageParser messageParser) {
+	public static void showNotification(Context ctx, PushMessageParser messageParser) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx).
                 setContentIntent(getPendingIntent(ctx)).
@@ -39,7 +43,7 @@ public class NotificationUI {
         }
 
 
-        getNotificationManager(ctx).notify(TAG, NOTIFICATION_ID, builder.build());
+        getNotificationManager(ctx).notify(NOTIFICATION_ID, builder.build());
     }
 
     private static NotificationManager getNotificationManager(Context ctx) {
@@ -50,6 +54,7 @@ public class NotificationUI {
     private static PendingIntent getPendingIntent(Context ctx) {
         Intent showIntent = new Intent(ctx, MainActivity.class);
         showIntent.putExtra(PUSH_NOTIFICATION, true);
-        return PendingIntent.getActivity(ctx, 0, showIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		return PendingIntent.getActivity(ctx, 0, showIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

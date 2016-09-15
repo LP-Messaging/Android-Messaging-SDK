@@ -20,12 +20,16 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.liveperson.infra.Infra;
 import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.account.AccountStorage;
+import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.liveperson.sample.app.Utils.SampleAppUtils;
 
-
+/**
+ * ***** Sample app class - Not related to Messaging SDK *****
+ *
+ * Taken from Google's GCM sample app
+ */
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
@@ -48,6 +52,6 @@ public class MyGcmListenerService extends GcmListenerService {
 		//Code snippet to add push UI notification
 		NotificationUI.showNotification(this, message);
 
-		LivePerson.handlePush(this, data, AccountStorage.getInstance(this).getAccount(), false);
+		LivePerson.handlePush(this, data, SampleAppStorage.getInstance(this).getAccount(), false);
     }
 }

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.liveperson.api.LivePersonCallback;
 import com.liveperson.infra.ICallback;
@@ -18,11 +17,14 @@ import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.infra.messaging_ui.MessagingUIFactory;
 import com.liveperson.infra.messaging_ui.MessagingUiInitData;
 import com.liveperson.infra.messaging_ui.notification.NotificationController;
+import com.liveperson.infra.sdkstatemachine.shutdown.ShutDownCompletionListener;
 import com.liveperson.messaging.MessagingFactory;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.model.UserProfileBundle;
 import com.liveperson.messaging.sdk.BuildConfig;
 import com.liveperson.messaging.sdk.R;
+import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
+import com.liveperson.messaging.sdk.api.callbacks.ShutDownLivePersonCallback;
 
 /**
  * LivePerson Messaging SDK entry point.
@@ -61,7 +63,7 @@ public class LivePerson {
 			if (initProperties != null && initProperties.getInitCallBack() != null){
 				initProperties.getInitCallBack().onInitFailed(new Exception("InitLivePersonProperties not valid or missing parameters."));
 			}
-			Log.w(TAG, "Invalid InitLivePersonProperties!");
+            LPMobileLog.w(TAG, "Invalid InitLivePersonProperties!");
 			return;
 		}
 		//try to initialized
@@ -132,7 +134,7 @@ public class LivePerson {
      */
     public static Fragment getConversationFragment(String authKey) {
         if (!isValidState()) {
-            Log.e(TAG, "getConversationFragment- not initialized! mBrandId = "+ mBrandId);
+            LPMobileLog.e(TAG, "getConversationFragment- not initialized! mBrandId = "+ mBrandId);
             return null;
         }
         return MessagingUIFactory.getInstance().getConversationFragment(mBrandId, authKey);
@@ -324,15 +326,50 @@ public class LivePerson {
      * Uninitialized SDK without cleaning data.
      * This does not handle the screen. To close the Activity call @hideConversation BEFORE shutdown
      */
-    public static void shutDown() {
+    public static void shutDown(final ShutDownLivePersonCallback shutdownCallback) {
 
         if (!isValidState()) {
             return;
         }
 
-        MessagingUIFactory.getInstance().shutDown();
-        reset();
+        MessagingUIFactory.getInstance().shutDown(new ShutDownCompletionListener(){
+
+			@Override
+			public void shutDownCompleted() {
+				if (shutdownCallback != null) {
+					shutdownCallback.onShutdownSucceed();
+				}
+
+				reset();
+			}
+
+			@Override
+			public void shutDownFailed() {
+
+				if (shutdownCallback != null) {
+					shutdownCallback.onShutdownFailed();
+				}
+			}
+		});
     }
+
+    /**
+     * Close LivePerson Messaging SDK
+     * Uninitialized SDK without cleaning data.
+     * This does not handle the screen.
+     * To close the Activity call @hideConversation BEFORE shutdown
+     * To close the fragment - remove it from its activity's container BEFORE shutdown.
+	 *
+	 * @deprecated
+	 * This does not provide any indication whether the shutdown was succeeded.
+	 * Please use shutDown(ShutDownLivePersonCallback)
+     */
+	@Deprecated
+    public static void shutDown() {
+
+       shutDown(null);
+    }
+
     private static void reset() {
         mBrandId = null;
     }

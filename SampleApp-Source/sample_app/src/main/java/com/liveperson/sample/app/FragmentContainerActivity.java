@@ -1,6 +1,7 @@
 package com.liveperson.sample.app;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,11 +17,14 @@ import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.account.AccountStorage;
-import com.liveperson.sample.app.account.UserProfileStorage;
+import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.liveperson.sample.app.Utils.SampleAppUtils;
+import com.liveperson.sample.app.push.RegistrationIntentService;
 
 /**
- * Created by shiranr on 11/11/2015.
+ * ***** Sample app class - Not related to Messaging SDK ****
+ *
+ * Used as an example of how to use SDK "Fragment mode"
  */
 public class FragmentContainerActivity extends AppCompatActivity {
 
@@ -34,11 +38,12 @@ public class FragmentContainerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_custom);
         Log.i(TAG, "onCreate savedInstanceState = " + savedInstanceState );
 
-        LivePerson.initialize(this, new InitLivePersonProperties(AccountStorage.getInstance(this).getAccount(), AccountStorage.SDK_SAMPLE_APP_ID, new InitLivePersonCallBack() {
+        LivePerson.initialize(this, new InitLivePersonProperties(SampleAppStorage.getInstance(this).getAccount(), SampleAppStorage.SDK_SAMPLE_APP_ID, new InitLivePersonCallBack() {
 
             @Override
             public void onInitSucceed() {
                 Log.i(TAG, "onInitSucceed");
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -46,10 +51,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
                     }
                 });
                 setCallBack();
-                String firstName = UserProfileStorage.getInstance(FragmentContainerActivity.this).getFirstName();
-                String lastName = UserProfileStorage.getInstance(FragmentContainerActivity.this).getLastName();
-                String phoneNumber = UserProfileStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
-                LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, firstName, lastName, phoneNumber);
+                SampleAppUtils.handleGCMRegistration(FragmentContainerActivity.this);
+                String firstName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getFirstName();
+                String lastName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getLastName();
+                String phoneNumber = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
+                LivePerson.setUserProfile(SampleAppStorage.SDK_SAMPLE_APP_ID, firstName, lastName, phoneNumber);
             }
 
             @Override
@@ -63,7 +69,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
         mConversationFragment = getSupportFragmentManager().findFragmentByTag(LIVEPERSON_FRAGMENT);
         Log.d(TAG, "initFragment. mConversationFragment = "+ mConversationFragment);
         if (mConversationFragment == null) {
-            String authCode = UserProfileStorage.getInstance(FragmentContainerActivity.this).getAuthCode();
+            String authCode = SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode();
             Log.d(TAG, "initFragment. authCode = "+ authCode);
             if (TextUtils.isEmpty(authCode)) {
                 mConversationFragment = LivePerson.getConversationFragment();
@@ -86,7 +92,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
     private void attachFragment() {
         if (mConversationFragment.isDetached()) {
-            Log.d("TAG", "initFragment. attaching fragment");
+            Log.d(TAG, "initFragment. attaching fragment");
             if (isValidState()){
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.attach(mConversationFragment).commitAllowingStateLoss();
@@ -107,16 +113,9 @@ public class FragmentContainerActivity extends AppCompatActivity {
         if (mConversationFragment != null && !mConversationFragment.isDetached()){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.detach(mConversationFragment).commit();
-            Log.d("TAG", "onSaveInstanceState, detaching fragment");
+            Log.d(TAG, "onSaveInstanceState, detaching fragment");
         }
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.i(TAG, "onDestroy");
-        LivePerson.shutDown();
-        super.onDestroy();
     }
 
     private void setCallBack() {
@@ -131,7 +130,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Toast.makeText(FragmentContainerActivity.this, "onTokenExpired ", Toast.LENGTH_LONG).show();
 
                 // Change authentication key here
-                LivePerson.reconnect(UserProfileStorage.getInstance(FragmentContainerActivity.this).getAuthCode());
+                LivePerson.reconnect(SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode());
             }
 
             @Override
@@ -161,10 +160,15 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
             @Override
             public void onCsatDismissed() {
-                Toast.makeText(FragmentContainerActivity.this, "on Csat Dismissed", Toast.LENGTH_LONG).show();
+                Toast.makeText(FragmentContainerActivity.this, "on CSAT Dismissed", Toast.LENGTH_LONG).show();
             }
 
-            @Override
+			@Override
+			public void onCsatSubmitted(String conversationId) {
+				Toast.makeText(FragmentContainerActivity.this, "on CSAT Submitted", Toast.LENGTH_LONG).show();
+			}
+
+			@Override
             public void onConversationMarkedAsUrgent() {
                 Toast.makeText(FragmentContainerActivity.this, "Conversation Marked As Urgent", Toast.LENGTH_LONG).show();
             }
