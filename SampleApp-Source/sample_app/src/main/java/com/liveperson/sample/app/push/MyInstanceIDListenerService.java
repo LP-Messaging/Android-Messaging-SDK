@@ -21,6 +21,12 @@ import android.content.Intent;
 
 import com.google.android.gms.iid.InstanceIDListenerService;
 
+
+/**
+ * ***** Sample app class - Not related to Messaging SDK *****
+ *
+ * Taken from Google's GCM sample app
+ */
 public class MyInstanceIDListenerService extends InstanceIDListenerService {
 
     private static final String TAG = "MyInstanceIDLS";

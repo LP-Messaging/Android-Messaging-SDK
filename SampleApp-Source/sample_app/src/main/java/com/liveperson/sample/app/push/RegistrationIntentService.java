@@ -27,8 +27,13 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.account.AccountStorage;
+import com.liveperson.sample.app.Utils.SampleAppStorage;
 
+/**
+ * ***** Sample app class - Not related to Messaging SDK *****
+ *
+ * Taken from Google's GCM sample app
+ */
 public class RegistrationIntentService extends IntentService {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
@@ -62,8 +67,9 @@ public class RegistrationIntentService extends IntentService {
                 // [END get_token]
                 Log.i(TAG, "GCM Registration Token: " + token);
 
-                String account = AccountStorage.getInstance(this).getAccount();
-                LivePerson.registerLPPusher(account, AccountStorage.SDK_SAMPLE_APP_ID, token);
+                String account = SampleAppStorage.getInstance(this).getAccount();
+                String appID = SampleAppStorage.SDK_SAMPLE_APP_ID;
+                LivePerson.registerLPPusher(account, appID, token);
 
                 // You should store a boolean that indicates whether the generated token has been
                 // sent to your server. If the boolean is false, send the token to your server,

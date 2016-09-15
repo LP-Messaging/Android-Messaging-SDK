@@ -1,10 +1,9 @@
 package com.liveperson.sample.app;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,16 +15,20 @@ import android.widget.Toast;
 
 import com.liveperson.api.LivePersonCallback;
 import com.liveperson.infra.InitLivePersonProperties;
-import com.liveperson.infra.InternetConnectionService;
-import com.liveperson.infra.LocalBroadcastReceiver;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.account.AccountStorage;
-import com.liveperson.sample.app.account.UserProfileStorage;
-import com.liveperson.sample.app.push.RegistrationIntentService;
+import com.liveperson.sample.app.Utils.SampleAppUtils;
+import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.liveperson.sample.app.push.NotificationUI;
 
+
+/**
+ * ***** Sample app class - Not related to Messaging SDK ****
+ *
+ * The main activity of the sample app
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -35,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText mPhoneNumberView;
     private EditText mAuthCodeView;
     private TextView mSdkVersion;
-    private LocalBroadcastReceiver mLocalBroadcastReceiver;
     private Button mOpenConversationButton;
     private Button mOpenFragmentButton;
 
@@ -44,30 +46,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initViews();
+        initSampleAppViews();
         initOpenConversationButton();
         initStartFragmentButton();
+
+        handlePush(getIntent());
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handlePush(intent);
+    }
+
 
     /**
      * Init Views
      */
-    private void initViews() {
+    private void initSampleAppViews() {
         // Set the default account in the view
         mAccountTextView = (EditText) findViewById(R.id.brand_id);
-        mAccountTextView.setText(AccountStorage.getInstance(this).getAccount());
+        mAccountTextView.setText(SampleAppStorage.getInstance(this).getAccount());
 
         mFirstNameView = (EditText) findViewById(R.id.first_name);
-        mFirstNameView.setText(UserProfileStorage.getInstance(this).getFirstName());
+        mFirstNameView.setText(SampleAppStorage.getInstance(this).getFirstName());
 
         mLastNameView = (EditText) findViewById(R.id.last_name);
-        mLastNameView.setText(UserProfileStorage.getInstance(this).getLastName());
+        mLastNameView.setText(SampleAppStorage.getInstance(this).getLastName());
 
         mPhoneNumberView = (EditText) findViewById(R.id.phone_number);
-        mPhoneNumberView.setText(UserProfileStorage.getInstance(this).getPhoneNumber());
+        mPhoneNumberView.setText(SampleAppStorage.getInstance(this).getPhoneNumber());
 
         mAuthCodeView = (EditText) findViewById(R.id.auth_code);
-        mAuthCodeView.setText(UserProfileStorage.getInstance(this).getAuthCode());
+        mAuthCodeView.setText(SampleAppStorage.getInstance(this).getAuthCode());
 
         String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
         mSdkVersion = (TextView) findViewById(R.id.sdk_version);
@@ -86,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "onTokenExpired ", Toast.LENGTH_LONG).show();
 
                 // Change authentication key here
-                LivePerson.reconnect(UserProfileStorage.getInstance(MainActivity.this).getAuthCode());
+                LivePerson.reconnect(SampleAppStorage.getInstance(MainActivity.this).getAuthCode());
             }
 
             @Override
@@ -116,7 +127,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCsatDismissed() {
-                Toast.makeText(MainActivity.this, "on Csat Dismissed", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "on CSAT Dismissed", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCsatSubmitted(String conversationId) {
+                Toast.makeText(MainActivity.this, "on CSAT Submitted. ConversationID = " + conversationId, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -131,23 +147,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onOfflineHoursChanges(boolean isOfflineHoursOn) {
-                Toast.makeText(MainActivity.this, "on Offline Hours Changes - " + isOfflineHoursOn , Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "on Offline Hours Changes - " + isOfflineHoursOn, Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    /**
-     * Validate that the account field is not empty
-     * @return
-     */
-    private boolean validateAccount() {
-        String account = mAccountTextView.getText().toString().trim();
-        if (TextUtils.isEmpty(account)) {
-            Toast.makeText(this, "No account!", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        return true;
-    }
+
 
     /**
      * Save the user input such as: account, first name, last name, phone number and auth code
@@ -158,113 +163,135 @@ public class MainActivity extends AppCompatActivity {
         String lastName = mLastNameView.getText().toString().trim();
         String phoneNumber = mPhoneNumberView.getText().toString().trim();
         String authCode = mAuthCodeView.getText().toString().trim();
-        AccountStorage.getInstance(this).setAccount(account);
-        UserProfileStorage.getInstance(this).setFirstName(firstName);
-        UserProfileStorage.getInstance(this).setLastName(lastName);
-        UserProfileStorage.getInstance(this).setPhoneNumber(phoneNumber);
-        UserProfileStorage.getInstance(this).setAuthCode(authCode);
+        SampleAppStorage.getInstance(this).setAccount(account);
+        SampleAppStorage.getInstance(this).setFirstName(firstName);
+        SampleAppStorage.getInstance(this).setLastName(lastName);
+        SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
+        SampleAppStorage.getInstance(this).setAuthCode(authCode);
     }
 
     /**
-     * Set the listener on the open conversation button
+     * Set the listener on the "open_conversation" button (Activity mode)
      */
     private void initOpenConversationButton() {
-        mOpenConversationButton = (Button) findViewById(R.id.button_start);
+        mOpenConversationButton = (Button) findViewById(R.id.button_start_activity);
         mOpenConversationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!validateAccount()) {
+                //Sample app setting - used to initialize the SDK with "Activity mode" when entering from push notification
+                SampleAppStorage.getInstance(MainActivity.this).setSDKMode(SampleAppStorage.SDKMode.ACTIVITY);
+                if (SampleAppUtils.isAccountEmpty(mAccountTextView, MainActivity.this)) {
                     return;
                 }
-                mOpenConversationButton.setText(R.string.initializing);
-                mOpenConversationButton.setEnabled(false);
-
+                SampleAppUtils.disableButtonAndChangeText(mOpenConversationButton, getString(R.string.initializing));
                 saveAccountAndUserSettings();
-                LivePerson.initialize(MainActivity.this,new InitLivePersonProperties(AccountStorage.getInstance(MainActivity.this).getAccount(), AccountStorage.SDK_SAMPLE_APP_ID , new InitLivePersonCallBack() {
-                    @Override
-                    public void onInitSucceed() {
-                        Log.i(TAG, "onInitSucceed");
-                        setCallBack();
-                        // you can't register pusher before initialization
-                        handleGCMRegistration();
-                        registerConnection();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                openActivity();
-                                restoreButton();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onInitFailed(Exception e) {
-                        restoreButton();
-                        Toast.makeText(MainActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
-                    }
-                }));
-            }
-
-            private void restoreButton() {
-                mOpenConversationButton.setText(R.string.open_conversation);
-                mOpenConversationButton.setEnabled(true);
-            }
-
-            private void openActivity() {
-                String authCode = UserProfileStorage.getInstance(MainActivity.this).getAuthCode();
-                if (TextUtils.isEmpty(authCode)) {
-                    LivePerson.showConversation(MainActivity.this);
-                }else{
-                    LivePerson.showConversation(MainActivity.this, authCode);
-                }
-                LivePerson.setUserProfile(AccountStorage.SDK_SAMPLE_APP_ID, mFirstNameView.getText().toString(), mLastNameView.getText().toString(), mPhoneNumberView.getText().toString());
+                initActivityConversation();
             }
         });
     }
 
     /**
-     * Set the listener on the open fragment button
+     * Set the listener on the "Open Fragment" button (Fragment mode)
      */
     private void initStartFragmentButton() {
         mOpenFragmentButton = (Button) findViewById(R.id.button_start_fragment);
         mOpenFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!validateAccount()) {
+                //Sample app setting - used to initialize the SDK with "Fragment mode" when entering from push notification
+                SampleAppStorage.getInstance(MainActivity.this).setSDKMode(SampleAppStorage.SDKMode.FRAGMENT);
+                if (SampleAppUtils.isAccountEmpty(mAccountTextView, MainActivity.this)) {
                     return;
                 }
                 saveAccountAndUserSettings();
-                setCallBack();
-                handleGCMRegistration();
                 openFragmentContainer();
-            }
-
-            private void openFragmentContainer() {
-                Intent in = new Intent(MainActivity.this, FragmentContainerActivity.class);
-                startActivity(in);
             }
         });
     }
 
+    /**
+     * Initialize the Messaging SDK and start the SDK in "Activity Mode"
+     */
+    private void initActivityConversation() {
 
-    private void registerConnection() {
-        mLocalBroadcastReceiver = new LocalBroadcastReceiver.Builder()
-                .addAction(InternetConnectionService.BROADCAST_INTERNET_CONNECTION_CONNECTED)
-                .build(new LocalBroadcastReceiver.IOnReceive() {
+        LivePerson.initialize(MainActivity.this, new InitLivePersonProperties(SampleAppStorage.getInstance(MainActivity.this).getAccount(), SampleAppStorage.SDK_SAMPLE_APP_ID, new InitLivePersonCallBack() {
+            @Override
+            public void onInitSucceed() {
+                Log.i(TAG, "SDK initialize completed with Activity mode");
+                setCallBack();
+                // you can't register pusher before initialization
+                SampleAppUtils.handleGCMRegistration(MainActivity.this);
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onBroadcastReceived(Context context, Intent intent) {
-                        handleGCMRegistration();
+                    public void run() {
+                        openActivity();
+                        SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_conversation));
                     }
                 });
+            }
+
+            @Override
+            public void onInitFailed(Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_conversation));
+                        Toast.makeText(MainActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }));
     }
 
+    /**
+     * Start {@link FragmentContainerActivity} that handles the SDK the Messaging SDK and start the SDK in "Fragment Mode"
+     */
+    private void openFragmentContainer() {
+        Intent in = new Intent(MainActivity.this, FragmentContainerActivity.class);
+        startActivity(in);
+    }
 
-    private void handleGCMRegistration() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isTokenSent = sharedPreferences.getBoolean(RegistrationIntentService.SENT_TOKEN_TO_SERVER, false);
-        if (!isTokenSent) {
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
+    /**
+     * Calling to "showConversation" API
+     */
+    private void openActivity() {
+        String authCode = SampleAppStorage.getInstance(MainActivity.this).getAuthCode();
+        if (TextUtils.isEmpty(authCode)) {
+            LivePerson.showConversation(MainActivity.this);
+        } else {
+            LivePerson.showConversation(MainActivity.this, authCode);
         }
+        LivePerson.setUserProfile(SampleAppStorage.SDK_SAMPLE_APP_ID, mFirstNameView.getText().toString(), mLastNameView.getText().toString(), mPhoneNumberView.getText().toString());
+    }
+
+    /**
+     * If we initiated from a push message we show the screen that was in use the previous session (fragment/activity)
+     * Activity mode is the default
+     * @param intent
+     */
+    private void handlePush(Intent intent) {
+        boolean isFromPush = intent.getBooleanExtra(NotificationUI.PUSH_NOTIFICATION, false);
+
+        //Check if we came from Push Notification
+        if (isFromPush) {
+            clearPushNotifications();
+            switch (SampleAppStorage.getInstance(this).getSDKMode()){
+                //Initialize the SDK with "Activity mode"
+                case ACTIVITY:
+                    initActivityConversation();
+                    break;
+                //Initialize the SDK with "Fragment mode"
+                case FRAGMENT:
+                    openFragmentContainer();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Hide any shown notification
+     */
+    private void clearPushNotifications() {
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NotificationUI.NOTIFICATION_ID);
     }
 }
