@@ -3,13 +3,19 @@ package com.liveperson.sample.app;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +28,10 @@ import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppUtils;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 import com.liveperson.sample.app.push.NotificationUI;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -40,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mSdkVersion;
     private Button mOpenConversationButton;
     private Button mOpenFragmentButton;
+    private TextView mTime;
+    private TextView mDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +95,72 @@ public class MainActivity extends AppCompatActivity {
         String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
         mSdkVersion = (TextView) findViewById(R.id.sdk_version);
         mSdkVersion.setText(sdkVersion);
+
+        mTime = (TextView) findViewById(R.id.time_sample_textView);
+        mDate = (TextView) findViewById(R.id.date_sample_textView);
+
+        updateTime();
+
+        initLocaleSpinner();
+    }
+
+    private void updateTime() {
+        Locale locale = getLocale();
+        DateFormat formatTime = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
+        DateFormat formatDate = DateFormat.getDateInstance(DateFormat.LONG, locale);
+        Date date = new Date(System.currentTimeMillis());
+        mDate.setText(formatDate.format(date));
+        mTime.setText(formatTime.format(date));
+    }
+
+
+    private void initLocaleSpinner() {
+        final EditText language = (EditText) findViewById(R.id.language_editText);
+        final EditText country = (EditText) findViewById(R.id.country_editText);
+
+        final Spinner localeSpinner = (Spinner) findViewById(R.id.spinner_locale);
+        ArrayAdapter<String> localeSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.supported_locales));
+        localeSpinner.setAdapter(localeSpinnerArrayAdapter);
+
+        Button updateLocale = (Button) findViewById(R.id.update_language_button);
+        updateLocale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedLocale = (String)localeSpinner.getSelectedItem();
+                String[] lang_reg = selectedLocale.split("-");
+
+                if (lang_reg.length >= 2){
+                    Log.i(TAG, "createLocale: " +lang_reg[0] +"-" +lang_reg[1]);
+                    createLocale(lang_reg[0], lang_reg[1]);
+
+                }else if (lang_reg.length == 1){
+
+                    String lang = lang_reg[0];
+
+                    if (TextUtils.isEmpty(lang)){
+                        Log.i(TAG, "createLocale: taking custom locale from edit text.. ");
+                        createLocale(language.getText().toString(), country.getText().toString());
+                    }else{
+                        Log.i(TAG, "createLocale: " +lang +"-null");
+                        createLocale(lang, null);
+                    }
+                }
+
+                updateTime();
+            }
+        });
+
+
+        final Button clear = (Button) findViewById(R.id.clear_locale_button);
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                language.setText(null);
+                country.setText(null);
+                localeSpinner.setSelection(0);
+            }
+        });
     }
 
     private void setCallBack() {
@@ -294,4 +372,46 @@ public class MainActivity extends AppCompatActivity {
     private void clearPushNotifications() {
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NotificationUI.NOTIFICATION_ID);
     }
+
+    protected void createLocale(String language , @Nullable String country) {
+        Resources resources = getResources();
+        Configuration configuration = resources.getConfiguration();
+        Locale customLocale;
+
+        if (TextUtils.isEmpty(language)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                language = resources.getConfiguration().getLocales().get(0).getCountry();
+            }else{
+                language = resources.getConfiguration().locale.getCountry();
+            }
+        }
+
+        if (TextUtils.isEmpty(country)) {
+            customLocale = new Locale(language);
+        }else{
+            customLocale = new Locale(language, country);
+        }
+        Locale.setDefault(customLocale);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(customLocale);
+            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        }else{
+            configuration.locale = customLocale;
+            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        }
+
+        Locale locale = getLocale();
+        Log.d(TAG, "country = " + locale.getCountry() + ", language = " + locale.getLanguage() );
+
+    }
+
+    private Locale getLocale(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return getResources().getConfiguration().getLocales().get(0);
+        }else{
+            return getResources().getConfiguration().locale;
+        }
+    }
+
 }

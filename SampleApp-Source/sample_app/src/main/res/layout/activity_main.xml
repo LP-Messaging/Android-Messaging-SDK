@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -114,6 +115,83 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_data_section"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:columnCount="3"
+            app:rowCount="2"
+            android:id="@+id/linearLayout">
+
+            <Spinner
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_locale"
+                app:layout_gravity="fill_vertical"
+                app:layout_row="0"
+                app:layout_column="0"
+                />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_row="0"
+                app:layout_column="1"
+                android:inputType="textPersonName"
+                android:id="@+id/language_editText"
+                android:hint="language"
+                app:layout_gravity="center"
+                />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                app:layout_row="0"
+                app:layout_column="2"
+                android:id="@+id/country_editText"
+                app:layout_gravity="center"
+                android:hint="region" />
+
+            <Button
+                android:text="Update Language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/update_language_button"
+                app:layout_row="1"
+                app:layout_column="0"
+                />
+
+            <Button
+                android:text="Clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/clear_locale_button"
+                app:layout_row="1"
+                app:layout_column="1"
+                />
+
+
+        </android.support.v7.widget.GridLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_sample_textView"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/time_sample_textView"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            />
 
         <TextView
             android:id="@+id/sdk_version"
