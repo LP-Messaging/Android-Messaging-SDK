@@ -1,7 +1,6 @@
 package com.liveperson.sample.app;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +16,9 @@ import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
+import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 import com.liveperson.sample.app.Utils.SampleAppUtils;
-import com.liveperson.sample.app.push.RegistrationIntentService;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
@@ -38,7 +37,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_custom);
         Log.i(TAG, "onCreate savedInstanceState = " + savedInstanceState );
 
-        LivePerson.initialize(this, new InitLivePersonProperties(SampleAppStorage.getInstance(this).getAccount(), SampleAppStorage.SDK_SAMPLE_APP_ID, new InitLivePersonCallBack() {
+        LivePerson.initialize(this, new InitLivePersonProperties(SampleAppStorage.getInstance(this).getAccount(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, new InitLivePersonCallBack() {
 
             @Override
             public void onInitSucceed() {
@@ -55,7 +54,13 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 String firstName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getFirstName();
                 String lastName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getLastName();
                 String phoneNumber = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
-                LivePerson.setUserProfile(SampleAppStorage.SDK_SAMPLE_APP_ID, firstName, lastName, phoneNumber);
+
+				ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
+						.setFirstName(firstName)
+						.setLastName(lastName)
+						.setPhoneNumber(phoneNumber)
+						.build();
+                LivePerson.setUserProfile(consumerProfile);
             }
 
             @Override
@@ -108,7 +113,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+   /* @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (mConversationFragment != null && !mConversationFragment.isDetached()){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -116,7 +121,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
             Log.d(TAG, "onSaveInstanceState, detaching fragment");
         }
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     private void setCallBack() {
         LivePerson.setCallback(new LivePersonCallback() {
@@ -181,6 +186,12 @@ public class FragmentContainerActivity extends AppCompatActivity {
             @Override
             public void onOfflineHoursChanges(boolean isOfflineHoursOn) {
                 Toast.makeText(FragmentContainerActivity.this, "on Offline Hours Changes - " + isOfflineHoursOn , Toast.LENGTH_LONG).show();
+            }
+
+
+            @Override
+            public void onAgentAvatarTapped(AgentData agentData) {
+                Toast.makeText(FragmentContainerActivity.this, "on Agent Avatar Tapped - " + agentData.mFirstName + " "  + agentData.mLastName, Toast.LENGTH_SHORT).show();
             }
         });
     }

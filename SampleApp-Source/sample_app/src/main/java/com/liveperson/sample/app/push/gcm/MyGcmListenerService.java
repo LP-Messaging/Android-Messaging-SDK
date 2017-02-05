@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liveperson.sample.app.push;
+package com.liveperson.sample.app.push.gcm;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +23,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
-import com.liveperson.sample.app.Utils.SampleAppUtils;
+import com.liveperson.sample.app.push.NotificationUI;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK *****

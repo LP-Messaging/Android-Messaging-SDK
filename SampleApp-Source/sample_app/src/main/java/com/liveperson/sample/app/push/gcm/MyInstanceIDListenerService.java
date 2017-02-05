@@ -15,7 +15,7 @@
  */
 
 
-package com.liveperson.sample.app.push;
+package com.liveperson.sample.app.push.gcm;
 
 import android.content.Intent;
 

@@ -2,5 +2,5 @@
     <string name="app_name">Sample Application</string>
     <string name="initializing">Initializing…</string>
     <string name="open_fragment">Open Fragment</string>
-    <string name="open_conversation">Open Conversation</string>
+    <string name="open_activity">Open Activity</string>
 </resources>

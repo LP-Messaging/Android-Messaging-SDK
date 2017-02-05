@@ -8,12 +8,14 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,8 +27,9 @@ import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.Utils.SampleAppUtils;
+import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.liveperson.sample.app.Utils.SampleAppUtils;
 import com.liveperson.sample.app.push.NotificationUI;
 
 import java.text.DateFormat;
@@ -36,7 +39,7 @@ import java.util.Locale;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
- *
+ * <p>
  * The main activity of the sample app
  */
 public class MainActivity extends AppCompatActivity {
@@ -47,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText mLastNameView;
     private EditText mPhoneNumberView;
     private EditText mAuthCodeView;
-    private TextView mSdkVersion;
     private Button mOpenConversationButton;
-    private Button mOpenFragmentButton;
+    private TextInputLayout mAccountIdLayout;
     private TextView mTime;
     private TextView mDate;
+    private CheckBox mSetCallbackCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initSampleAppViews() {
         // Set the default account in the view
-        mAccountTextView = (EditText) findViewById(R.id.brand_id);
+        mAccountTextView = (EditText) findViewById(R.id.account_id);
+        mAccountIdLayout = (TextInputLayout) findViewById(R.id.account_id_layout);
         mAccountTextView.setText(SampleAppStorage.getInstance(this).getAccount());
 
         mFirstNameView = (EditText) findViewById(R.id.first_name);
@@ -92,15 +96,15 @@ public class MainActivity extends AppCompatActivity {
         mAuthCodeView = (EditText) findViewById(R.id.auth_code);
         mAuthCodeView.setText(SampleAppStorage.getInstance(this).getAuthCode());
 
+        mSetCallbackCheckBox = ((CheckBox)findViewById(R.id.set_callback));
+
         String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
-        mSdkVersion = (TextView) findViewById(R.id.sdk_version);
-        mSdkVersion.setText(sdkVersion);
+        ((TextView) findViewById(R.id.sdk_version)).setText(sdkVersion);
 
         mTime = (TextView) findViewById(R.id.time_sample_textView);
         mDate = (TextView) findViewById(R.id.date_sample_textView);
 
         updateTime();
-
         initLocaleSpinner();
     }
 
@@ -126,22 +130,22 @@ public class MainActivity extends AppCompatActivity {
         updateLocale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedLocale = (String)localeSpinner.getSelectedItem();
+                String selectedLocale = (String) localeSpinner.getSelectedItem();
                 String[] lang_reg = selectedLocale.split("-");
 
-                if (lang_reg.length >= 2){
-                    Log.i(TAG, "createLocale: " +lang_reg[0] +"-" +lang_reg[1]);
+                if (lang_reg.length >= 2) {
+                    Log.i(TAG, "createLocale: " + lang_reg[0] + "-" + lang_reg[1]);
                     createLocale(lang_reg[0], lang_reg[1]);
 
-                }else if (lang_reg.length == 1){
+                } else if (lang_reg.length == 1) {
 
                     String lang = lang_reg[0];
 
-                    if (TextUtils.isEmpty(lang)){
+                    if (TextUtils.isEmpty(lang)) {
                         Log.i(TAG, "createLocale: taking custom locale from edit text.. ");
                         createLocale(language.getText().toString(), country.getText().toString());
-                    }else{
-                        Log.i(TAG, "createLocale: " +lang +"-null");
+                    } else {
+                        Log.i(TAG, "createLocale: " + lang + "-null");
                         createLocale(lang, null);
                     }
                 }
@@ -164,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setCallBack() {
+        if (!mSetCallbackCheckBox.isChecked()){
+            return;
+        }
         LivePerson.setCallback(new LivePersonCallback() {
             @Override
             public void onError(TaskType type, String message) {
@@ -195,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAgentTyping(boolean isTyping) {
-                Toast.makeText(MainActivity.this, "isTyping " + isTyping, Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "isTyping " + isTyping, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -227,9 +234,14 @@ public class MainActivity extends AppCompatActivity {
             public void onOfflineHoursChanges(boolean isOfflineHoursOn) {
                 Toast.makeText(MainActivity.this, "on Offline Hours Changes - " + isOfflineHoursOn, Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onAgentAvatarTapped(AgentData agentData) {
+                Toast.makeText(MainActivity.this, "on Agent Avatar Tapped - " + agentData.mFirstName + " " + agentData.mLastName, Toast.LENGTH_SHORT).show();
+
+            }
         });
     }
-
 
 
     /**
@@ -258,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Sample app setting - used to initialize the SDK with "Activity mode" when entering from push notification
                 SampleAppStorage.getInstance(MainActivity.this).setSDKMode(SampleAppStorage.SDKMode.ACTIVITY);
-                if (SampleAppUtils.isAccountEmpty(mAccountTextView, MainActivity.this)) {
+                if(!isValidAccount()){
                     return;
                 }
                 SampleAppUtils.disableButtonAndChangeText(mOpenConversationButton, getString(R.string.initializing));
@@ -272,13 +284,13 @@ public class MainActivity extends AppCompatActivity {
      * Set the listener on the "Open Fragment" button (Fragment mode)
      */
     private void initStartFragmentButton() {
-        mOpenFragmentButton = (Button) findViewById(R.id.button_start_fragment);
-        mOpenFragmentButton.setOnClickListener(new View.OnClickListener() {
+        Button openFragmentButton = (Button) findViewById(R.id.button_start_fragment);
+        openFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Sample app setting - used to initialize the SDK with "Fragment mode" when entering from push notification
                 SampleAppStorage.getInstance(MainActivity.this).setSDKMode(SampleAppStorage.SDKMode.FRAGMENT);
-                if (SampleAppUtils.isAccountEmpty(mAccountTextView, MainActivity.this)) {
+                if(!isValidAccount()){
                     return;
                 }
                 saveAccountAndUserSettings();
@@ -288,11 +300,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Validate that the text field is not empty
+     * @return
+     */
+    private boolean isValidAccount() {
+        if (TextUtils.isEmpty(mAccountTextView.getText())) {
+            mAccountIdLayout.setError("Enter valid Account");
+            return false;
+        }
+        mAccountIdLayout.setError("");
+        return true;
+    }
+
+    /**
      * Initialize the Messaging SDK and start the SDK in "Activity Mode"
      */
     private void initActivityConversation() {
 
-        LivePerson.initialize(MainActivity.this, new InitLivePersonProperties(SampleAppStorage.getInstance(MainActivity.this).getAccount(), SampleAppStorage.SDK_SAMPLE_APP_ID, new InitLivePersonCallBack() {
+        LivePerson.initialize(MainActivity.this, new InitLivePersonProperties(SampleAppStorage.getInstance(MainActivity.this).getAccount(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, new InitLivePersonCallBack() {
             @Override
             public void onInitSucceed() {
                 Log.i(TAG, "SDK initialize completed with Activity mode");
@@ -303,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         openActivity();
-                        SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_conversation));
+                        SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_activity));
                     }
                 });
             }
@@ -313,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_conversation));
+                        SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_activity));
                         Toast.makeText(MainActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -339,12 +364,18 @@ public class MainActivity extends AppCompatActivity {
         } else {
             LivePerson.showConversation(MainActivity.this, authCode);
         }
-        LivePerson.setUserProfile(SampleAppStorage.SDK_SAMPLE_APP_ID, mFirstNameView.getText().toString(), mLastNameView.getText().toString(), mPhoneNumberView.getText().toString());
+		ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
+				.setFirstName(mFirstNameView.getText().toString())
+				.setLastName(mLastNameView.getText().toString())
+				.setPhoneNumber(mPhoneNumberView.getText().toString())
+				.build();
+        LivePerson.setUserProfile(consumerProfile);
     }
 
     /**
      * If we initiated from a push message we show the screen that was in use the previous session (fragment/activity)
      * Activity mode is the default
+     *
      * @param intent
      */
     private void handlePush(Intent intent) {
@@ -353,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
         //Check if we came from Push Notification
         if (isFromPush) {
             clearPushNotifications();
-            switch (SampleAppStorage.getInstance(this).getSDKMode()){
+            switch (SampleAppStorage.getInstance(this).getSDKMode()) {
                 //Initialize the SDK with "Activity mode"
                 case ACTIVITY:
                     initActivityConversation();
@@ -373,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NotificationUI.NOTIFICATION_ID);
     }
 
-    protected void createLocale(String language , @Nullable String country) {
+    protected void createLocale(String language, @Nullable String country) {
         Resources resources = getResources();
         Configuration configuration = resources.getConfiguration();
         Locale customLocale;
@@ -381,14 +412,14 @@ public class MainActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(language)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 language = resources.getConfiguration().getLocales().get(0).getCountry();
-            }else{
+            } else {
                 language = resources.getConfiguration().locale.getCountry();
             }
         }
 
         if (TextUtils.isEmpty(country)) {
             customLocale = new Locale(language);
-        }else{
+        } else {
             customLocale = new Locale(language, country);
         }
         Locale.setDefault(customLocale);
@@ -396,20 +427,20 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(customLocale);
             resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        }else{
+        } else {
             configuration.locale = customLocale;
             resources.updateConfiguration(configuration, resources.getDisplayMetrics());
         }
 
         Locale locale = getLocale();
-        Log.d(TAG, "country = " + locale.getCountry() + ", language = " + locale.getLanguage() );
+        Log.d(TAG, "country = " + locale.getCountry() + ", language = " + locale.getLanguage());
 
     }
 
-    private Locale getLocale(){
+    private Locale getLocale() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return getResources().getConfiguration().getLocales().get(0);
-        }else{
+        } else {
             return getResources().getConfiguration().locale;
         }
     }

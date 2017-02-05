@@ -15,6 +15,7 @@ public class SampleAppStorage {
     private static final String TAG = SampleAppStorage.class.getSimpleName();
 
     public static final String SDK_SAMPLE_APP_ID = "com.liveperson.sdksample";
+    public static final String SDK_SAMPLE_FCM_APP_ID = "com.liveperson.sdksampleFcm";
 
     private static final String FIRST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
