@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name="supported_locales">
-        <item></item>
+        <item />
         <item>bg</item>
         <item>cs</item>
         <item>da</item>

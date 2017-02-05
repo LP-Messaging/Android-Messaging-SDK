@@ -11,11 +11,14 @@ import android.text.TextUtils;
 import com.liveperson.api.LivePersonCallback;
 import com.liveperson.infra.ICallback;
 import com.liveperson.infra.InitLivePersonProperties;
+import com.liveperson.infra.LivePersonConfiguration;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.callbacks.LogoutLivePersonCallBack;
 import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.infra.messaging_ui.MessagingUIFactory;
+import com.liveperson.infra.messaging_ui.MessagingUiConfiguration;
 import com.liveperson.infra.messaging_ui.MessagingUiInitData;
+import com.liveperson.infra.messaging_ui.configuration.UIConfigurationKeys;
 import com.liveperson.infra.messaging_ui.notification.NotificationController;
 import com.liveperson.infra.sdkstatemachine.shutdown.ShutDownCompletionListener;
 import com.liveperson.messaging.MessagingFactory;
@@ -25,6 +28,7 @@ import com.liveperson.messaging.sdk.BuildConfig;
 import com.liveperson.messaging.sdk.R;
 import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
 import com.liveperson.messaging.sdk.api.callbacks.ShutDownLivePersonCallback;
+import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 
 /**
  * LivePerson Messaging SDK entry point.
@@ -36,6 +40,7 @@ public class LivePerson {
 
     private static final String TAG = LivePerson.class.getSimpleName();
     private static String mBrandId;
+    static LivePersonConfiguration mLivePersonConfiguration;
 
     private LivePerson() {
     }
@@ -43,39 +48,42 @@ public class LivePerson {
 
     /**
      * Initialize the framework
-	 * @deprecated - need to have app id in order to enable some features.
-	 * use {@link #initialize(Context, InitLivePersonProperties)} instead
+     *
+     * @param context Application or activity context
+     * @deprecated - need to have app id in order to enable some features.
+     * use {@link #initialize(Context, InitLivePersonProperties)} instead
+     */
+    @Deprecated
+    public static void initialize(final Context context, final String brandId, final InitLivePersonCallBack initCallBack) {
+        initialize(context, new InitLivePersonProperties(brandId, context.getApplicationInfo().packageName, initCallBack));
+    }
+
+    /**
+     * Initialize the framework
+     *
      * @param context Application or activity context
      */
-	@Deprecated
-    public static void initialize(final Context context, final String brandId, final InitLivePersonCallBack initCallBack) {
-		initialize(context, new InitLivePersonProperties(brandId, context.getApplicationInfo().packageName, initCallBack));
-    }
-
-	/**
-	 * Initialize the framework
-	 *
-	 * @param context Application or activity context
-	 */
     public static void initialize(final Context context, final InitLivePersonProperties initProperties) {
-		//check if initProperties contains all the mandatory params.
-		if (!InitLivePersonProperties.isValid(initProperties)){
-			if (initProperties != null && initProperties.getInitCallBack() != null){
-				initProperties.getInitCallBack().onInitFailed(new Exception("InitLivePersonProperties not valid or missing parameters."));
-			}
+        //check if initProperties contains all the mandatory params.
+        if (!InitLivePersonProperties.isValid(initProperties)) {
+            if (initProperties != null && initProperties.getInitCallBack() != null) {
+                initProperties.getInitCallBack().onInitFailed(new Exception("InitLivePersonProperties not valid or missing parameters."));
+            }
             LPMobileLog.w(TAG, "Invalid InitLivePersonProperties!");
-			return;
-		}
-		//try to initialized
-		if (!isValidState()) {
-			mBrandId = initProperties.getBrandId();
-			setLogDebugMode(context);
-			MessagingUIFactory.getInstance().init(context, new MessagingUiInitData(initProperties, getSDKVersion()));
-		} else {
-			initProperties.getInitCallBack().onInitSucceed();
-		}
+            return;
+        }
+        //try to initialized
+        if (!isValidState()) {
+            mBrandId = initProperties.getBrandId();
+            setLogDebugMode(context);
+            UIConfigurationKeys.setDefaultConfiguration(context);
+            mLivePersonConfiguration = new LivePersonConfiguration(null);
+            MessagingUIFactory.getInstance().init(context, new MessagingUiInitData(initProperties, getSDKVersion()), new MessagingUiConfiguration(null));
+        } else {
+            initProperties.getInitCallBack().onInitSucceed();
+            MessagingUIFactory.getInstance().setConfiguration(new MessagingUiConfiguration(null));
+        }
     }
-
 
     private static void setLogDebugMode(Context context) {
         boolean isDebuggable = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
@@ -101,10 +109,7 @@ public class LivePerson {
      * @return
      */
     public static boolean showConversation(Activity activity, String authenticationKey) {
-        if (!isValidState()) {
-            return false;
-        }
-        return MessagingUIFactory.getInstance().showConversation(activity, mBrandId, authenticationKey);
+        return isValidState() && MessagingUIFactory.getInstance().showConversation(activity, mBrandId, authenticationKey);
     }
 
     /**
@@ -134,7 +139,7 @@ public class LivePerson {
      */
     public static Fragment getConversationFragment(String authKey) {
         if (!isValidState()) {
-            LPMobileLog.e(TAG, "getConversationFragment- not initialized! mBrandId = "+ mBrandId);
+            LPMobileLog.e(TAG, "getConversationFragment- not initialized! mBrandId = " + mBrandId);
             return null;
         }
         return MessagingUIFactory.getInstance().getConversationFragment(mBrandId, authKey);
@@ -142,6 +147,7 @@ public class LivePerson {
 
     /**
      * Reconnect with new authentication key
+     *
      * @param authKey the authentication key to connect with
      */
     public static void reconnect(String authKey) {
@@ -151,7 +157,7 @@ public class LivePerson {
         }
 
         MessagingFactory.getInstance().getController().reconnect(mBrandId, authKey);
-	}
+    }
 
     /**
      * Register LivePerson pusher service
@@ -230,13 +236,42 @@ public class LivePerson {
 
     /**
      * Set user profile for this session
+     *
+     * @deprecated The setUserProfile method with appId parameter is deprecated. Please use {@link #setUserProfile(ConsumerProfile)}}
      */
+    @Deprecated
     public static void setUserProfile(String appId, String firstName, String lastName, String phone) {
         if (!isValidState()) {
             return;
         }
-        UserProfileBundle userProfileBundle = new UserProfileBundle(firstName, lastName, phone);
-        MessagingFactory.getInstance().getController().sendUserProfile(mBrandId, appId, userProfileBundle);
+        ConsumerProfile profile = new ConsumerProfile.Builder()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setPhoneNumber(phone)
+                .build();
+
+        setUserProfile(profile);
+    }
+
+
+    /**
+     * Set the consumer's profile for this session
+     *
+     * @param profile {@link ConsumerProfile}
+     */
+    public static void setUserProfile(ConsumerProfile profile) {
+        if (!isValidState()) {
+            return;
+        }
+        UserProfileBundle userProfile = new UserProfileBundle.Builder()
+                .setFirstName(profile.getFirstName())
+                .setLastName(profile.getLastName())
+                .setPhoneNumber(profile.getPhoneNumber())
+                .setNickname(profile.getNickname())
+                .setAvatarUrl(profile.getAvatarUrl())
+                .build();
+
+        MessagingFactory.getInstance().getController().sendUserProfile(mBrandId, userProfile);
     }
 
     /**
@@ -247,8 +282,7 @@ public class LivePerson {
     public static void checkActiveConversation(final ICallback<Boolean, Exception> callback) {
         if (!isValidState()) {
             callback.onError(new Exception("SDK not initialized"));
-            return;
-        }else {
+        } else {
             MessagingFactory.getInstance().getController().checkActiveConversation(mBrandId, callback);
         }
     }
@@ -262,25 +296,24 @@ public class LivePerson {
         if (!isValidState()) {
             callback.onError(new Exception("SDK not initialized"));
             return;
-        }else {
+        } else {
             MessagingFactory.getInstance().getController().checkConversationIsMarkedAsUrgent(mBrandId, callback);
         }
     }
 
     /**
-     * return the agent data(first name, last name, email, avatarURL) in case we have an active conversation
-     * or null otherwise
+     * return the agent data(first name, last name, email, avatarURL) in case the user tapped on Agent's Image
      *
      * @param callback
      */
-    public static void checkAgentID(final ICallback<AgentData, Exception> callback){
+    public static void checkAgentID(final ICallback<AgentData, Exception> callback) {
         if (!isValidState()) {
             callback.onError(new Exception("SDK not initialized"));
-            return;
-        }else {
+        } else {
             MessagingFactory.getInstance().getController().checkAgentID(mBrandId, callback);
         }
     }
+
 
     public static void markConversationAsUrgent() {
         if (!isValidState()) {
@@ -308,18 +341,15 @@ public class LivePerson {
         return MessagingUIFactory.getInstance().isInitialized() && !TextUtils.isEmpty(mBrandId);
     }
 
-	/**
-	 * Clear all messages and conversations for the current brand.
-	 * This method will clear only if there is no open conversation active.
-	 *
-	 * @return <code>true</code> if messages cleared, <code>false</code> if messages were not cleared (due to open conversation, or no current brand)
-	 */
-	public static boolean clearHistory() {
-        if (!isValidState()) {
-            return false;
-        }
-		return MessagingFactory.getInstance().getController().clearHistory(mBrandId);
-	}
+    /**
+     * Clear all messages and conversations for the current brand.
+     * This method will clear only if there is no open conversation active.
+     *
+     * @return <code>true</code> if messages cleared, <code>false</code> if messages were not cleared (due to open conversation, or no current brand)
+     */
+    public static boolean clearHistory() {
+        return isValidState() && MessagingFactory.getInstance().getController().clearHistory(mBrandId);
+    }
 
     /**
      * Close LivePerson Messaging SDK
@@ -332,25 +362,25 @@ public class LivePerson {
             return;
         }
 
-        MessagingUIFactory.getInstance().shutDown(new ShutDownCompletionListener(){
+        MessagingUIFactory.getInstance().shutDown(new ShutDownCompletionListener() {
 
-			@Override
-			public void shutDownCompleted() {
-				if (shutdownCallback != null) {
-					shutdownCallback.onShutdownSucceed();
-				}
+            @Override
+            public void shutDownCompleted() {
+                if (shutdownCallback != null) {
+                    shutdownCallback.onShutdownSucceed();
+                }
 
-				reset();
-			}
+                reset();
+            }
 
-			@Override
-			public void shutDownFailed() {
+            @Override
+            public void shutDownFailed() {
 
-				if (shutdownCallback != null) {
-					shutdownCallback.onShutdownFailed();
-				}
-			}
-		});
+                if (shutdownCallback != null) {
+                    shutdownCallback.onShutdownFailed();
+                }
+            }
+        });
     }
 
     /**
@@ -359,15 +389,14 @@ public class LivePerson {
      * This does not handle the screen.
      * To close the Activity call @hideConversation BEFORE shutdown
      * To close the fragment - remove it from its activity's container BEFORE shutdown.
-	 *
-	 * @deprecated
-	 * This does not provide any indication whether the shutdown was succeeded.
-	 * Please use shutDown(ShutDownLivePersonCallback)
+     *
+     * @deprecated This does not provide any indication whether the shutdown was succeeded.
+     * Please use shutDown(ShutDownLivePersonCallback)
      */
-	@Deprecated
+    @Deprecated
     public static void shutDown() {
 
-       shutDown(null);
+        shutDown(null);
     }
 
     private static void reset() {
