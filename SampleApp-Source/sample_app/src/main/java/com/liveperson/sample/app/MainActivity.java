@@ -21,7 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.liveperson.api.LivePersonCallback;
+import com.liveperson.api.LivePersonCallbackImpl;
+import com.liveperson.api.ams.cm.types.CloseReason;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
@@ -171,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
         if (!mSetCallbackCheckBox.isChecked()){
             return;
         }
-        LivePerson.setCallback(new LivePersonCallback() {
+
+        LivePerson.setCallback(new LivePersonCallbackImpl() {
             @Override
             public void onError(TaskType type, String message) {
                 Toast.makeText(MainActivity.this, " problem " + type.name(), Toast.LENGTH_LONG).show();
@@ -192,6 +194,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onConversationResolved() {
+                Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onConversationResolved(CloseReason reason) {
                 Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
             }
 
@@ -364,11 +371,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             LivePerson.showConversation(MainActivity.this, authCode);
         }
-		ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
-				.setFirstName(mFirstNameView.getText().toString())
-				.setLastName(mLastNameView.getText().toString())
-				.setPhoneNumber(mPhoneNumberView.getText().toString())
-				.build();
+        ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
+                .setFirstName(mFirstNameView.getText().toString())
+                .setLastName(mLastNameView.getText().toString())
+                .setPhoneNumber(mPhoneNumberView.getText().toString())
+                .build();
         LivePerson.setUserProfile(consumerProfile);
     }
 
