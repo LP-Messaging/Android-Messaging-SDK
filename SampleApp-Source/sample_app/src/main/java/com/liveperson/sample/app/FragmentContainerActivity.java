@@ -10,7 +10,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.liveperson.api.LivePersonCallback;
+import com.liveperson.api.LivePersonCallbackImpl;
+import com.liveperson.api.ams.cm.types.CloseReason;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
@@ -55,11 +56,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 String lastName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getLastName();
                 String phoneNumber = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
 
-				ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
-						.setFirstName(firstName)
-						.setLastName(lastName)
-						.setPhoneNumber(phoneNumber)
-						.build();
+                ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
+                        .setFirstName(firstName)
+                        .setLastName(lastName)
+                        .setPhoneNumber(phoneNumber)
+                        .build();
                 LivePerson.setUserProfile(consumerProfile);
             }
 
@@ -86,7 +87,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 ft.add(R.id.custom_fragment_container, mConversationFragment, LIVEPERSON_FRAGMENT).commitAllowingStateLoss();
             }
         }else{
-             attachFragment();
+            attachFragment();
         }
     }
 
@@ -124,7 +125,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }*/
 
     private void setCallBack() {
-        LivePerson.setCallback(new LivePersonCallback() {
+        LivePerson.setCallback(new LivePersonCallbackImpl() {
             @Override
             public void onError(TaskType type, String message) {
                 Toast.makeText(FragmentContainerActivity.this, " problem " + type.name(), Toast.LENGTH_LONG).show();
@@ -135,7 +136,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Toast.makeText(FragmentContainerActivity.this, "onTokenExpired ", Toast.LENGTH_LONG).show();
 
                 // Change authentication key here
-                LivePerson.reconnect(SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode());
+                //LivePerson.reconnect(SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode());
             }
 
             @Override
@@ -146,6 +147,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
             @Override
             public void onConversationResolved() {
                 Toast.makeText(FragmentContainerActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onConversationResolved(CloseReason reason) {
+                Toast.makeText(FragmentContainerActivity.this, "onConversationResolved reason = "+ reason, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -168,12 +174,12 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Toast.makeText(FragmentContainerActivity.this, "on CSAT Dismissed", Toast.LENGTH_LONG).show();
             }
 
-			@Override
-			public void onCsatSubmitted(String conversationId) {
-				Toast.makeText(FragmentContainerActivity.this, "on CSAT Submitted", Toast.LENGTH_LONG).show();
-			}
+            @Override
+            public void onCsatSubmitted(String conversationId) {
+                Toast.makeText(FragmentContainerActivity.this, "on CSAT Submitted", Toast.LENGTH_LONG).show();
+            }
 
-			@Override
+            @Override
             public void onConversationMarkedAsUrgent() {
                 Toast.makeText(FragmentContainerActivity.this, "Conversation Marked As Urgent", Toast.LENGTH_LONG).show();
             }
