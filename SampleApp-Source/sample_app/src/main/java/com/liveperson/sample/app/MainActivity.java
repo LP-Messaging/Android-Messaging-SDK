@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.liveperson.api.LivePersonCallbackImpl;
 import com.liveperson.api.ams.cm.types.CloseReason;
+import com.liveperson.api.sdk.LPConversationData;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private TextInputLayout mAccountIdLayout;
     private TextView mTime;
     private TextView mDate;
-    private CheckBox mSetCallbackCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAuthCodeView = (EditText) findViewById(R.id.auth_code);
         mAuthCodeView.setText(SampleAppStorage.getInstance(this).getAuthCode());
-
-        mSetCallbackCheckBox = ((CheckBox)findViewById(R.id.set_callback));
 
         String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
         ((TextView) findViewById(R.id.sdk_version)).setText(sdkVersion);
@@ -169,10 +167,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setCallBack() {
-        if (!mSetCallbackCheckBox.isChecked()){
-            return;
-        }
-
         LivePerson.setCallback(new LivePersonCallbackImpl() {
             @Override
             public void onError(TaskType type, String message) {
@@ -188,18 +182,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onConversationStarted() {
-                Toast.makeText(MainActivity.this, "onConversationStarted", Toast.LENGTH_LONG).show();
+            public void onConversationStarted(LPConversationData convData) {
+                Toast.makeText(MainActivity.this, "Conversation started " + convData.getId()
+                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onConversationResolved() {
-                Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationResolved(CloseReason reason) {
-                Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
+            public void onConversationResolved(LPConversationData convData) {
+                Toast.makeText(MainActivity.this, "Conversation resolved " + convData.getId()
+                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -209,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAgentTyping(boolean isTyping) {
-                //Toast.makeText(MainActivity.this, "isTyping " + isTyping, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Agent is " + isTyping, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -277,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Sample app setting - used to initialize the SDK with "Activity mode" when entering from push notification
                 SampleAppStorage.getInstance(MainActivity.this).setSDKMode(SampleAppStorage.SDKMode.ACTIVITY);
-                if(!isValidAccount()){
+                if (!isValidAccount()) {
                     return;
                 }
                 SampleAppUtils.disableButtonAndChangeText(mOpenConversationButton, getString(R.string.initializing));
@@ -297,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Sample app setting - used to initialize the SDK with "Fragment mode" when entering from push notification
                 SampleAppStorage.getInstance(MainActivity.this).setSDKMode(SampleAppStorage.SDKMode.FRAGMENT);
-                if(!isValidAccount()){
+                if (!isValidAccount()) {
                     return;
                 }
                 saveAccountAndUserSettings();
@@ -308,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Validate that the text field is not empty
+     *
      * @return
      */
     private boolean isValidAccount() {

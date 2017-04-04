@@ -7,8 +7,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 2108
-        versionName "2.1.0.8"
+        versionCode 2112
+        versionName "2.1.1.2"
     }
     buildTypes {
 
@@ -41,8 +41,6 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:9.8.0'
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:gridlayout-v7:25.1.0'
-
-    debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
