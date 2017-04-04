@@ -147,7 +147,10 @@
     <integer name="full_image_longer_dimension_resize">800</integer>
     <integer name="max_image_size_kb">3000</integer>
 
-    <color name="attachment_menu_item_background_color">#004DC9</color>
+    <color name="attachment_menu_item_background_color">@color/lp_blue</color>
+    <color name="lp_attachment_menu_item_icon_color">@color/lp_light_gray_1</color>
+    <color name="lp_attachment_menu_item_text_color">@color/lp_dark_gray_1</color>
+    <color name="lp_attachment_menu_background_color">@color/lp_light_gray_2</color>
 
     <!--Links-->
     <string name="lp_bubble_phone_links_regex" />
@@ -163,7 +166,7 @@
     <bool name="link_preview_enable_real_time_preview">true</bool>
     <bool name="link_preview_use_big_picture">false</bool>
     <bool name="link_preview_enable_feature">true</bool>
-    <bool name="link_preview_to_use_more_than_og_tags">false</bool>
+    <bool name="link_preview_to_use_more_than_og_tags">true</bool>
 
 
     <!--Resend pending message-->

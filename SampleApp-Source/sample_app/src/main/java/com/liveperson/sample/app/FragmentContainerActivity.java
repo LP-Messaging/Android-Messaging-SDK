@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.liveperson.api.LivePersonCallbackImpl;
 import com.liveperson.api.ams.cm.types.CloseReason;
+import com.liveperson.api.sdk.LPConversationData;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.TaskType;
@@ -56,11 +57,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 String lastName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getLastName();
                 String phoneNumber = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
 
-                ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
-                        .setFirstName(firstName)
-                        .setLastName(lastName)
-                        .setPhoneNumber(phoneNumber)
-                        .build();
+				ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
+						.setFirstName(firstName)
+						.setLastName(lastName)
+						.setPhoneNumber(phoneNumber)
+						.build();
                 LivePerson.setUserProfile(consumerProfile);
             }
 
@@ -87,7 +88,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 ft.add(R.id.custom_fragment_container, mConversationFragment, LIVEPERSON_FRAGMENT).commitAllowingStateLoss();
             }
         }else{
-            attachFragment();
+             attachFragment();
         }
     }
 
@@ -136,22 +137,19 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Toast.makeText(FragmentContainerActivity.this, "onTokenExpired ", Toast.LENGTH_LONG).show();
 
                 // Change authentication key here
-                //LivePerson.reconnect(SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode());
+                LivePerson.reconnect(SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode());
             }
 
             @Override
-            public void onConversationStarted() {
-                Toast.makeText(FragmentContainerActivity.this, "onConversationStarted", Toast.LENGTH_LONG).show();
+            public void onConversationStarted(LPConversationData convData) {
+                Toast.makeText(FragmentContainerActivity.this, "Conversation started " + convData.getId()
+                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onConversationResolved() {
-                Toast.makeText(FragmentContainerActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationResolved(CloseReason reason) {
-                Toast.makeText(FragmentContainerActivity.this, "onConversationResolved reason = "+ reason, Toast.LENGTH_LONG).show();
+            public void onConversationResolved(LPConversationData convData) {
+                Toast.makeText(FragmentContainerActivity.this, "Conversation resolved " + convData.getId()
+                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -174,12 +172,12 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Toast.makeText(FragmentContainerActivity.this, "on CSAT Dismissed", Toast.LENGTH_LONG).show();
             }
 
-            @Override
-            public void onCsatSubmitted(String conversationId) {
-                Toast.makeText(FragmentContainerActivity.this, "on CSAT Submitted", Toast.LENGTH_LONG).show();
-            }
+			@Override
+			public void onCsatSubmitted(String conversationId) {
+				Toast.makeText(FragmentContainerActivity.this, "on CSAT Submitted", Toast.LENGTH_LONG).show();
+			}
 
-            @Override
+			@Override
             public void onConversationMarkedAsUrgent() {
                 Toast.makeText(FragmentContainerActivity.this, "Conversation Marked As Urgent", Toast.LENGTH_LONG).show();
             }
