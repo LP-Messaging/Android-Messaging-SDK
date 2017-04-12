@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 211
-        versionName "2.1.1"
+        versionCode 212
+        versionName "2.1.2"
     }
 
     defaultConfig {
@@ -37,4 +37,9 @@ dependencies {
     compile(name: 'messaging', ext: 'aar')
     compile(name: 'messaging_ui', ext: 'aar')
     compile(name: 'ui', ext: 'aar')
+
+    /*compile project(':AndroidInfra:infra')
+    compile project(':AndroidInfra:messaging')
+    compile project(':AndroidInfra:messaging_ui')
+    compile project(':AndroidInfra:ui')*/
 }
