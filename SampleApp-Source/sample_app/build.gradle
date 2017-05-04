@@ -7,8 +7,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 2141
-        versionName "2.1.4.1"
+        versionCode 2150
+        versionName "2.1.5.0"
     }
     buildTypes {
 
