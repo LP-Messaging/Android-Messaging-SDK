@@ -54,6 +54,12 @@
             android:name="com.liveperson.sample.app.push.fcm.FirebaseRegistrationIntentService"
             android:exported="false">
         </service>
+
+        <receiver android:name=".push.NotificationUI$BadgeBroadcastReceiver">
+            <intent-filter>
+                <action android:name="ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION"/>
+            </intent-filter>
+        </receiver>
         <!--End of FCM-->
 
 <!--

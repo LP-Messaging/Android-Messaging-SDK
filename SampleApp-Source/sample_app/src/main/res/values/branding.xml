@@ -66,13 +66,6 @@
 
     <!-- icons visibility -->
     <integer name="message_receive_icons">0</integer>
-    <string-array name="message_receive_text">
-        <item>"Sent"</item>
-        <item>"Delivered"</item>
-        <item>"Read"</item>
-        <item>"Not delivered"</item>
-        <item>"Sending"</item>
-    </string-array>
 
     <!--Feedback Fragment-->
     <color name="feedback_fragment_background_color">@android:color/white</color>
@@ -103,8 +96,14 @@
     <dimen name="feedback_fragment_submit_btn_stroke_width_enabled">1dp</dimen>
     <dimen name="feedback_fragment_submit_btn_stroke_width_disabled">1dp</dimen>
 
-    <bool name="show_yes_no_question">true</bool>
     <!--Feedback Fragment-->
+    <bool name="show_feedback">true</bool>
+    <bool name="show_yes_no_question">true</bool>
+    <bool name="show_agent_details_csat">true</bool>
+    <!-- if both show_yes_no_question & show_agent_details_csat are true, show_yes_no_question will be ignored-->
+    <bool name="show_csat_thank_you">true</bool>
+    <integer name="csatSurveyExpirationInMinutes">1440</integer>
+
 
     <!--TTR-->
     <bool name="disableTTRPopup">false</bool>
@@ -133,6 +132,11 @@
 
     <!--Edit Text-->
     <color name="edit_text_underline_color">#90CAF9</color>
+    <color name="lp_enter_msg_text">@android:color/black</color>
+    <color name="lp_enter_msg_hint">@android:color/darker_gray</color>
+    <color name="lp_send_button_text_enable">#004dc9</color>
+    <color name="lp_send_button_text_disable">#b7b8b9</color>
+
     <bool name="use_send_image_button">false</bool>
 
     <!--Clear History-->
@@ -140,7 +144,7 @@
 
     <!--Photo sharing-->
     <bool name="enable_photo_sharing">true</bool>
-    <bool name="upload_photo_using_service">false</bool>
+    <bool name="upload_photo_using_service">true</bool>
     <integer name="max_number_stored_images">20</integer>
     <integer name="full_image_compression_rate">50</integer>
     <integer name="thumbnail_longer_dimension_resize">100</integer>
@@ -175,24 +179,15 @@
     <!-- Vibrate -->
     <bool name="vibrate_enabled">false</bool>
 
-
-
-    <bool name="show_agent_details_csat">true</bool>
-    <!-- if both show_yes_no_question & show_agent_details_csat are true, show_yes_no_question will be ignored-->
-    <bool name="show_csat_thank_you">true</bool>
-    <bool name="show_feedback">true</bool>
-    <!--Feedback Fragment-->
-
     <integer name="ttr_duration">3000</integer>
+    <integer name="ttrFirstTimeDelaySeconds">10</integer>
 
     <!-- Off hours notification -->
     <bool name="ttr_message_off_hours_enabled">true</bool>
 
     <!-- Off hours notification -->
 
-    <string name="lp_date_time_format" />
-    <string name="lp_time_format" />
-    <string name="lp_ttr_message_off_hours_time_zone_id" />
+
 
 
     <!--Accessibility-->
@@ -207,11 +202,16 @@
 
     <bool name="send_agent_profile_updates_when_conversation_closed">true</bool>
 
-    <!--Compression rate (0-100)-->
-    <!--CSAT-->
-    <integer name="csatSurveyExpirationInMinutes">1440</integer>
-
     <string name="client_only_mask_character">*</string>
     <string name="real_time_mask_character">*</string>
+
+    <!-- agent PCI bubble-->
+    <color name="agent_bubble_pci_form_invitation_background_color">@android:color/white</color>
+    <color name="agent_bubble_pci_form_invitation_background_btn_color">@android:color/white</color>
+    <color name="agent_bubble_pci_form_invitation_stroke_color">@color/lp_gray</color>
+    <color name="agent_bubble_pci_form_invitation_button_text_color">@color/lp_blue</color>
+    <color name="agent_bubble_pci_form_invitation_description_text_color">@color/lp_gray</color>
+    <color name="agent_bubble_pci_form_invitation_title_text_color">@android:color/black</color>
+    <color name="agent_bubble_pci_form_invitation_icon_tint_color">@color/lp_blue</color>
 
 </resources>

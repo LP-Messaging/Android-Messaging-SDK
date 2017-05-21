@@ -1,10 +1,13 @@
 package com.liveperson.messaging.sdk.api;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
@@ -20,6 +23,8 @@ import com.liveperson.infra.messaging_ui.MessagingUiConfiguration;
 import com.liveperson.infra.messaging_ui.MessagingUiInitData;
 import com.liveperson.infra.messaging_ui.configuration.UIConfigurationKeys;
 import com.liveperson.infra.messaging_ui.notification.NotificationController;
+import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
+import com.liveperson.infra.model.PushMessage;
 import com.liveperson.infra.sdkstatemachine.shutdown.ShutDownCompletionListener;
 import com.liveperson.messaging.MessagingFactory;
 import com.liveperson.messaging.model.AgentData;
@@ -30,6 +35,8 @@ import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
 import com.liveperson.messaging.sdk.api.callbacks.ShutDownLivePersonCallback;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 
+import java.util.Map;
+
 /**
  * LivePerson Messaging SDK entry point.
  * <p/>
@@ -39,6 +46,9 @@ import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 public class LivePerson {
 
     private static final String TAG = LivePerson.class.getSimpleName();
+    public static final String ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION = NotificationController.ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION;
+    public static final String ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_EXTRA = NotificationController.ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_EXTRA;
+
     private static String mBrandId;
     static LivePersonConfiguration mLivePersonConfiguration;
 
@@ -63,7 +73,7 @@ public class LivePerson {
      *
      * @param context Application or activity context
      */
-    public static void initialize(final Context context, final InitLivePersonProperties initProperties) {
+    public static void initialize(Context context, final InitLivePersonProperties initProperties) {
         //check if initProperties contains all the mandatory params.
         if (!InitLivePersonProperties.isValid(initProperties)) {
             if (initProperties != null && initProperties.getInitCallBack() != null) {
@@ -72,6 +82,7 @@ public class LivePerson {
             LPMobileLog.w(TAG, "Invalid InitLivePersonProperties!");
             return;
         }
+        context = context.getApplicationContext();
         //try to initialized
         if (!isValidState()) {
             mBrandId = initProperties.getBrandId();
@@ -200,6 +211,7 @@ public class LivePerson {
      *
      * @param data
      */
+    @Deprecated
     public static void handlePush(Context context, Bundle data, String brandId, boolean showNotification) {
 
         if (TextUtils.isEmpty(brandId)) {
@@ -207,10 +219,48 @@ public class LivePerson {
             return;
         }
 
-        String message = data.getString("message");
+        PushMessage message = PushMessageParser.parseBundle(brandId, data);
 
-        NotificationController.instance.addMessageAndDisplayNotification(context, brandId, message, showNotification, R.drawable.liveperson_icon);
+        if (message != null){
+            NotificationController.instance.addMessageAndDisplayNotification(context, brandId, message, showNotification, R.drawable.liveperson_icon);
+        }
     }
+
+
+    /***
+     * Since the AMS is sending the message with the name of the agent we need to remove it and leave the message only
+     * @param context
+     * @param remoteMessage
+     * @param brandId
+     * @param showNotification
+     * @return push message object - can be nullable - if its not our push message or we had error parsing it.
+     */
+    @Nullable
+    public static PushMessage handlePushMessage(Context context, Map<String, String> remoteMessage, String brandId, boolean showNotification) {
+
+        if (TextUtils.isEmpty(brandId)) {
+            LPMobileLog.e(TAG, "No Brand! ignoring push message?");
+            return null;
+        }
+
+        //Parse the bundle in case it's related to LivePerson messages
+        PushMessage message = PushMessageParser.parse(brandId, remoteMessage);
+
+        if (message != null){
+            NotificationController.instance.addMessageAndDisplayNotification(context, brandId, message, showNotification, R.drawable.liveperson_icon);
+        }
+
+        return message;
+    }
+
+    public static int getNumUnreadMessages(String brandId) {
+        if (TextUtils.isEmpty(brandId)) {
+            LPMobileLog.e(TAG, "No Brand! returning -1");
+            return -1;
+        }
+        return NotificationController.instance.getNumUnreadMessages(brandId);
+    }
+
 
     /**
      * Set a callback to be called when needed
@@ -295,7 +345,6 @@ public class LivePerson {
     public static void checkConversationIsMarkedAsUrgent(final ICallback<Boolean, Exception> callback) {
         if (!isValidState()) {
             callback.onError(new Exception("SDK not initialized"));
-            return;
         } else {
             MessagingFactory.getInstance().getController().checkConversationIsMarkedAsUrgent(mBrandId, callback);
         }
@@ -438,4 +487,40 @@ public class LivePerson {
             }
         });
     }
+
+	/**
+	 * Set a PendingIntent to be used on the image foreground service notification.
+	 * Note: the foreground service will be used only if the <i>upload_photo_using_service</i> configuration is set to true
+	 * @param pendingIntent
+	 */
+	public static void setImageServicePendingIntent(PendingIntent pendingIntent) {
+		if (pendingIntent != null) {
+			MessagingFactory.getInstance().getController().setImageServicePendingIntent(pendingIntent);
+		}
+	}
+
+	/**
+	 * Set a notification builder that represents the ongoing notification for the image upload foreground service. It is assumed that a pending intent
+	 * is added to the given notification builder.
+	 * Note: the foreground service will be used only if the <i>upload_photo_using_service</i> configuration is set to true
+	 * @param builder - the Notification.Builder for the ongoing notification
+	 */
+	public static void setImageServiceUploadNotificationBuilder(Notification.Builder builder) {
+		if (builder != null) {
+			MessagingFactory.getInstance().getController().setImageForegroundServiceUploadNotificationBuilder(builder);
+		}
+	}
+
+	/**
+	 * Set a notification builder that represents the ongoing notification for the image download foreground service. It is assumed that a pending intent
+	 * is added to the given notification builder.
+	 * Note: the foreground service will be used only if the <i>upload_photo_using_service</i> configuration is set to true
+	 * @param builder - the Notification.Builder for the ongoing notification
+	 */
+	public static void setImageServiceDownloadNotificationBuilder(Notification.Builder builder) {
+		if (builder != null) {
+			MessagingFactory.getInstance().getController().setImageForegroundServiceDownloadNotificationBuilder(builder);
+		}
+	}
+
 }
