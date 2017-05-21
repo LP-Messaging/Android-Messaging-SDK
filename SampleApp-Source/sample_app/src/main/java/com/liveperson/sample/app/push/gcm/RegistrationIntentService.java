@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *//*
+
 
 
 package com.liveperson.sample.app.push.gcm;
@@ -29,11 +30,13 @@ import com.google.android.gms.iid.InstanceID;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 
+*/
 /**
  * ***** Sample app class - Not related to Messaging SDK *****
  *
  * Taken from Google's GCM sample app
- */
+ *//*
+
 public class RegistrationIntentService extends IntentService {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
@@ -88,3 +91,4 @@ public class RegistrationIntentService extends IntentService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
 }
+*/

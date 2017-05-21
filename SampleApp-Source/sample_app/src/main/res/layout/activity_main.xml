@@ -120,9 +120,7 @@
                 android:layout_height="wrap_content"
                 app:layout_column="0"
                 app:layout_gravity="fill_vertical"
-                app:layout_row="0"
-                android:layout_row="1"
-                android:layout_column="2" />
+                app:layout_row="0"/>
 
             <EditText
                 android:id="@+id/language_editText"

@@ -1,8 +1,12 @@
 package com.liveperson.sample.app;
 
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -36,6 +40,7 @@ import com.liveperson.sample.app.push.NotificationUI;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -166,6 +171,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *
+     */
     private void setCallBack() {
         LivePerson.setCallback(new LivePersonCallbackImpl() {
             @Override
@@ -177,8 +185,8 @@ public class MainActivity extends AppCompatActivity {
             public void onTokenExpired() {
                 Toast.makeText(MainActivity.this, "onTokenExpired ", Toast.LENGTH_LONG).show();
 
-                // Change authentication key here
-                LivePerson.reconnect(SampleAppStorage.getInstance(MainActivity.this).getAuthCode());
+                // Change authentication key here:
+                //LivePerson.reconnect(SampleAppStorage.getInstance(MainActivity.this).getAuthCode());
             }
 
             @Override
@@ -194,13 +202,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onConversationResolved(CloseReason reason) {
+                Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
             public void onConnectionChanged(boolean isConnected) {
                 Toast.makeText(MainActivity.this, "onConnectionChanged " + isConnected, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onAgentTyping(boolean isTyping) {
-                Toast.makeText(MainActivity.this, "Agent is " + isTyping, Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "isTyping " + isTyping, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -256,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         SampleAppStorage.getInstance(this).setLastName(lastName);
         SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
         SampleAppStorage.getInstance(this).setAuthCode(authCode);
+
     }
 
     /**
@@ -273,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 SampleAppUtils.disableButtonAndChangeText(mOpenConversationButton, getString(R.string.initializing));
                 saveAccountAndUserSettings();
+                removeNotification();
                 initActivityConversation();
             }
         });
@@ -292,9 +307,14 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 saveAccountAndUserSettings();
+                removeNotification();
                 openFragmentContainer();
             }
         });
+    }
+
+    private void removeNotification() {
+        NotificationUI.hideNotification(this);
     }
 
     /**
@@ -312,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *
      * Initialize the Messaging SDK and start the SDK in "Activity Mode"
      */
     private void initActivityConversation() {
@@ -346,6 +367,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *
      * Start {@link FragmentContainerActivity} that handles the SDK the Messaging SDK and start the SDK in "Fragment Mode"
      */
     private void openFragmentContainer() {
@@ -354,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *
      * Calling to "showConversation" API
      */
     private void openActivity() {
@@ -372,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *
      * If we initiated from a push message we show the screen that was in use the previous session (fragment/activity)
      * Activity mode is the default
      *
@@ -397,12 +421,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *
      * Hide any shown notification
      */
     private void clearPushNotifications() {
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NotificationUI.NOTIFICATION_ID);
     }
 
+    /**
+     *
+     * @param language
+     * @param country
+     */
     protected void createLocale(String language, @Nullable String country) {
         Resources resources = getResources();
         Configuration configuration = resources.getConfiguration();
@@ -436,6 +466,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @return
+     */
     private Locale getLocale() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return getResources().getConfiguration().getLocales().get(0);
@@ -444,4 +478,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    IntentFilter unreadMessagesCounterFilter = new IntentFilter(LivePerson.ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION);
+    BroadcastReceiver unreadMessagesCounter = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int newValue = intent.getIntExtra(LivePerson.ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_EXTRA, 0);
+            Log.d(TAG, "Got new value for unread messages counter: " + newValue);
+            updateToolBar(newValue);
+        }
+    };
+
+    private void updateToolBar(final int newValue) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (newValue > 0){
+                    setTitle(getResources().getString(R.string.app_name) + " (" + newValue + ") ");
+                }else{
+                    setTitle(R.string.app_name);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateToolBar(LivePerson.getNumUnreadMessages(SampleAppStorage.getInstance(MainActivity.this).getAccount()));
+        registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(unreadMessagesCounter);
+        super.onPause();
+    }
 }

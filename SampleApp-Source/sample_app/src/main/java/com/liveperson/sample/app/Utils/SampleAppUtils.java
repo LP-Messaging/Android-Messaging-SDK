@@ -7,7 +7,6 @@ import android.widget.Button;
 import com.liveperson.sample.app.FragmentContainerActivity;
 import com.liveperson.sample.app.MainActivity;
 import com.liveperson.sample.app.push.fcm.FirebaseRegistrationIntentService;
-import com.liveperson.sample.app.push.gcm.RegistrationIntentService;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
@@ -43,7 +42,7 @@ public class SampleAppUtils {
 
 
     /**
-     * Call to the {@link RegistrationIntentService} class which was taken from Google's
+     * Call to the {@link FirebaseRegistrationIntentService} class which was taken from Google's
      * sample app for GCM integration
      */
     public static void handleGCMRegistration(Context ctx) {

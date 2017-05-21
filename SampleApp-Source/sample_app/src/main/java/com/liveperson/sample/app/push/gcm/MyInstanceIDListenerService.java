@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *//*
+
 
 
 package com.liveperson.sample.app.push.gcm;
@@ -22,20 +23,24 @@ import android.content.Intent;
 import com.google.android.gms.iid.InstanceIDListenerService;
 
 
+*/
 /**
  * ***** Sample app class - Not related to Messaging SDK *****
  *
  * Taken from Google's GCM sample app
- */
+ *//*
+
 public class MyInstanceIDListenerService extends InstanceIDListenerService {
 
     private static final String TAG = "MyInstanceIDLS";
 
-    /**
+    */
+/**
      * Called if InstanceID token is updated. This may occur if the security of
      * the previous token had been compromised. This call is initiated by the
      * InstanceID provider.
-     */
+     *//*
+
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
@@ -45,3 +50,4 @@ public class MyInstanceIDListenerService extends InstanceIDListenerService {
     }
     // [END refresh_token]
 }
+*/

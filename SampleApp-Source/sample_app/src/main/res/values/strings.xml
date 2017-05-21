@@ -3,4 +3,21 @@
     <string name="initializing">Initializing…</string>
     <string name="open_fragment">Open Fragment</string>
     <string name="open_activity">Open Activity</string>
+
+    <string-array name="message_receive_text">
+        <item>"Sent"</item>
+        <item>"Delivered"</item>
+        <item>"Read"</item>
+        <item>"Not delivered"</item>
+        <item>"Sending"</item>
+    </string-array>
+
+    <!-- <string name="lp_date_time_format">mm/dd/yyyy HH:mm</string>-->
+    <string name="lp_date_time_format"></string>
+    <string name="lp_date_format"></string>
+    <string name="lp_time_format"></string>
+    <string name="lp_ttr_message_off_hours_time_zone_id"></string>
+
+
+
 </resources>

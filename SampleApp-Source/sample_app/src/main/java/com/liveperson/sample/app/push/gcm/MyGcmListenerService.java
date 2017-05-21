@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *//*
+
 
 package com.liveperson.sample.app.push.gcm;
 
@@ -25,22 +26,26 @@ import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 import com.liveperson.sample.app.push.NotificationUI;
 
+*/
 /**
  * ***** Sample app class - Not related to Messaging SDK *****
  *
  * Taken from Google's GCM sample app
- */
+ *//*
+
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
 
-    /**
+    */
+/**
      * Called when message is received.
      *
      * @param from SenderID of the sender.
      * @param data Data bundle containing message data as key/value pairs.
      *             For Set of keys use data.keySet().
-     */
+     *//*
+
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
@@ -55,3 +60,4 @@ public class MyGcmListenerService extends GcmListenerService {
 		LivePerson.handlePush(this, data, SampleAppStorage.getInstance(this).getAccount(), false);
     }
 }
+*/
