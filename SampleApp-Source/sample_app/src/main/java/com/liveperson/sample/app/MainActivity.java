@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -171,89 +173,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     *
-     */
-    private void setCallBack() {
-        LivePerson.setCallback(new LivePersonCallbackImpl() {
-            @Override
-            public void onError(TaskType type, String message) {
-                Toast.makeText(MainActivity.this, " problem " + type.name(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onTokenExpired() {
-                Toast.makeText(MainActivity.this, "onTokenExpired ", Toast.LENGTH_LONG).show();
-
-                // Change authentication key here:
-                //LivePerson.reconnect(SampleAppStorage.getInstance(MainActivity.this).getAuthCode());
-            }
-
-            @Override
-            public void onConversationStarted(LPConversationData convData) {
-                Toast.makeText(MainActivity.this, "Conversation started " + convData.getId()
-                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationResolved(LPConversationData convData) {
-                Toast.makeText(MainActivity.this, "Conversation resolved " + convData.getId()
-                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationResolved(CloseReason reason) {
-                Toast.makeText(MainActivity.this, "onConversationResolved", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConnectionChanged(boolean isConnected) {
-                Toast.makeText(MainActivity.this, "onConnectionChanged " + isConnected, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onAgentTyping(boolean isTyping) {
-                //Toast.makeText(MainActivity.this, "isTyping " + isTyping, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onAgentDetailsChanged(AgentData agentData) {
-                Toast.makeText(MainActivity.this, "Agent Details Changed " + agentData, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCsatDismissed() {
-                Toast.makeText(MainActivity.this, "on CSAT Dismissed", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCsatSubmitted(String conversationId) {
-                Toast.makeText(MainActivity.this, "on CSAT Submitted. ConversationID = " + conversationId, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationMarkedAsUrgent() {
-                Toast.makeText(MainActivity.this, "Conversation Marked As Urgent", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationMarkedAsNormal() {
-                Toast.makeText(MainActivity.this, "Conversation Marked As Normal", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onOfflineHoursChanges(boolean isOfflineHoursOn) {
-                Toast.makeText(MainActivity.this, "on Offline Hours Changes - " + isOfflineHoursOn, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onAgentAvatarTapped(AgentData agentData) {
-                Toast.makeText(MainActivity.this, "on Agent Avatar Tapped - " + agentData.mFirstName + " " + agentData.mLastName, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
-
 
     /**
      * Save the user input such as: account, first name, last name, phone number and auth code
@@ -341,7 +260,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInitSucceed() {
                 Log.i(TAG, "SDK initialize completed with Activity mode");
-                setCallBack();
+                //we are not setting a call back here - we'll listen to callbacks with broadcast receiver
+                // in main application class.
+                //setCallBack();
                 // you can't register pusher before initialization
                 SampleAppUtils.handleGCMRegistration(MainActivity.this);
                 runOnUiThread(new Runnable() {

@@ -25,3 +25,8 @@
 -keep public class * extends android.support.v4.app.DialogFragment
 -keep public class * extends android.app.Fragment
 
+-dontwarn com.squareup.picasso.*
+-dontwarn com.squareup.okhttp.*
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
