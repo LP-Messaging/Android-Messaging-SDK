@@ -97,8 +97,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
 				LivePerson.setImageServicePendingIntent(pendingIntent);
 
 				// Notification builder for image upload foreground service
-				Notification.Builder uploadBuilder = 	new Notification.Builder(this);
-				Notification.Builder downloadBuilder = 	new Notification.Builder(this);
+				Notification.Builder uploadBuilder = 	new Notification.Builder(this.getApplicationContext());
+				Notification.Builder downloadBuilder = 	new Notification.Builder(this.getApplicationContext());
 				uploadBuilder.setContentTitle("Uploading image")
 						.setSmallIcon(android.R.drawable.arrow_up_float)
 						.setContentIntent(pendingIntent)
@@ -120,9 +120,12 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private boolean isValidState() {
-        return !isFinishing() && !isDestroyed();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return !isFinishing() && !isDestroyed();
+        }else{
+            return !isFinishing();
+        }
     }
 
     private void attachFragment() {
@@ -143,94 +146,9 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
-   /* @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if (mConversationFragment != null && !mConversationFragment.isDetached()){
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.detach(mConversationFragment).commit();
-            Log.d(TAG, "onSaveInstanceState, detaching fragment");
-        }
-        super.onSaveInstanceState(outState);
-    }*/
-
     private void setCallBack() {
-        LivePerson.setCallback(new LivePersonCallbackImpl() {
-            @Override
-            public void onError(TaskType type, String message) {
-                Toast.makeText(FragmentContainerActivity.this, " problem " + type.name(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onTokenExpired() {
-                Toast.makeText(FragmentContainerActivity.this, "onTokenExpired ", Toast.LENGTH_LONG).show();
-
-                // Change authentication key here:
-                //LivePerson.reconnect(SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode());
-            }
-
-            @Override
-            public void onConversationStarted(LPConversationData convData) {
-                Toast.makeText(FragmentContainerActivity.this, "Conversation started " + convData.getId()
-                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationResolved(LPConversationData convData) {
-                Toast.makeText(FragmentContainerActivity.this, "Conversation resolved " + convData.getId()
-                        + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationResolved(CloseReason reason) {
-                Toast.makeText(FragmentContainerActivity.this, "onConversationResolved reason = "+ reason, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConnectionChanged(boolean isConnected) {
-                Toast.makeText(FragmentContainerActivity.this, "onConnectionChanged " + isConnected, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onAgentTyping(boolean isTyping) {
-                Toast.makeText(FragmentContainerActivity.this, "isTyping " + isTyping, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onAgentDetailsChanged(AgentData agentData) {
-                Toast.makeText(FragmentContainerActivity.this, "Agent Details Changed " + agentData, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCsatDismissed() {
-                Toast.makeText(FragmentContainerActivity.this, "on CSAT Dismissed", Toast.LENGTH_LONG).show();
-            }
-
-			@Override
-			public void onCsatSubmitted(String conversationId) {
-				Toast.makeText(FragmentContainerActivity.this, "on CSAT Submitted", Toast.LENGTH_LONG).show();
-			}
-
-			@Override
-            public void onConversationMarkedAsUrgent() {
-                Toast.makeText(FragmentContainerActivity.this, "Conversation Marked As Urgent", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConversationMarkedAsNormal() {
-                Toast.makeText(FragmentContainerActivity.this, "Conversation Marked As Normal", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onOfflineHoursChanges(boolean isOfflineHoursOn) {
-                Toast.makeText(FragmentContainerActivity.this, "on Offline Hours Changes - " + isOfflineHoursOn , Toast.LENGTH_LONG).show();
-            }
-
-
-            @Override
-            public void onAgentAvatarTapped(AgentData agentData) {
-                Toast.makeText(FragmentContainerActivity.this, "on Agent Avatar Tapped - " + agentData.mFirstName + " "  + agentData.mLastName, Toast.LENGTH_SHORT).show();
-            }
-        });
+        //register via callback, also available to listen via BroadCastReceiver in Main Application
+        MainApplication.getInstance().registerToLivePersonCallbacks();
     }
 
 

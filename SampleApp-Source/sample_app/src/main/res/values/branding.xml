@@ -214,4 +214,7 @@
     <color name="agent_bubble_pci_form_invitation_title_text_color">@android:color/black</color>
     <color name="agent_bubble_pci_form_invitation_icon_tint_color">@color/lp_blue</color>
 
+    <string name="custom_font_name_conversation_feed"></string>
+    <string name="custom_font_name_non_conversation_feed"></string>
+
 </resources>

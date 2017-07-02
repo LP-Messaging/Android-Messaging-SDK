@@ -75,7 +75,7 @@ public class ConsumerProfile {
             return this;
         }
 
-        public Builder setAvatartUrl(String avatarUrl) {
+        public Builder setAvatarUrl(String avatarUrl) {
             this.avatarUrl = avatarUrl;
             return this;
         }
