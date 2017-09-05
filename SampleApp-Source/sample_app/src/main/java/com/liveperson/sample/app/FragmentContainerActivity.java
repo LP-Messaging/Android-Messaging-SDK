@@ -1,27 +1,26 @@
 package com.liveperson.sample.app;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
-import com.liveperson.api.LivePersonCallbackImpl;
-import com.liveperson.api.ams.cm.types.CloseReason;
-import com.liveperson.api.sdk.LPConversationData;
-import com.liveperson.infra.ICallback;
+import com.liveperson.infra.ConversationViewParams;
+import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
+import com.liveperson.infra.LPAuthenticationParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.messaging_ui.fragment.ConversationFragment;
-import com.liveperson.messaging.TaskType;
-import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
@@ -82,12 +81,10 @@ public class FragmentContainerActivity extends AppCompatActivity {
         Log.d(TAG, "initFragment. mConversationFragment = "+ mConversationFragment);
         if (mConversationFragment == null) {
             String authCode = SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode();
+
             Log.d(TAG, "initFragment. authCode = "+ authCode);
-            if (TextUtils.isEmpty(authCode)) {
-                mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment();
-            }else{
-                mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(authCode);
-            }
+            mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(new LPAuthenticationParams().setAuthKey(authCode), new ConversationViewParams(isReadOnly()));
+
             if (isValidState()) {
 
 				// Pending intent for image foreground service
@@ -118,6 +115,10 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }else{
              attachFragment();
         }
+    }
+
+    private boolean isReadOnly() {
+        return getIntent().getBooleanExtra(Infra.KEY_READ_ONLY, false);
     }
 
     private boolean isValidState() {
@@ -157,6 +158,45 @@ public class FragmentContainerActivity extends AppCompatActivity {
         if (mConversationFragment == null || !mConversationFragment.onBackPressed()) {
             super.onBackPressed();
         }
+    }
+
+
+    /**
+     * Relevant only for tablet. called from XML
+     * @param v
+     */
+    public void onLeftPanelUpdate(View v){
+        String size = ((EditText)findViewById(R.id.left_panel_size)).getText().toString();
+        if (TextUtils.isEmpty(size)){
+            return;
+        }
+        int width = Integer.valueOf(size);
+        View layout_panel = findViewById(R.id.left_panel_layout);
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout_panel.getLayoutParams();
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, r.getDisplayMetrics());
+        params.width = (int) px;
+        layout_panel.setLayoutParams(params);
+    }
+
+    /**
+     * Relevant only for tablet. called from XML
+     * @param v
+     */
+    public void onFooterPanelUpdate(View v){
+        String size = ((EditText)findViewById(R.id.footer_panel_size)).getText().toString();
+        if (TextUtils.isEmpty(size)){
+            return;
+        }
+        int height = Integer.valueOf(size);
+        View layout_panel = findViewById(R.id.footer_panel_layout);
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout_panel.getLayoutParams();
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, r.getDisplayMetrics());
+        params.height = (int) px;
+        layout_panel.setLayoutParams(params);
     }
 
 }

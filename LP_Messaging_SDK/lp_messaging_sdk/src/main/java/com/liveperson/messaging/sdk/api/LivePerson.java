@@ -12,8 +12,10 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.liveperson.api.LivePersonCallback;
+import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.ICallback;
 import com.liveperson.infra.InitLivePersonProperties;
+import com.liveperson.infra.LPAuthenticationParams;
 import com.liveperson.infra.LivePersonConfiguration;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.callbacks.LogoutLivePersonCallBack;
@@ -101,17 +103,16 @@ public class LivePerson {
         LPMobileLog.setDebugMode(isDebuggable);
     }
 
-
     /**
      * Show the conversation screen
      *
      * @param activity
      * @return
      */
+    @Deprecated
     public static boolean showConversation(Activity activity) {
-        return showConversation(activity, null);
+        return showConversation(activity, new LPAuthenticationParams(), new ConversationViewParams(false));
     }
-
     /**
      * Show the conversation screen
      *
@@ -119,8 +120,16 @@ public class LivePerson {
      * @param authenticationKey
      * @return
      */
+    @Deprecated
     public static boolean showConversation(Activity activity, String authenticationKey) {
-        return isValidState() && MessagingUIFactory.getInstance().showConversation(activity, mBrandId, authenticationKey);
+        return showConversation(activity, new LPAuthenticationParams().setAuthKey(authenticationKey), new ConversationViewParams(false));
+    }
+
+    /**
+     * Show the conversation screen
+     */
+    public static boolean showConversation(Activity activity, LPAuthenticationParams lpAuthenticationParams, ConversationViewParams params‎) {
+        return isValidState() && MessagingUIFactory.getInstance().showConversation(activity, mBrandId, lpAuthenticationParams, params‎);
     }
 
     /**
@@ -138,9 +147,11 @@ public class LivePerson {
     /**
      * Get the conversation fragment only
      */
+    @Deprecated
     public static Fragment getConversationFragment() {
-        return getConversationFragment(null);
+        return getConversationFragment(new LPAuthenticationParams(), new ConversationViewParams(false));
     }
+
 
     /**
      * Get the conversation fragment only
@@ -148,12 +159,21 @@ public class LivePerson {
      * @param authKey
      * @return
      */
+    @Deprecated
     public static Fragment getConversationFragment(String authKey) {
+        return getConversationFragment(new LPAuthenticationParams().setAuthKey(authKey), new ConversationViewParams(false));
+    }
+    /**
+     * Get the conversation fragment only
+     *
+     * @return
+     */
+    public static Fragment getConversationFragment(LPAuthenticationParams lpAuthenticationParams, ConversationViewParams params‎) {
         if (!isValidState()) {
             LPMobileLog.e(TAG, "getConversationFragment- not initialized! mBrandId = " + mBrandId);
             return null;
         }
-        return MessagingUIFactory.getInstance().getConversationFragment(mBrandId, authKey);
+        return MessagingUIFactory.getInstance().getConversationFragment(mBrandId, lpAuthenticationParams, params‎);
     }
 
     /**
@@ -161,13 +181,28 @@ public class LivePerson {
      *
      * @param authKey the authentication key to connect with
      */
+    @Deprecated
     public static void reconnect(String authKey) {
 
         if (!isValidState()) {
             return;
         }
 
-        MessagingFactory.getInstance().getController().reconnect(mBrandId, authKey);
+        MessagingFactory.getInstance().getController().reconnect(mBrandId, new LPAuthenticationParams().setAuthKey(authKey));
+    }
+
+    /**
+     * Reconnect with new authentication key / JWT
+     *
+     * @param lpAuthenticationParams the authentication params to connect with
+     */
+    public static void reconnect(LPAuthenticationParams lpAuthenticationParams) {
+
+        if (!isValidState()) {
+            return;
+        }
+
+        MessagingFactory.getInstance().getController().reconnect(mBrandId, lpAuthenticationParams);
     }
 
     /**
@@ -387,7 +422,14 @@ public class LivePerson {
     }
 
     private static boolean isValidState() {
-        return MessagingUIFactory.getInstance().isInitialized() && !TextUtils.isEmpty(mBrandId);
+
+        boolean initialized = MessagingUIFactory.getInstance().isInitialized();
+        boolean isEmpty = TextUtils.isEmpty(mBrandId);
+        if (initialized && isEmpty){
+            mBrandId = MessagingUIFactory.getInstance().getMessagingUi().getInitData().getBrandId();
+        }
+        LPMobileLog.d(TAG, "init = " + initialized + " mBrandId = " + mBrandId);
+        return initialized && !TextUtils.isEmpty(mBrandId);
     }
 
     /**

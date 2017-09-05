@@ -14,57 +14,109 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/account_id_layout"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/account_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Account ID:" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/auth_code_layout"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/auth_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Auth Code:" />
-
-        </android.support.design.widget.TextInputLayout>
-
-
-        <Button
-            android:id="@+id/button_start_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/open_activity" />
-
-        <Button
-            android:id="@+id/button_start_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/open_fragment" />
-
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/account_id_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/account_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Account ID:" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/logout"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="logout"
+
+                />
+        </LinearLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/auth_code_layout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/auth_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Auth Code:" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rowCount="9"
+            app:columnCount="2"
+            >
+
+            <Button
+                android:id="@+id/button_start_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/open_activity"
+                app:layout_column="0"
+                app:layout_row="0"
+                app:layout_gravity="fill"
+                />
+
+            <Button
+                android:id="@+id/button_start_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/open_fragment"
+                app:layout_column="1"
+                app:layout_row="0"
+                app:layout_gravity="fill"
+
+                />
+
+            <CheckBox
+                android:id="@+id/check_box_toasts"
+                android:text="Show callbacks toasts"
+                app:layout_column="0"
+                app:layout_row="1"
+                android:checked="false"
+                android:gravity="center"
+
+                />
+            <CheckBox
+                android:id="@+id/check_box_read_only"
+                android:text="Read Only mode"
+                app:layout_column="1"
+                app:layout_row="1"
+                android:checked="false"
+                android:gravity="center"
+                />
+
+
+
+        <android.support.design.widget.TextInputLayout
                 android:id="@+id/first_name_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_column="0"
+                app:layout_row="2"
+                app:layout_columnSpan="2"
+            app:layout_gravity="fill"
+
+            >
 
                 <EditText
                     android:id="@+id/first_name"
@@ -77,7 +129,13 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/last_name_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_column="0"
+                app:layout_row="3"
+                app:layout_columnSpan="2"
+                app:layout_gravity="fill"
+
+                >
 
                 <EditText
                     android:id="@+id/last_name"
@@ -91,7 +149,13 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/phone_number_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_column="0"
+                app:layout_row="4"
+                app:layout_columnSpan="2"
+                app:layout_gravity="fill"
+
+                >
 
                 <EditText
                     android:id="@+id/phone_number"
@@ -102,53 +166,52 @@
 
             </android.support.design.widget.TextInputLayout>
 
-        </LinearLayout>
-
-        <android.support.v7.widget.GridLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/user_data_section"
-            app:columnCount="3"
-            app:rowCount="2">
 
             <Spinner
                 android:id="@+id/spinner_locale"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
-                app:layout_gravity="fill_vertical"
-                app:layout_row="0"/>
+                app:layout_row="5"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center"
+                />
 
-            <EditText
+
+        <EditText
                 android:id="@+id/language_editText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="language"
                 android:inputType="textPersonName"
-                app:layout_column="1"
-                app:layout_gravity="center"
-                app:layout_row="0" />
+                app:layout_column="0"
+                app:layout_row="6"
+            app:layout_gravity="center"
+            />
 
-            <EditText
+
+        <EditText
                 android:id="@+id/country_editText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="region"
                 android:inputType="textPersonName"
-                app:layout_column="2"
-                app:layout_gravity="center"
-                app:layout_row="0" />
+                app:layout_column="1"
+                app:layout_row="6"
+            app:layout_gravity="center"
+            />
 
-            <Button
+
+        <Button
                 android:id="@+id/update_language_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Update Language"
                 app:layout_column="0"
-                app:layout_row="1" />
+                app:layout_row="7"
+                app:layout_gravity="fill"
+
+            />
 
             <Button
                 android:id="@+id/clear_locale_button"
@@ -156,29 +219,43 @@
                 android:layout_height="wrap_content"
                 android:text="Clear"
                 app:layout_column="1"
-                app:layout_row="1" />
+                app:layout_row="7"
+                app:layout_gravity="fill"
+
+                />
+
+
+        <TextView
+                android:id="@+id/date_sample_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_column="0"
+                app:layout_row="8"
+            app:layout_gravity="fill"
+
+            />
+
+            <TextView
+                android:id="@+id/time_sample_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_column="1"
+                app:layout_row="8"
+                app:layout_gravity="fill"
+
+                />
 
         </android.support.v7.widget.GridLayout>
 
-        <TextView
-            android:id="@+id/date_sample_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+    <TextView
+        android:id="@+id/sdk_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="10dp"
+        android:text="VERSION" />
 
-        <TextView
-            android:id="@+id/time_sample_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-        <TextView
-            android:id="@+id/sdk_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="VERSION" />
     </LinearLayout>
 </ScrollView>

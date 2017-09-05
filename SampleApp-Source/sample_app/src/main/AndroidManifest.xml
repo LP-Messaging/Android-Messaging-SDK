@@ -33,6 +33,15 @@
         <activity
             android:name=".FragmentContainerActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".DeepLinkActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http"
+                    android:host="liveperson.com"
+                    android:pathPrefix="/deeplink"/>
+            </intent-filter>
+        </activity>
 
         <!--FCM-->
         <!--This service is used to receive any incoming message-->

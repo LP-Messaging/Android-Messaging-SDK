@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="left_panel_width">250dp</dimen>
+</resources>

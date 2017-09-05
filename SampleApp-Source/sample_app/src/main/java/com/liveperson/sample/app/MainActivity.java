@@ -5,12 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,13 +23,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.liveperson.api.LivePersonCallbackImpl;
-import com.liveperson.api.ams.cm.types.CloseReason;
-import com.liveperson.api.sdk.LPConversationData;
+import com.liveperson.infra.ConversationViewParams;
+import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
+import com.liveperson.infra.LPAuthenticationParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
-import com.liveperson.messaging.TaskType;
-import com.liveperson.messaging.model.AgentData;
+import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
@@ -42,7 +37,6 @@ import com.liveperson.sample.app.push.NotificationUI;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -63,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private TextInputLayout mAccountIdLayout;
     private TextView mTime;
     private TextView mDate;
+    private CheckBox mCallbackToastCheckBox;
+    private CheckBox mReadOnlyModeCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +106,41 @@ public class MainActivity extends AppCompatActivity {
         mTime = (TextView) findViewById(R.id.time_sample_textView);
         mDate = (TextView) findViewById(R.id.date_sample_textView);
 
+        mCallbackToastCheckBox = (CheckBox) findViewById(R.id.check_box_toasts);
+        mReadOnlyModeCheckBox = (CheckBox) findViewById(R.id.check_box_read_only);
+
         updateTime();
         initLocaleSpinner();
+
+        setLogout();
     }
+
+
+    private void setLogout() {
+        (findViewById(R.id.logout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setEnabled(false);
+                LivePerson.logOut(getApplicationContext(), SampleAppStorage.getInstance(MainActivity.this).getAccount(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID,
+                        new LogoutLivePersonCallback() {
+                            @Override
+                            public void onLogoutSucceed() {
+                                findViewById(R.id.logout).setEnabled(true);
+                                mAccountTextView.setText("");
+                                mAuthCodeView.setText("");
+                                saveAccountAndUserSettings();
+                            }
+
+                            @Override
+                            public void onLogoutFailed() {
+                                findViewById(R.id.logout).setEnabled(true);
+                                mAccountTextView.setText("Failed!");
+                            }
+                        });
+            }
+        });
+    }
+
 
     private void updateTime() {
         Locale locale = getLocale();
@@ -188,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
         SampleAppStorage.getInstance(this).setLastName(lastName);
         SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
         SampleAppStorage.getInstance(this).setAuthCode(authCode);
-
     }
 
     /**
@@ -227,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 saveAccountAndUserSettings();
                 removeNotification();
+                MainApplication.getInstance().setShowToastOnCallback(mCallbackToastCheckBox.isChecked());
                 openFragmentContainer();
             }
         });
@@ -251,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * Initialize the Messaging SDK and start the SDK in "Activity Mode"
      */
     private void initActivityConversation() {
@@ -263,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
                 //we are not setting a call back here - we'll listen to callbacks with broadcast receiver
                 // in main application class.
                 //setCallBack();
+                MainApplication.getInstance().setShowToastOnCallback(mCallbackToastCheckBox.isChecked());
                 // you can't register pusher before initialization
                 SampleAppUtils.handleGCMRegistration(MainActivity.this);
                 runOnUiThread(new Runnable() {
@@ -288,25 +316,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * Start {@link FragmentContainerActivity} that handles the SDK the Messaging SDK and start the SDK in "Fragment Mode"
      */
     private void openFragmentContainer() {
         Intent in = new Intent(MainActivity.this, FragmentContainerActivity.class);
+        in.putExtra(Infra.KEY_READ_ONLY, isReadOnly());
         startActivity(in);
     }
 
     /**
-     *
      * Calling to "showConversation" API
      */
     private void openActivity() {
         String authCode = SampleAppStorage.getInstance(MainActivity.this).getAuthCode();
-        if (TextUtils.isEmpty(authCode)) {
-            LivePerson.showConversation(MainActivity.this);
-        } else {
-            LivePerson.showConversation(MainActivity.this, authCode);
-        }
+        LivePerson.showConversation(MainActivity.this, new LPAuthenticationParams().setAuthKey(authCode), new ConversationViewParams(isReadOnly()));
         ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
                 .setFirstName(mFirstNameView.getText().toString())
                 .setLastName(mLastNameView.getText().toString())
@@ -315,8 +338,11 @@ public class MainActivity extends AppCompatActivity {
         LivePerson.setUserProfile(consumerProfile);
     }
 
+    private boolean isReadOnly() {
+        return mReadOnlyModeCheckBox.isChecked();
+    }
+
     /**
-     *
      * If we initiated from a push message we show the screen that was in use the previous session (fragment/activity)
      * Activity mode is the default
      *
@@ -342,7 +368,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * Hide any shown notification
      */
     private void clearPushNotifications() {
@@ -350,7 +375,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param language
      * @param country
      */
@@ -388,7 +412,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @return
      */
     private Locale getLocale() {
@@ -413,9 +436,9 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (newValue > 0){
+                if (newValue > 0) {
                     setTitle(getResources().getString(R.string.app_name) + " (" + newValue + ") ");
-                }else{
+                } else {
                     setTitle(R.string.app_name);
                 }
             }

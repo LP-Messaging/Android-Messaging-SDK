@@ -1,6 +1,6 @@
 package com.liveperson.sample.app;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,26 +11,37 @@ import android.widget.Toast;
 import com.liveperson.api.LivePersonCallbackImpl;
 import com.liveperson.api.LivePersonIntents;
 import com.liveperson.api.ams.cm.types.CloseReason;
+import com.liveperson.api.sdk.PermissionType;
 import com.liveperson.api.sdk.LPConversationData;
+import com.liveperson.infra.LPAuthenticationParams;
+import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by shiranr on 4/9/17.
  */
-public class MainApplication extends Application {
+public class MainApplication extends MultiDexApplication {
 
 
     private static final String TAG = MainApplication.class.getSimpleName();
     public static MainApplication Instance;
     private LivePersonCallbackImpl livePersonCallback;
     private BroadcastReceiver mLivePersonReceiver;
+    private boolean showToastOnCallback;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
 
         Instance = this;
         registerToLivePersonEvents();
@@ -47,6 +58,9 @@ public class MainApplication extends Application {
     }
 
     private void createLivePersonReceiver() {
+        if (mLivePersonReceiver != null){
+            return;
+        }
         mLivePersonReceiver = new BroadcastReceiver(){
 
             @Override
@@ -91,8 +105,16 @@ public class MainApplication extends Application {
                         onConversationStarted(lpConversationData1);
                         break;
 
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_CSAT_LAUNCHED_INTENT_ACTION:
+                        onCsatLaunched();
+                        break;
+
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_CSAT_DISMISSED_INTENT_ACTION:
                         onCsatDismissed();
+                        break;
+
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_CSAT_SKIPPED_INTENT_ACTION:
+                        onCsatSkipped();
                         break;
 
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_CSAT_SUBMITTED_INTENT_ACTION:
@@ -113,7 +135,23 @@ public class MainApplication extends Application {
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_TOKEN_EXPIRED_INTENT_ACTION:
                         onTokenExpired();
                         break;
-                }
+
+					case LivePersonIntents.ILivePersonIntentAction.LP_ON_USER_DENIED_PERMISSION:
+						PermissionType deniedPermissionType = LivePersonIntents.getPermissionType(intent);
+						boolean doNotShowAgainMarked = LivePersonIntents.getPermissionDoNotShowAgainMarked(intent);
+						onUserDeniedPermission(deniedPermissionType, doNotShowAgainMarked);
+						break;
+
+					case LivePersonIntents.ILivePersonIntentAction.LP_ON_USER_ACTION_ON_PREVENTED_PERMISSION:
+						PermissionType preventedPermissionType = LivePersonIntents.getPermissionType(intent);
+						onUserActionOnPreventedPermission(preventedPermissionType);
+						break;
+
+					case LivePersonIntents.ILivePersonIntentAction.LP_ON_STRUCTURED_CONTENT_LINK_CLICKED:
+						String uri = LivePersonIntents.getLinkUri(intent);
+						onStructuredContentLinkClicked(uri);
+						break;
+				}
 
             }
         };
@@ -169,7 +207,12 @@ public class MainApplication extends Application {
                 MainApplication.this.onAgentDetailsChanged(agentData);
             }
 
-            @Override
+			@Override
+			public void onCsatLaunched() {
+				MainApplication.this.onCsatLaunched();
+			}
+
+			@Override
             public void onCsatDismissed() {
                 MainApplication.this.onCsatDismissed();
             }
@@ -179,7 +222,12 @@ public class MainApplication extends Application {
                 MainApplication.this.onCsatSubmitted(conversationId);
             }
 
-            @Override
+			@Override
+			public void onCsatSkipped() {
+				MainApplication.this.onCsatSkipped();
+			}
+
+			@Override
             public void onConversationMarkedAsUrgent() {
                 MainApplication.this.onConversationMarkedAsUrgent();
             }
@@ -199,63 +247,111 @@ public class MainApplication extends Application {
                 MainApplication.this.onAgentAvatarTapped(agentData);
 
             }
-        };
+
+			@Override
+			public void onUserDeniedPermission(PermissionType permissionType, boolean doNotShowAgainMarked) {
+				MainApplication.this.onUserDeniedPermission(permissionType, doNotShowAgainMarked);
+			}
+
+			@Override
+			public void onUserActionOnPreventedPermission(PermissionType permissionType) {
+				MainApplication.this.onUserActionOnPreventedPermission(permissionType);
+			}
+
+			@Override
+			public void onStructuredContentLinkClicked(String uri) {
+				MainApplication.this.onStructuredContentLinkClicked(uri);
+			}
+		};
+    }
+
+
+	public void setShowToastOnCallback(boolean showToastOnCallback) {
+        this.showToastOnCallback = showToastOnCallback;
+    }
+    private void showToast(String message) {
+        if (showToastOnCallback){
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        }else{
+            LPMobileLog.d(TAG + "_CALLBACK", message);
+        }
     }
 
     private void onAgentAvatarTapped(AgentData agentData) {
-        Toast.makeText(getApplicationContext(), "on Agent Avatar Tapped - " + agentData.mFirstName + " " + agentData.mLastName, Toast.LENGTH_SHORT).show();
+        showToast("on Agent Avatar Tapped - " + agentData.mFirstName + " " + agentData.mLastName);
     }
 
+
     private void onOfflineHoursChanges(boolean isOfflineHoursOn) {
-        Toast.makeText(getApplicationContext(), "on Offline Hours Changes - " + isOfflineHoursOn, Toast.LENGTH_LONG).show();
+        showToast("on Offline Hours Changes - " + isOfflineHoursOn);
     }
 
     private void onConversationMarkedAsNormal() {
-        Toast.makeText(getApplicationContext(), "Conversation Marked As Normal", Toast.LENGTH_LONG).show();
+        showToast("Conversation Marked As Normal");
     }
 
     private void onConversationMarkedAsUrgent() {
-        Toast.makeText(getApplicationContext(), "Conversation Marked As Urgent", Toast.LENGTH_LONG).show();
+        showToast("Conversation Marked As Urgent");
     }
 
     private void onCsatSubmitted(String conversationId) {
-        Toast.makeText(getApplicationContext(), "on CSAT Submitted. ConversationID = " + conversationId, Toast.LENGTH_LONG).show();
+        showToast("on CSAT Submitted. ConversationID = " + conversationId);
+    }
+
+    private void onCsatLaunched() {
+        showToast("on CSAT Launched");
     }
 
     private void onCsatDismissed() {
-        Toast.makeText(getApplicationContext(), "on CSAT Dismissed", Toast.LENGTH_LONG).show();
+        showToast("on CSAT Dismissed");
     }
 
+	private void onCsatSkipped() {
+		showToast("on CSAT Skipped");
+	}
+
     private void onAgentDetailsChanged(AgentData agentData) {
-        Toast.makeText(getApplicationContext(), "Agent Details Changed " + agentData, Toast.LENGTH_LONG).show();
+        showToast("Agent Details Changed " + agentData);
     }
 
     private void onAgentTyping(boolean isTyping) {
-        Toast.makeText(getApplicationContext(), "isTyping " + isTyping, Toast.LENGTH_LONG).show();
+        showToast("isTyping " + isTyping);
     }
 
     private void onConnectionChanged(boolean isConnected) {
-        Toast.makeText(getApplicationContext(), "onConnectionChanged " + isConnected, Toast.LENGTH_LONG).show();
+        showToast("onConnectionChanged " + isConnected);
     }
 
     private void onConversationResolved(LPConversationData convData) {
-        Toast.makeText(getApplicationContext(), "Conversation resolved " + convData.getId()
-                + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
+        showToast("Conversation resolved " + convData.getId()
+                + " reason " + convData.getCloseReason());
     }
 
     private void onConversationStarted(LPConversationData convData) {
-        Toast.makeText(getApplicationContext(), "Conversation started " + convData.getId()
-                + " reason " + convData.getCloseReason(), Toast.LENGTH_LONG).show();
+        showToast("Conversation started " + convData.getId()
+                + " reason " + convData.getCloseReason());
     }
 
     private void onTokenExpired() {
-        Toast.makeText(getApplicationContext(), "onTokenExpired ", Toast.LENGTH_LONG).show();
+        showToast("onTokenExpired ");
 
         // Change authentication key here:
-        LivePerson.reconnect(SampleAppStorage.getInstance(getApplicationContext()).getAuthCode());
+        LivePerson.reconnect(new LPAuthenticationParams().setAuthKey(SampleAppStorage.getInstance(getApplicationContext()).getAuthCode()));
     }
 
     private void onError(TaskType type, String message) {
-        Toast.makeText(getApplicationContext(), " problem " + type.name(), Toast.LENGTH_LONG).show();
+        showToast(" problem " + type.name());
     }
+
+	private void onUserDeniedPermission(PermissionType permissionType, boolean doNotShowAgainMarked) {
+		showToast("onUserDeniedPermission " + permissionType.name() + " doNotShowAgainMarked = " + doNotShowAgainMarked);
+	}
+
+	private void onUserActionOnPreventedPermission(PermissionType permissionType) {
+		showToast("onUserActionOnPreventedPermission " + permissionType.name());
+	}
+
+	private void onStructuredContentLinkClicked(String uri) {
+		showToast("onStructuredContentLinkClicked. Uri: " + uri);
+	}
 }
