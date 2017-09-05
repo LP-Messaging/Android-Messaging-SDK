@@ -2,4 +2,18 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="end_bubble_bottom_left_radius">       10dp</dimen>
+    <dimen name="end_bubble_top_left_radius">          10dp</dimen>
+    <dimen name="end_bubble_top_right_radius">           10dp</dimen>
+    <dimen name="end_bubble_bottom_right_radius">       0dp</dimen>
+
+    <dimen name="start_bubble_bottom_left_radius">0dp</dimen>
+    <dimen name="start_bubble_top_left_radius">10dp</dimen>
+    <dimen name="start_bubble_top_right_radius">10dp</dimen>
+    <dimen name="start_bubble_bottom_right_radius">10dp</dimen>
+
+    <dimen name="unread_indicator_bubble_radius">20dp</dimen>
+    <dimen name="scroll_down_indicator_radius">20dp</dimen>
+    <dimen name="scroll_down_indicator_counter_radius">20dp</dimen>
 </resources>

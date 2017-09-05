@@ -1,19 +1,29 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'MobileAndroid'
+            storeFile file('../team_keystore.jks')
+            keyPassword 'MobileAndroid'
+            storePassword 'MobileAndroid'
+        }
+    }
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 251
-        versionName "2.5.1"
+        multiDexEnabled true
+        versionCode 270
+        versionName "2.7.0"
     }
     buildTypes {
         debug{
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
         release {
             minifyEnabled true
@@ -30,6 +40,11 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
@@ -37,8 +52,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':lp_messaging_sdk')
     compile 'com.google.firebase:firebase-messaging:9.8.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:gridlayout-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:gridlayout-v7:25.3.1'
+    compile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
+    compile 'com.android.support:multidex:1.0.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
