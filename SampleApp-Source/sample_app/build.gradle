@@ -8,8 +8,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 28006
-        versionName "2.8.0.6"
+        versionCode 280
+        versionName "2.8.0"
     }
     buildTypes {
         debug{
