@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content xmlns:android="http://schemas.android.com/apk/res/android">
+    <exclude domain="sharedpref" path="lp_shared.xml"/>
+    <exclude domain="database" path="lp_infra_tables.db"/>
+    <exclude domain="file" path="images"/>
+</full-backup-content>

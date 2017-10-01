@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liveperson.infra.ConversationViewParams;
+import com.liveperson.infra.ICallback;
 import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.LPAuthenticationParams;
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         initLocaleSpinner();
 
         setLogout();
+        setBadgeButton();
     }
 
 
@@ -137,6 +139,27 @@ public class MainActivity extends AppCompatActivity {
                                 mAccountTextView.setText("Failed!");
                             }
                         });
+            }
+        });
+    }
+
+    private void setBadgeButton(){
+        (findViewById(R.id.badge)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LivePerson.getNumUnreadMessages(SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, new ICallback<Integer, Exception>() {
+                    @Override
+                    public void onSuccess(Integer value) {
+                        Toast.makeText(MainActivity.this, "New badge value: " + value, Toast.LENGTH_LONG).show();
+                        updateToolBar(value);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        Toast.makeText(MainActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }
