@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'MobileAndroid'
-            storeFile file('../team_keystore.jks')
-            keyPassword 'MobileAndroid'
-            storePassword 'MobileAndroid'
-        }
-    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -16,14 +8,13 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 270
-        versionName "2.7.0"
+        versionCode 280
+        versionName "2.8.0"
     }
     buildTypes {
         debug{
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
         release {
             minifyEnabled true
