@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         multiDexEnabled true
-        versionCode 280
-        versionName "2.8.0"
+        versionCode 290
+        versionName "2.9.0"
     }
     buildTypes {
         debug{
@@ -42,9 +42,10 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(':lp_messaging_sdk')
-    compile 'com.google.firebase:firebase-messaging:9.8.0'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:gridlayout-v7:25.3.1'
+    compile 'com.google.firebase:firebase-messaging:11.0.2'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:gridlayout-v7:26.1.0'
     compile 'com.squareup.leakcanary:leakcanary-android:1.5'
     debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
     compile 'com.android.support:multidex:1.0.1'

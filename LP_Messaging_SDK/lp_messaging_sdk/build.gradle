@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 280
-        versionName "2.8.0"
+        versionCode 290
+        versionName "2.9.0"
     }
 
     defaultConfig {
@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:percent:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:9.8.0'
+    compile 'com.google.android.gms:play-services-maps:11.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -38,4 +38,5 @@ dependencies {
     compile(name: 'messaging', ext: 'aar')
     compile(name: 'messaging_ui', ext: 'aar')
     compile(name: 'ui', ext: 'aar')
+    
 }
