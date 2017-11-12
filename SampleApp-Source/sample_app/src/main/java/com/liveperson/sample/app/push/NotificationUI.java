@@ -1,6 +1,7 @@
 package com.liveperson.sample.app.push;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -19,6 +20,9 @@ import com.liveperson.sample.app.R;
 
 import java.util.List;
 
+import static android.app.NotificationManager.IMPORTANCE_HIGH;
+import static android.app.NotificationManager.IMPORTANCE_MAX;
+
 /**
  * ***** Sample app class - Not related to Messaging SDK *****
  *
@@ -35,29 +39,40 @@ public class NotificationUI {
 
 	public static void showNotification(Context ctx, PushMessage pushMessage) {
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx).
-                setContentIntent(getPendingIntent(ctx)).
-                setContentTitle(pushMessage.getMessage()).
-                setAutoCancel(true).
-                setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
-                setSmallIcon(R.mipmap.ic_launcher).
-                setStyle(new NotificationCompat.InboxStyle()
+        Notification.Builder builder;
+		NotificationChannel notificationChannel;
 
-                        .addLine(pushMessage.getFrom())
-                        .addLine(pushMessage.getBrandId())
-                        .addLine(pushMessage.getConversationId())
-                        .addLine(pushMessage.getBackendService())
-                        .addLine(pushMessage.getCollapseKey())
-                        .addLine("Unread messages : " + LivePerson.getNumUnreadMessages(pushMessage.getBrandId()))
+		// If we're running on Android O we create a notification channel
+		if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+			builder = new Notification.Builder(ctx);
+		} else {
+			notificationChannel = new NotificationChannel(PUSH_NOTIFICATION, "Push Notification", NotificationManager.IMPORTANCE_DEFAULT);
+			notificationChannel.setImportance(IMPORTANCE_HIGH);
+			getNotificationManager(ctx).createNotificationChannel(notificationChannel);
+			builder = new Notification.Builder(ctx, PUSH_NOTIFICATION);
+		}
 
-                );
+		builder.setContentIntent(getPendingIntent(ctx)).
+			setContentTitle(pushMessage.getMessage()).
+			setAutoCancel(true).
+			setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
+			setSmallIcon(R.mipmap.ic_launcher).
+			setStyle(new Notification.InboxStyle()
 
-        if (Build.VERSION.SDK_INT >= 21) {
+					.addLine(pushMessage.getFrom())
+					.addLine(pushMessage.getBrandId())
+					.addLine(pushMessage.getConversationId())
+					.addLine(pushMessage.getBackendService())
+					.addLine(pushMessage.getCollapseKey())
+					.addLine("Unread messages : " + LivePerson.getNumUnreadMessages(pushMessage.getBrandId()))
+
+			);
+
+		if (Build.VERSION.SDK_INT >= 21) {
             builder = builder.
                     setCategory(Notification.CATEGORY_MESSAGE).
                     setPriority(Notification.PRIORITY_HIGH);
         }
-
 
         getNotificationManager(ctx).notify(NOTIFICATION_ID, builder.build());
     }
