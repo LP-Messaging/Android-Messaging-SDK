@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 290
-        versionName "2.9.0"
+        versionCode 291
+        versionName "2.9.1"
     }
 
     defaultConfig {
@@ -38,5 +38,4 @@ dependencies {
     compile(name: 'messaging', ext: 'aar')
     compile(name: 'messaging_ui', ext: 'aar')
     compile(name: 'ui', ext: 'aar')
-    
 }
