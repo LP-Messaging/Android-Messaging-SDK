@@ -23,6 +23,7 @@ public class SampleAppStorage {
     private static final String AUTH_CODE = "auth_code";
     private static final String SDK_MODE = "sdk_mode";
     private static final String BRAND_ID = "brand_id";
+    private static final String PUBLIC_KEY = "public_key";
 
     private SharedPreferences mDefaultSharedPreferences;
     private static volatile SampleAppStorage Instance = null;
@@ -60,6 +61,10 @@ public class SampleAppStorage {
         mDefaultSharedPreferences.edit().putString(AUTH_CODE, authCode).apply();
     }
 
+    public void setPublicKey(String publicKey) {
+        mDefaultSharedPreferences.edit().putString(PUBLIC_KEY, publicKey).apply();
+    }
+
     public void setSDKMode(SDKMode state) {
         mDefaultSharedPreferences.edit().putInt(SDK_MODE, state.ordinal()).apply();
     }
@@ -78,6 +83,10 @@ public class SampleAppStorage {
 
     public String getAuthCode() {
         return mDefaultSharedPreferences.getString(AUTH_CODE, "");
+    }
+
+    public String getPublicKey(){
+        return mDefaultSharedPreferences.getString(PUBLIC_KEY, "");
     }
 
     public SDKMode getSDKMode() {

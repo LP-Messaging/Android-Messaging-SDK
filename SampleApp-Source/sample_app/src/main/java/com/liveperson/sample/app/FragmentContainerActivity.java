@@ -81,9 +81,14 @@ public class FragmentContainerActivity extends AppCompatActivity {
         Log.d(TAG, "initFragment. mConversationFragment = "+ mConversationFragment);
         if (mConversationFragment == null) {
             String authCode = SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode();
+            String publicKey = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPublicKey();
 
             Log.d(TAG, "initFragment. authCode = "+ authCode);
-            mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(new LPAuthenticationParams().setAuthKey(authCode), new ConversationViewParams(isReadOnly()));
+            Log.d(TAG, "initFragment. publicKey = "+ publicKey);
+            LPAuthenticationParams authParams = new LPAuthenticationParams();
+            authParams.setAuthKey(authCode);
+            authParams.addCertificatePinningKey(publicKey);
+            mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(authParams, new ConversationViewParams(isReadOnly()));
 
             if (isValidState()) {
 

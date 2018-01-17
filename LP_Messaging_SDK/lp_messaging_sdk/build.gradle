@@ -2,13 +2,13 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 292
-        versionName "2.9.2"
+        versionCode 300
+        versionName "3.0.0"
     }
 
     defaultConfig {
@@ -17,25 +17,24 @@ android {
 
     repositories {
         flatDir {
-            dirs 'aars'
+         dirs 'aars'
         }
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:percent:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support:design:25.3.1'
+    implementation 'com.android.support:recyclerview-v7:25.3.1'
+    implementation 'com.android.support:percent:25.3.1'
+    implementation 'com.google.android.gms:play-services-maps:11.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.neovisionaries:nv-websocket-client:1.31'
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
 
-    compile(name: 'infra', ext: 'aar')
-    compile(name: 'messaging', ext: 'aar')
-    compile(name: 'messaging_ui', ext: 'aar')
-    compile(name: 'ui', ext: 'aar')
+    api(name: 'infra', ext: 'aar')
+    api(name: 'messaging', ext: 'aar')
+    api(name: 'messaging_ui', ext: 'aar')
+    api(name: 'ui', ext: 'aar')
 }
