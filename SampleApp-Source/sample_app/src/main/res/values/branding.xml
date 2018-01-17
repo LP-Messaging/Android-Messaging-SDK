@@ -120,6 +120,8 @@
     <integer name="encryptionVersion">1</integer>
 
     <string name="csds_url">adminlogin.liveperson.net</string>
+    <string name="lptag_domain">lptag.liveperson.net</string>
+
     <integer name="idp_num_history_conversation">2</integer>
 
     <!--Credit card masking-->
@@ -233,5 +235,8 @@
 
     <!--Controller messages-->
     <color name="conversation_controller_message_text_color">@color/lp_dark_gray_2</color>
+
+    <!-- Message bubble timestamp -->
+    <bool name="message_status_numeric_timestamp_only">false</bool>
 
 </resources>

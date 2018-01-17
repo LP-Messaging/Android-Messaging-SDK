@@ -16,4 +16,31 @@
     <dimen name="unread_indicator_bubble_radius">20dp</dimen>
     <dimen name="scroll_down_indicator_radius">20dp</dimen>
     <dimen name="scroll_down_indicator_counter_radius">20dp</dimen>
+
+    <dimen name="brand_bubble_padding_right">8dp</dimen>
+    <dimen name="brand_bubble_padding_left">8dp</dimen>
+    <dimen name="brand_bubble_padding_top">8dp</dimen>
+    <dimen name="brand_bubble_padding_bottom">8dp</dimen>
+
+    <dimen name="chat_bubble_padding_right">8dp</dimen>
+    <dimen name="chat_bubble_padding_left">8dp</dimen>
+    <dimen name="chat_bubble_padding_top">8dp</dimen>
+    <dimen name="chat_bubble_padding_bottom">8dp</dimen>
+
+    <!-- agent avatar margin -->
+    <dimen name="avatar_margin_leading">@dimen/margin_regular</dimen>
+    <dimen name="avatar_margin_trailing">@dimen/margin_regular</dimen>
+
+    <!-- sticky timestamp -->
+    <dimen name="sticky_timestamp_text_size">@dimen/small_text_size</dimen>
+    <dimen name="sticky_timestamp_margin_top">@dimen/margin_half</dimen>
+
+    <!-- conversation resolved -->
+    <dimen name="bubble_system_resolved_text_size">@dimen/small_text_size</dimen>
+    <dimen name="bubble_system_resolved_padding">@dimen/margin_half</dimen>
+    <dimen name="bubble_system_resolved_line_spacing">0dp</dimen>
+    <dimen name="bubble_system_resolved_separator_padding_bottom">@dimen/margin_half</dimen>
+
+    <!-- post-chat survey button -->
+    <dimen name="button_corner_radius">30dp</dimen>
 </resources>

@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mLastNameView;
     private EditText mPhoneNumberView;
     private EditText mAuthCodeView;
+    private EditText mPublicKey;
     private Button mOpenConversationButton;
     private TextInputLayout mAccountIdLayout;
     private TextView mTime;
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
         mAuthCodeView = (EditText) findViewById(R.id.auth_code);
         mAuthCodeView.setText(SampleAppStorage.getInstance(this).getAuthCode());
+
+        mPublicKey = (EditText) findViewById(R.id.public_key);
+        mPublicKey.setText(SampleAppStorage.getInstance(this).getPublicKey());
 
         String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
         ((TextView) findViewById(R.id.sdk_version)).setText(sdkVersion);
@@ -234,11 +238,13 @@ public class MainActivity extends AppCompatActivity {
         String lastName = mLastNameView.getText().toString().trim();
         String phoneNumber = mPhoneNumberView.getText().toString().trim();
         String authCode = mAuthCodeView.getText().toString().trim();
+        String publicKey = mPublicKey.getText().toString().trim();
         SampleAppStorage.getInstance(this).setAccount(account);
         SampleAppStorage.getInstance(this).setFirstName(firstName);
         SampleAppStorage.getInstance(this).setLastName(lastName);
         SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
         SampleAppStorage.getInstance(this).setAuthCode(authCode);
+        SampleAppStorage.getInstance(this).setPublicKey(publicKey);
     }
 
     /**
@@ -352,7 +358,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void openActivity() {
         String authCode = SampleAppStorage.getInstance(MainActivity.this).getAuthCode();
-        LivePerson.showConversation(MainActivity.this, new LPAuthenticationParams().setAuthKey(authCode), new ConversationViewParams(isReadOnly()));
+        String publicKey = SampleAppStorage.getInstance(MainActivity.this).getPublicKey();
+
+        LPAuthenticationParams authParams = new LPAuthenticationParams();
+        authParams.setAuthKey(authCode);
+        authParams.addCertificatePinningKey(publicKey);
+        LivePerson.showConversation(MainActivity.this, authParams, new ConversationViewParams(isReadOnly()));
         ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
                 .setFirstName(mFirstNameView.getText().toString())
                 .setLastName(mLastNameView.getText().toString())
