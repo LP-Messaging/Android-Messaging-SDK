@@ -1,14 +1,16 @@
+
+
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 25
-        versionCode 300
-        versionName "3.0.0"
+        targetSdkVersion 26
+        versionCode 310
+        versionName "3.1.0"
     }
 
     defaultConfig {
@@ -17,16 +19,16 @@ android {
 
     repositories {
         flatDir {
-         dirs 'aars'
+            dirs 'aars'
         }
     }
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:25.3.1'
-    implementation 'com.android.support:design:25.3.1'
-    implementation 'com.android.support:recyclerview-v7:25.3.1'
-    implementation 'com.android.support:percent:25.3.1'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:percent:26.1.0'
     implementation 'com.google.android.gms:play-services-maps:11.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
@@ -37,4 +39,6 @@ dependencies {
     api(name: 'messaging', ext: 'aar')
     api(name: 'messaging_ui', ext: 'aar')
     api(name: 'ui', ext: 'aar')
+    api(name: 'monitoring', ext: 'aar')
+
 }

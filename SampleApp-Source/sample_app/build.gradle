@@ -1,23 +1,25 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-   compileSdkVersion 26
+    compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 19
         targetSdkVersion 26
         multiDexEnabled true
-        versionCode 300
-        versionName "3.0.0"
+        versionCode 310
+        versionName "3.1.0"
     }
     buildTypes {
-        debug{
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -28,7 +30,7 @@ android {
             dirs project(':lp_messaging_sdk').file('aars')
         }
     }
-    
+
     lintOptions {
         abortOnError false
     }
@@ -47,8 +49,14 @@ dependencies {
     implementation 'com.android.support:gridlayout-v7:26.1.0'
     implementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     implementation 'com.android.support:multidex:1.0.2'
-    testImplementation  'junit:junit:4.12'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
 
+
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

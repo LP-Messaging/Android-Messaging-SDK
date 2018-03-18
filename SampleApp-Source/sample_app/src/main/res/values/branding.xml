@@ -24,6 +24,7 @@
     <color name="agent_bubble_background_color">@color/lp_blue</color>
     <color name="agent_avatar_background_color">@color/lp_gray</color>
     <color name="agent_avatar_icon_color">@android:color/white</color>
+    <bool name="show_agent_typing_in_message_bubble">false</bool>
 
     <!--consumer bubble-->
     <dimen name="consumer_bubble_stroke_width">1dp</dimen>
@@ -238,5 +239,8 @@
 
     <!-- Message bubble timestamp -->
     <bool name="message_status_numeric_timestamp_only">false</bool>
+
+    <!-- Brand/Agent name header properties-->
+    <color name="lp_brand_header_text_color">@android:color/black</color>
 
 </resources>
