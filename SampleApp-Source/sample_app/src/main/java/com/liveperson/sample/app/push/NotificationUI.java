@@ -10,18 +10,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
 
-import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
 import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.MainActivity;
+import com.liveperson.sample.app.MessagingActivity;
 import com.liveperson.sample.app.R;
 
 import java.util.List;
 
 import static android.app.NotificationManager.IMPORTANCE_HIGH;
-import static android.app.NotificationManager.IMPORTANCE_MAX;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK *****
@@ -57,6 +54,7 @@ public class NotificationUI {
 			setAutoCancel(true).
 			setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
 			setSmallIcon(R.mipmap.ic_launcher).
+			setNumber(pushMessage.getCurrentUnreadMessgesCounter()).
 			setStyle(new Notification.InboxStyle()
 
 					.addLine(pushMessage.getFrom())
@@ -88,7 +86,7 @@ public class NotificationUI {
 
 
     private static PendingIntent getPendingIntent(Context ctx) {
-        Intent showIntent = new Intent(ctx, MainActivity.class);
+        Intent showIntent = new Intent(ctx, MessagingActivity.class);
         showIntent.putExtra(PUSH_NOTIFICATION, true);
 
 		return PendingIntent.getActivity(ctx, 0, showIntent, PendingIntent.FLAG_UPDATE_CURRENT);

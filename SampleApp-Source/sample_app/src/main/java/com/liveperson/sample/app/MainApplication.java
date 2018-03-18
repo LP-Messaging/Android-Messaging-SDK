@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.liveperson.api.LivePersonCallbackImpl;
 import com.liveperson.api.LivePersonIntents;
-import com.liveperson.api.ams.cm.types.CloseReason;
+import com.liveperson.api.response.types.CloseReason;
 import com.liveperson.api.sdk.PermissionType;
 import com.liveperson.api.sdk.LPConversationData;
 import com.liveperson.infra.LPAuthenticationParams;

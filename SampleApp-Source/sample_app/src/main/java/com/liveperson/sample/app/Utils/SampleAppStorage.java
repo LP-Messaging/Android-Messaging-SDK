@@ -17,6 +17,7 @@ public class SampleAppStorage {
     public static final String SDK_SAMPLE_APP_ID = "com.liveperson.sdksample";
     public static final String SDK_SAMPLE_FCM_APP_ID = "com.liveperson.sdksampleFcm";
 
+    // Messaging
     private static final String FIRST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
     private static final String PHONE_NUMBER = "phone_number";
@@ -25,7 +26,18 @@ public class SampleAppStorage {
     private static final String BRAND_ID = "brand_id";
     private static final String PUBLIC_KEY = "public_key";
 
-    private SharedPreferences mDefaultSharedPreferences;
+    // Monitoring
+	private static final String APP_INSTALL_ID = "app_install_id";
+	private static final String CONSUMER_ID = "consume_id";
+	private static final String PAGE_ID = "page_id";
+
+	private Long mCampaignId;
+	private Long mEngagementId;
+	private String mSessionId;
+	private String mVisitorId;
+	private String mInteractionContextId;
+
+	private SharedPreferences mDefaultSharedPreferences;
     private static volatile SampleAppStorage Instance = null;
     public enum SDKMode {ACTIVITY, FRAGMENT}
 
@@ -101,4 +113,69 @@ public class SampleAppStorage {
     public String getAccount() {
         return mDefaultSharedPreferences.getString(BRAND_ID, "");
     }
+
+    // Monitoring
+	public void setAppInstallId(String appInstallId) {
+		mDefaultSharedPreferences.edit().putString(APP_INSTALL_ID, appInstallId).apply();
+	}
+
+	public String getAppInstallId() {
+		return mDefaultSharedPreferences.getString(APP_INSTALL_ID, "");
+	}
+
+	public void setConsumerId(String consumerId) {
+		mDefaultSharedPreferences.edit().putString(CONSUMER_ID, consumerId).apply();
+	}
+
+	public String getConsumerId() {
+		return mDefaultSharedPreferences.getString(CONSUMER_ID, "");
+	}
+
+	public void setPageId(String pageId) {
+		mDefaultSharedPreferences.edit().putString(PAGE_ID, pageId).apply();
+	}
+
+	public String getPageId() {
+		return mDefaultSharedPreferences.getString(PAGE_ID, "");
+	}
+
+	public void setCampaignId(Long campaignId) {
+		mCampaignId = campaignId;
+	}
+
+	public Long getCampaignId() {
+		return mCampaignId;
+	}
+
+	public void setEngagementId(Long engagementId) {
+		mEngagementId = engagementId;
+	}
+
+	public Long getEngagementId() {
+		return mEngagementId;
+	}
+
+	public String getSessionId() {
+		return mSessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		mSessionId = sessionId;
+	}
+
+	public String getVisitorId() {
+		return mVisitorId;
+	}
+
+	public void setVisitorId(String visitorId) {
+		mVisitorId = visitorId;
+	}
+
+	public String getInteractionContextId() {
+		return mInteractionContextId;
+	}
+
+	public void setInteractionContextId(String interactionContextId) {
+		mInteractionContextId = interactionContextId;
+	}
 }

@@ -30,3 +30,19 @@
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+# from the king himself 9.2017
+# https://github.com/square/picasso/issues/1410
+### OKHTTP
+-dontwarn okhttp3.**
+
+### OKIO
+-dontwarn okio.**
+
+### PICASSO
+# Checks for OkHttp versions on the classpath to determine Downloader to use.
+-dontnote com.squareup.picasso.Utils
+# Downloader used only when OkHttp 2.x is present on the classpath.
+-dontwarn com.squareup.picasso.OkHttpDownloader
+# Downloader used only when OkHttp 3.x is present on the classpath.
+-dontwarn com.squareup.picasso.OkHttp3Downloader

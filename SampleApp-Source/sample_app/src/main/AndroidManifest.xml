@@ -2,78 +2,84 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.liveperson.sample.app">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Vibrate on new incoming msg -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- [START gcm_permission] -->
-    <!--<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />-->
-    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
+    <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> -->
+    <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
     <!-- [END gcm_permission] -->
-
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/lp_backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".MainApplication"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".IntroActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".MessagingActivity"
+            android:launchMode="singleTop"
+            android:label="@string/messaging_title">
+        </activity>
+        <activity
+            android:name=".MonitoringActivity"
+            android:label="@string/monitoring_title"/>
         <activity
             android:name=".FragmentContainerActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".DeepLinkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="http"
+
+                <data
                     android:host="liveperson.com"
-                    android:pathPrefix="/deeplink"/>
+                    android:pathPrefix="/deeplink"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
 
-        <!--FCM-->
-        <!--This service is used to receive any incoming message-->
-        <service
-            android:name=".push.fcm.MyFirebaseMessagingService">
+        <!-- FCM -->
+        <!-- This service is used to receive any incoming message -->
+        <service android:name=".push.fcm.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <!--This service is used to receive and register the token when it is refreshed-->
-        <service
-            android:name=".push.fcm.MyFirebaseInstanceIDService">
+        <!-- This service is used to receive and register the token when it is refreshed -->
+        <service android:name=".push.fcm.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service
-            android:name="com.liveperson.sample.app.push.fcm.FirebaseRegistrationIntentService"
-            android:exported="false">
-        </service>
+            android:name=".push.fcm.FirebaseRegistrationIntentService"
+            android:exported="false"></service>
 
         <receiver android:name=".push.NotificationUI$BadgeBroadcastReceiver">
             <intent-filter>
-                <action android:name="ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION"/>
+                <action android:name="ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION" />
             </intent-filter>
         </receiver>
-        <!--End of FCM-->
+        <!-- End of FCM -->
 
-<!--
+
+        <!--
         &lt;!&ndash; [START gcm_receiver] &ndash;&gt;
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -107,8 +113,7 @@
         <service
             android:name="com.liveperson.sample.app.push.gcm.RegistrationIntentService"
             android:exported="false"></service>
--->
-
+        -->
 
     </application>
 

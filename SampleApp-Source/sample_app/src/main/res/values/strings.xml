@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Sample Application</string>
+    <string name="monitoring_title">Monitoring</string>
+    <string name="messaging_title">Messaging</string>
     <string name="initializing">Initializing…</string>
     <string name="open_fragment">Open Fragment</string>
     <string name="open_activity">Open Activity</string>
@@ -17,7 +19,7 @@
     <string name="lp_date_format"></string>
     <string name="lp_time_format"></string>
     <string name="lp_ttr_message_off_hours_time_zone_id"></string>
-
+    <string name="logout_failed">Logout Failed!</string>
 
 
 </resources>

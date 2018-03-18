@@ -36,6 +36,8 @@ import com.liveperson.messaging.sdk.R;
 import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
 import com.liveperson.messaging.sdk.api.callbacks.ShutDownLivePersonCallback;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
+import com.liveperson.monitoring.MonitoringFactory;
+import com.liveperson.sdk.MonitoringInternalInitParams;
 
 import java.util.Map;
 
@@ -76,24 +78,67 @@ public class LivePerson {
      * @param context Application or activity context
      */
     public static void initialize(Context context, final InitLivePersonProperties initProperties) {
+
+		final Context applicationContext = context.getApplicationContext();
+
+    	// Save hostapp callback
+		final InitLivePersonCallBack hostAppCallback = initProperties.getInitCallBack();
+
+		InitLivePersonCallBack callbackForMonitoringInit = new InitLivePersonCallBack() {
+			@Override
+			public void onInitSucceed() {
+
+				// Initialize Monitoring
+				if (initProperties.isMonitoringParamsValid()) {
+					// If Monitoring already initialized return success
+					if (MonitoringFactory.INSTANCE.isInitialized()) {
+						LPMobileLog.d(TAG, "initialize: Monitoring already initialized. Return success");
+						hostAppCallback.onInitSucceed();
+						return;
+					}
+
+					LPMobileLog.d(TAG, "initialize: initializing monitoring");
+					// Initialize Monitoring
+					if( MonitoringFactory.INSTANCE.initMonitoring(new MonitoringInternalInitParams(applicationContext, mBrandId, initProperties.getMonitoringInitParams().getAppInstallId()))){
+						hostAppCallback.onInitSucceed();
+					}
+					else {
+						hostAppCallback.onInitFailed(new Exception("Monitoring initialization failed"));
+					}
+				}else {
+					hostAppCallback.onInitSucceed();
+				}
+			}
+
+			@Override
+			public void onInitFailed(Exception e) {
+
+				hostAppCallback.onInitFailed(e);
+			}
+		};
+
+		initProperties.setInitCallBack(callbackForMonitoringInit);
+
         //check if initProperties contains all the mandatory params.
         if (!InitLivePersonProperties.isValid(initProperties)) {
-            if (initProperties != null && initProperties.getInitCallBack() != null) {
-                initProperties.getInitCallBack().onInitFailed(new Exception("InitLivePersonProperties not valid or missing parameters."));
+            if (hostAppCallback != null) {
+                hostAppCallback.onInitFailed(new Exception("InitLivePersonProperties not valid or missing parameters."));
             }
             LPMobileLog.w(TAG, "Invalid InitLivePersonProperties!");
             return;
         }
-        context = context.getApplicationContext();
         //try to initialized
         if (!isValidState()) {
             mBrandId = initProperties.getBrandId();
-            setLogDebugMode(context);
-            UIConfigurationKeys.setDefaultConfiguration(context);
+            setLogDebugMode(applicationContext);
+            UIConfigurationKeys.setDefaultConfiguration(applicationContext);
             mLivePersonConfiguration = new LivePersonConfiguration(null);
-            MessagingUIFactory.getInstance().init(context, new MessagingUiInitData(initProperties, getSDKVersion()), new MessagingUiConfiguration(null));
-        } else {
-            initProperties.getInitCallBack().onInitSucceed();
+
+			// Initialize Messsaging
+            MessagingUIFactory.getInstance().init(applicationContext, new MessagingUiInitData(initProperties, getSDKVersion()), new MessagingUiConfiguration(null));
+
+		} else {
+            hostAppCallback.onInitSucceed();
             MessagingUIFactory.getInstance().setConfiguration(new MessagingUiConfiguration(null));
         }
     }
@@ -449,7 +494,7 @@ public class LivePerson {
         boolean initialized = MessagingUIFactory.getInstance().isInitialized();
         boolean isEmpty = TextUtils.isEmpty(mBrandId);
         if (initialized && isEmpty) {
-            mBrandId = MessagingUIFactory.getInstance().getMessagingUi().getInitData().getBrandId();
+            mBrandId = MessagingUIFactory.getInstance().getMessagingUi().getInitBrandId();
         }
         LPMobileLog.d(TAG, "init = " + initialized + " mBrandId = " + mBrandId);
         return initialized && !TextUtils.isEmpty(mBrandId);
@@ -533,13 +578,24 @@ public class LivePerson {
         MessagingUIFactory.getInstance().logout(context, ui, new LogoutLivePersonCallBack() {
             @Override
             public void onLogoutSucceed() {
-                logoutHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        logoutCallback.onLogoutSucceed();
-                    }
-                });
-            }
+				if (MonitoringFactory.INSTANCE.logout(context)) {
+
+					logoutHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							logoutCallback.onLogoutSucceed();
+						}
+					});
+				}
+				else {
+					logoutHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							logoutCallback.onLogoutFailed();
+						}
+					});
+				}
+			}
 
             @Override
             public void onLogoutFailed(final Exception e) {

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
@@ -88,7 +89,10 @@ public class FragmentContainerActivity extends AppCompatActivity {
             LPAuthenticationParams authParams = new LPAuthenticationParams();
             authParams.setAuthKey(authCode);
             authParams.addCertificatePinningKey(publicKey);
-            mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(authParams, new ConversationViewParams(isReadOnly()));
+
+			CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
+            ConversationViewParams params = new ConversationViewParams().setCampaignInfo(campaignInfo).setReadOnlyMode(isReadOnly());
+            mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(authParams,params );
 
             if (isValidState()) {
 
