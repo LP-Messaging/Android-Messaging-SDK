@@ -1,3 +1,17 @@
+buildscript {
+    ext.kotlin_version = '1.2.30'
+    repositories {
+        google() // Gradle 4.0+
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:3.0.1"
+        classpath 'com.google.gms:google-services:3.0.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -51,12 +65,18 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 
 apply plugin: 'com.google.gms.google-services'
 repositories {
     mavenCentral()
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
 }
