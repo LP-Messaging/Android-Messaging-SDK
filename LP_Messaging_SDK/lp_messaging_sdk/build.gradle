@@ -1,6 +1,21 @@
-
+// require for com.jfrog.artifactory pluggin
+buildscript {
+    ext.kotlin_version = '1.2.30'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.5.4"
+        classpath 'net.researchgate:gradle-release:2.3.5'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
 
 android {
     compileSdkVersion 26
@@ -9,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 310
-        versionName "3.1.0"
+        versionCode 311
+        versionName "3.1.1"
     }
 
     defaultConfig {
@@ -18,9 +33,9 @@ android {
     }
 
     repositories {
-        flatDir {
-            dirs 'aars'
-        }
+         flatDir {
+             dirs 'aars'
+         }
     }
 }
 
@@ -34,6 +49,7 @@ dependencies {
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api(name: 'infra', ext: 'aar')
     api(name: 'messaging', ext: 'aar')
