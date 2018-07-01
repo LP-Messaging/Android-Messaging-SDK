@@ -32,6 +32,7 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/account_id_layout"
+                    android:hint="Account ID:"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -39,8 +40,7 @@
                     <EditText
                         android:id="@+id/account_id"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Account ID:" />
+                        android:layout_height="wrap_content" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -56,14 +56,14 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/auth_code_layout"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content">
+                    android:hint="Auth Code:"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/auth_code"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Auth Code:" />
+                        android:layout_height="wrap_content" />
 
                 </android.support.design.widget.TextInputLayout>
         </LinearLayout>
@@ -74,9 +74,7 @@
             android:layout_height="wrap_content"
             app:rowCount="10"
             app:columnCount="2"
-            android:padding="10dp"
-
-            >
+            android:padding="10dp">
 
             <Button
                 android:id="@+id/button_start_activity"
@@ -85,8 +83,7 @@
                 android:text="@string/open_activity"
                 app:layout_column="0"
                 app:layout_row="0"
-                app:layout_gravity="fill"
-                />
+                app:layout_gravity="fill" />
 
             <Button
                 android:id="@+id/button_start_fragment"
@@ -95,9 +92,7 @@
                 android:text="@string/open_fragment"
                 app:layout_column="1"
                 app:layout_row="0"
-                app:layout_gravity="fill"
-
-                />
+                app:layout_gravity="fill" />
 
             <CheckBox
                 android:id="@+id/check_box_toasts"
@@ -120,60 +115,54 @@
 
 
         <android.support.design.widget.TextInputLayout
-                android:id="@+id/first_name_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_column="0"
-                app:layout_row="2"
-                app:layout_columnSpan="2"
-            app:layout_gravity="fill"
-
-            >
+            android:id="@+id/first_name_layout"
+            android:hint="First Name:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_column="0"
+            app:layout_row="2"
+            app:layout_columnSpan="2"
+            app:layout_gravity="fill">
 
                 <EditText
                     android:id="@+id/first_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="First Name:" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/last_name_layout"
+                android:hint="Last Name:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
                 app:layout_row="3"
                 app:layout_columnSpan="2"
-                app:layout_gravity="fill"
-
-                >
+                app:layout_gravity="fill">
 
                 <EditText
                     android:id="@+id/last_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Last Name:" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/phone_number_layout"
+                android:hint="Phone Number:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
                 app:layout_row="4"
                 app:layout_columnSpan="2"
-                app:layout_gravity="fill"
-
-                >
+                app:layout_gravity="fill">
 
                 <EditText
                     android:id="@+id/phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Phone Number:"
                     android:inputType="phone"/>
 
             </android.support.design.widget.TextInputLayout>

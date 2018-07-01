@@ -21,6 +21,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/auth_code_layout"
+                android:hint="Auth Code:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
@@ -28,8 +29,7 @@
                 <EditText
                     android:id="@+id/auth_code"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Auth Code:" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -51,6 +51,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/public_key_layout"
+                android:hint="Public Key:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
@@ -58,8 +59,7 @@
                 <EditText
                     android:id="@+id/public_key"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Public Key:" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -112,45 +112,42 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/first_name_layout"
+                android:hint="First Name:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
                 app:layout_columnSpan="2"
                 app:layout_gravity="fill"
-                app:layout_row="2"
-
-                >
+                app:layout_row="2">
 
                 <EditText
                     android:id="@+id/first_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="First Name:" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/last_name_layout"
+                android:hint="Last Name:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
                 app:layout_columnSpan="2"
                 app:layout_gravity="fill"
-                app:layout_row="3"
-
-                >
+                app:layout_row="3">
 
                 <EditText
                     android:id="@+id/last_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Last Name:" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/phone_number_layout"
+                android:hint="Phone Number:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
@@ -162,13 +159,13 @@
                     android:id="@+id/phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Phone Number:"
                     android:inputType="phone" />
 
             </android.support.design.widget.TextInputLayout>
 
 
             <android.support.design.widget.TextInputLayout
+                android:hint="Campaign ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
@@ -179,12 +176,12 @@
                 <EditText
                     android:id="@+id/campaign_id"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Campaign ID" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:hint="Engagement ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
@@ -195,13 +192,13 @@
             <EditText
                     android:id="@+id/emgagement_id"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Engagement ID" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
 
             <android.support.design.widget.TextInputLayout
+                android:hint="Session ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
@@ -212,12 +209,12 @@
                 <EditText
                     android:id="@+id/session_id"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Session ID" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:hint="Visitor ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
@@ -228,12 +225,12 @@
             <EditText
                     android:id="@+id/visitor_id"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Visitor ID" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:hint="Engagement Context ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_column="0"
@@ -244,8 +241,7 @@
             <EditText
                     android:id="@+id/engaement_context_id"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Engagement Context ID" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
 

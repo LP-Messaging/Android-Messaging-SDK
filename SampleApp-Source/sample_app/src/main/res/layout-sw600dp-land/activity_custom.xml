@@ -15,15 +15,14 @@
         >
 
         <android.support.design.widget.TextInputLayout
+            android:hint="Width size (in dp)"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/left_panel_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Width size (in dp)"
                 android:inputType="number"
                 android:imeActionId="@+id/left_panel_update"
                 android:imeOptions="actionGo"

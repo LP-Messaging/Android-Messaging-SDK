@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.liveperson.monitoring.model.LPMonitoringIdentity
 import com.liveperson.monitoring.sdk.api.LivepersonMonitoring
 import com.liveperson.monitoring.sdk.callbacks.MonitoringErrorType
 import com.liveperson.monitoring.sdk.callbacks.SdeCallback
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_monitoring.*
 import org.json.JSONArray
 import org.json.JSONException
 import java.lang.Exception
+import java.util.*
 
 class MonitoringActivity : AppCompatActivity() {
 
@@ -82,7 +84,9 @@ class MonitoringActivity : AppCompatActivity() {
             try {
                 SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdEditText.text.toString()
 
-                LivepersonMonitoring.getEngagement(this@MonitoringActivity, consumerIdEditText.text.toString(), buildSde(false), object : EngagementCallback{
+                var lpMonitoringIdentityList = Arrays.asList(LPMonitoringIdentity(consumerIdEditText.text.toString(), "brandIssuer"))
+
+                LivepersonMonitoring.getEngagement(this@MonitoringActivity, lpMonitoringIdentityList, buildSde(false), object : EngagementCallback{
                     override fun onSuccess(lpEngagementResponse: LPEngagementResponse) {
 
                         hideProgressBar()
@@ -93,7 +97,7 @@ class MonitoringActivity : AppCompatActivity() {
                             // For demo we display the first engagement only
                             currentCampaignId = engagementList[0].campaignId
                             currentEngagementId = engagementList[0].engagementId
-                            currentEngagementContextId = engagementList[0].contextId;
+                            currentEngagementContextId = engagementList[0].contextId
                             currentSessionId = lpEngagementResponse.sessionId
                             currentVisitorId = lpEngagementResponse.visitorId
                         }
@@ -131,7 +135,8 @@ class MonitoringActivity : AppCompatActivity() {
                 SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdEditText.text.toString()
                 SampleAppStorage.getInstance(this@MonitoringActivity).pageId = pageIdEditText.text.toString()
 
-                LivepersonMonitoring.sendSde(this@MonitoringActivity, consumerIdEditText.text.toString(), buildSde(true), object : SdeCallback{
+                var lpMonitoringIdentityList = Arrays.asList(LPMonitoringIdentity(consumerIdEditText.text.toString(), "brandIssuer"))
+                LivepersonMonitoring.sendSde(this@MonitoringActivity, lpMonitoringIdentityList, buildSde(true), object : SdeCallback{
                     override fun onSuccess(lpSdeResponse: LPSdeResponse) {
                         hideProgressBar()
                         updateResult(lpSdeResponse.toString())
@@ -178,12 +183,12 @@ class MonitoringActivity : AppCompatActivity() {
         if (view is EditText) {
             val layoutParams = view.layoutParams
             if (expand) {
-                view.setTextSize(16f)
+                view.textSize = 16f
                 layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                 view.layoutParams = layoutParams
             }
             else{
-                view.setTextSize(12f)
+                view.textSize = 12f
                 layoutParams.height = 120
                 view.layoutParams = layoutParams
             }

@@ -4,23 +4,18 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.MonitoringInitParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
-import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
-import com.liveperson.monitoring.MonitoringFactory;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
-import com.liveperson.sample.app.Utils.SampleAppUtils;
-import com.liveperson.sample.app.push.NotificationUI;
+import com.liveperson.sample.app.notification.NotificationUI;
 
 public class IntroActivity extends AppCompatActivity {
 

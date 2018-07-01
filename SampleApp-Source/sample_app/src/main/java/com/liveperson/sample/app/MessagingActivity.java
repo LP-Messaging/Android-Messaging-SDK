@@ -1,5 +1,6 @@
 package com.liveperson.sample.app;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,7 +37,7 @@ import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 import com.liveperson.sample.app.Utils.SampleAppUtils;
-import com.liveperson.sample.app.push.NotificationUI;
+import com.liveperson.sample.app.notification.NotificationUI;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -99,31 +100,31 @@ public class MessagingActivity extends AppCompatActivity {
      */
     private void initSampleAppViews() {
         // Set the default account in the view
-        mAccountIdLayout = (TextInputLayout) findViewById(R.id.account_id_layout);
+        mAccountIdLayout = findViewById(R.id.account_id_layout);
 
-        mFirstNameView = (EditText) findViewById(R.id.first_name);
+        mFirstNameView = findViewById(R.id.first_name);
         mFirstNameView.setText(SampleAppStorage.getInstance(this).getFirstName());
 
-        mLastNameView = (EditText) findViewById(R.id.last_name);
+        mLastNameView = findViewById(R.id.last_name);
         mLastNameView.setText(SampleAppStorage.getInstance(this).getLastName());
 
-        mPhoneNumberView = (EditText) findViewById(R.id.phone_number);
+        mPhoneNumberView = findViewById(R.id.phone_number);
         mPhoneNumberView.setText(SampleAppStorage.getInstance(this).getPhoneNumber());
 
-        mAuthCodeView = (EditText) findViewById(R.id.auth_code);
+        mAuthCodeView = findViewById(R.id.auth_code);
         mAuthCodeView.setText(SampleAppStorage.getInstance(this).getAuthCode());
 
-        mPublicKey = (EditText) findViewById(R.id.public_key);
+        mPublicKey = findViewById(R.id.public_key);
         mPublicKey.setText(SampleAppStorage.getInstance(this).getPublicKey());
 
         String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
         ((TextView) findViewById(R.id.sdk_version)).setText(sdkVersion);
 
-        mTime = (TextView) findViewById(R.id.time_sample_textView);
-        mDate = (TextView) findViewById(R.id.date_sample_textView);
+        mTime = findViewById(R.id.time_sample_textView);
+        mDate = findViewById(R.id.date_sample_textView);
 
-        mCallbackToastCheckBox = (CheckBox) findViewById(R.id.check_box_toasts);
-        mReadOnlyModeCheckBox = (CheckBox) findViewById(R.id.check_box_read_only);
+        mCallbackToastCheckBox = findViewById(R.id.check_box_toasts);
+        mReadOnlyModeCheckBox = findViewById(R.id.check_box_read_only);
 
 		mCampaignIdEditText = findViewById(R.id.campaign_id);
 		mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
@@ -180,14 +181,14 @@ public class MessagingActivity extends AppCompatActivity {
 
 
     private void initLocaleSpinner() {
-        final EditText language = (EditText) findViewById(R.id.language_editText);
-        final EditText country = (EditText) findViewById(R.id.country_editText);
+        final EditText language = findViewById(R.id.language_editText);
+        final EditText country = findViewById(R.id.country_editText);
 
-        final Spinner localeSpinner = (Spinner) findViewById(R.id.spinner_locale);
+        final Spinner localeSpinner = findViewById(R.id.spinner_locale);
         ArrayAdapter<String> localeSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.supported_locales));
         localeSpinner.setAdapter(localeSpinnerArrayAdapter);
 
-        Button updateLocale = (Button) findViewById(R.id.update_language_button);
+        Button updateLocale = findViewById(R.id.update_language_button);
         updateLocale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +217,7 @@ public class MessagingActivity extends AppCompatActivity {
         });
 
 
-        final Button clear = (Button) findViewById(R.id.clear_locale_button);
+        final Button clear = findViewById(R.id.clear_locale_button);
 
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,7 +250,7 @@ public class MessagingActivity extends AppCompatActivity {
      * Set the listener on the "open_conversation" button (Activity mode)
      */
     private void initOpenConversationButton() {
-        mOpenConversationButton = (Button) findViewById(R.id.button_start_activity);
+        mOpenConversationButton = findViewById(R.id.button_start_activity);
         mOpenConversationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,7 +268,7 @@ public class MessagingActivity extends AppCompatActivity {
      * Set the listener on the "Open Fragment" button (Fragment mode)
      */
     private void initStartFragmentButton() {
-        Button openFragmentButton = (Button) findViewById(R.id.button_start_fragment);
+        Button openFragmentButton = findViewById(R.id.button_start_fragment);
         openFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -358,6 +359,12 @@ public class MessagingActivity extends AppCompatActivity {
                 .setPhoneNumber(mPhoneNumberView.getText().toString())
                 .build();
         LivePerson.setUserProfile(consumerProfile);
+
+        //Constructing the notification builder for the upload/download foreground service and passing it to the SDK.
+        Notification.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(getApplicationContext());
+        Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
+        LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
+        LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
     }
 
     @NonNull
@@ -376,7 +383,7 @@ public class MessagingActivity extends AppCompatActivity {
      * @param intent
      */
     private void handlePush(Intent intent) {
-        boolean isFromPush = intent.getBooleanExtra(NotificationUI.PUSH_NOTIFICATION, false);
+        boolean isFromPush = intent.getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false);
 
         //Check if we came from Push Notification
         if (isFromPush) {
@@ -398,7 +405,7 @@ public class MessagingActivity extends AppCompatActivity {
      * Hide any shown notification
      */
     private void clearPushNotifications() {
-        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NotificationUI.NOTIFICATION_ID);
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NotificationUI.PUSH_NOTIFICATION_ID);
     }
 
     /**

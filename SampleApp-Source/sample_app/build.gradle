@@ -1,31 +1,16 @@
-buildscript {
-    ext.kotlin_version = '1.2.30'
-    repositories {
-        google() // Gradle 4.0+
-        jcenter()
-    }
-
-    dependencies {
-        classpath "com.android.tools.build:gradle:3.0.1"
-        classpath 'com.google.gms:google-services:3.0.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 19
         targetSdkVersion 26
-        multiDexEnabled true
         versionCode 311
         versionName "3.1.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -37,47 +22,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
-    repositories {
-        flatDir {
-            dirs project(':lp_messaging_sdk').file('aars')
-        }
-    }
-
-    lintOptions {
-        abortOnError false
-    }
-
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':lp_messaging_sdk')
-    implementation 'com.google.firebase:firebase-messaging:11.0.2'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'com.android.support:gridlayout-v7:26.1.0'
-    implementation 'com.squareup.leakcanary:leakcanary-android:1.5'
-    implementation 'com.android.support:multidex:1.0.2'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
+    implementation "com.google.firebase:firebase-messaging:11.0.2"
+    implementation "com.android.support:appcompat-v7:26.1.0"
+    implementation "com.android.support:design:26.1.0"
+    implementation "com.android.support:gridlayout-v7:26.1.0"
+    implementation "com.android.support.constraint:constraint-layout:1.0.2"
+    testImplementation "junit:junit:4.12"
+
+
+    implementation 'com.liveperson.android:lp_messaging_sdk:3.2.0'
 
 }
-
 
 apply plugin: 'com.google.gms.google-services'
-repositories {
-    mavenCentral()
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
-}

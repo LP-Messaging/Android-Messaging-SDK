@@ -8,6 +8,13 @@
     <!-- Vibrate on new incoming msg -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!--Required for Audio Messaging-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!--Required for Audio Messaging and Image Sharing-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <!-- [START gcm_permission] -->
     <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> -->
     <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
@@ -69,9 +76,11 @@
         </service>
         <service
             android:name=".push.fcm.FirebaseRegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false">
 
-        <receiver android:name=".push.NotificationUI$BadgeBroadcastReceiver">
+        </service>
+
+        <receiver android:name=".notification.NotificationUI$BadgeBroadcastReceiver">
             <intent-filter>
                 <action android:name="ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION" />
             </intent-filter>

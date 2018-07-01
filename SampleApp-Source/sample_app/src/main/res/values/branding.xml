@@ -64,7 +64,6 @@
     <bool name="scroll_down_indicator_enabled">true</bool>
     <bool name="scroll_down_indicator_unread_summary_enabled">true</bool>
 
-
     <!-- icons visibility -->
     <integer name="message_receive_icons">0</integer>
 
@@ -242,5 +241,9 @@
 
     <!-- Brand/Agent name header properties-->
     <color name="lp_brand_header_text_color">@android:color/black</color>
+
+    <!--Voice-->
+    <bool name="enable_voice_sharing">true</bool>
+    <integer name="max_number_stored_voice_files">20</integer>
 
 </resources>
