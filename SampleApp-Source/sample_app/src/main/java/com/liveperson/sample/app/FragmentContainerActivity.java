@@ -71,8 +71,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 LivePerson.setUserProfile(consumerProfile);
 
                 //Constructing the notification builder for the upload/download foreground service and passing it to the SDK.
-                Notification.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(FragmentContainerActivity.this);
-                Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(FragmentContainerActivity.this);
+                Notification.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(getApplicationContext());
+                Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
                 LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
                 LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
             }
