@@ -22,7 +22,7 @@ public class DeepLinkActivity extends AppCompatActivity {
 		Uri data = intent.getData();
 
 		// Display the URI
-		TextView pathTextView = (TextView) findViewById(R.id.deep_link_path);
+		TextView pathTextView = findViewById(R.id.deep_link_path);
 		pathTextView.setText(data.toString());
 	}
 }

@@ -24,7 +24,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
-import com.liveperson.sample.app.push.NotificationUI;
+import com.liveperson.sample.app.notification.NotificationUI;
 
 */
 /**

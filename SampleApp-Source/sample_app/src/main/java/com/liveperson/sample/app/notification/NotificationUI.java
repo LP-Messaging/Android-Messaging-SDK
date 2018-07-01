@@ -1,4 +1,4 @@
-package com.liveperson.sample.app.push;
+package com.liveperson.sample.app.notification;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
@@ -17,8 +18,6 @@ import com.liveperson.sample.app.MessagingActivity;
 import com.liveperson.sample.app.R;
 
 import java.util.List;
-
-import static android.app.NotificationManager.IMPORTANCE_HIGH;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK *****
@@ -28,26 +27,15 @@ import static android.app.NotificationManager.IMPORTANCE_HIGH;
  *
  */
 public class NotificationUI {
+    public static final int PUSH_NOTIFICATION_ID = 143434567;
+    public static final String NOTIFICATION_EXTRA = "notification_extra";
 
-    private static final String TAG = NotificationUI.class.getSimpleName();
-    public static final int NOTIFICATION_ID = 143434567;
-    public static final String PUSH_NOTIFICATION = "push_notification";
+    private static final String CHANNEL_SERVICE_NOTIFICATION_ID = "channel_service_notification";
+    private static final String CHANNEL_PUSH_NOTIFICATION_ID = "channel_push_notification";
 
 
-	public static void showNotification(Context ctx, PushMessage pushMessage) {
-
-        Notification.Builder builder;
-		NotificationChannel notificationChannel;
-
-		// If we're running on Android O we create a notification channel
-		if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
-			builder = new Notification.Builder(ctx);
-		} else {
-			notificationChannel = new NotificationChannel(PUSH_NOTIFICATION, "Push Notification", NotificationManager.IMPORTANCE_DEFAULT);
-			notificationChannel.setImportance(IMPORTANCE_HIGH);
-			getNotificationManager(ctx).createNotificationChannel(notificationChannel);
-			builder = new Notification.Builder(ctx, PUSH_NOTIFICATION);
-		}
+	public static void showPushNotification(Context ctx, PushMessage pushMessage) {
+        Notification.Builder builder = createNotificationBuilder(ctx, CHANNEL_PUSH_NOTIFICATION_ID, "Push Notification", true);
 
 		builder.setContentIntent(getPendingIntent(ctx)).
 			setContentTitle(pushMessage.getMessage()).
@@ -72,12 +60,60 @@ public class NotificationUI {
                     setPriority(Notification.PRIORITY_HIGH);
         }
 
-        getNotificationManager(ctx).notify(NOTIFICATION_ID, builder.build());
+        getNotificationManager(ctx).notify(PUSH_NOTIFICATION_ID, builder.build());
+    }
+
+    public static Notification.Builder createUploadNotificationBuilder(Context ctx) {
+        return createServiceNotificationBuilder(ctx, "Uploading image", android.R.drawable.arrow_up_float);
+    }
+
+    public static Notification.Builder createDownloadNotificationBuilder(Context ctx) {
+        return createServiceNotificationBuilder(ctx, "Downloading image", android.R.drawable.arrow_down_float);
     }
 
     public static void hideNotification(Context ctx){
-        getNotificationManager(ctx).cancel(NOTIFICATION_ID);
+        getNotificationManager(ctx).cancel(PUSH_NOTIFICATION_ID);
 
+    }
+
+    private static Notification.Builder createServiceNotificationBuilder(Context ctx, String contentTitle, int smallIcon) {
+        Notification.Builder notificationBuilder = createNotificationBuilder(ctx, CHANNEL_SERVICE_NOTIFICATION_ID, "Foreground Service", false);
+
+        notificationBuilder
+                .setContentIntent(getPendingIntent(ctx))
+                .setContentTitle(contentTitle)
+                .setSmallIcon(smallIcon)
+                .setProgress(0, 0, true);
+
+        return notificationBuilder;
+    }
+
+    /**
+     * Create notification builder according to platform level.
+     */
+    private static Notification.Builder createNotificationBuilder(Context ctx, String channelId, String channelName, boolean isHighImportance) {
+        Notification.Builder builder;
+        if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+            builder = new Notification.Builder(ctx);
+        } else {
+            //Create a channel for the notification.
+            createNotificationChannel(ctx, channelId, channelName, isHighImportance);
+            builder = new Notification.Builder(ctx, channelId);
+        }
+
+        return builder;
+    }
+
+    /**
+     * Creates a notification channel with the given parameters.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static void createNotificationChannel(Context context, String channelId, String channelName, boolean isHighImportance) {
+        NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        if (isHighImportance) {
+            notificationChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
+        }
+        getNotificationManager(context).createNotificationChannel(notificationChannel);
     }
 
     private static NotificationManager getNotificationManager(Context ctx) {
@@ -87,15 +123,12 @@ public class NotificationUI {
 
     private static PendingIntent getPendingIntent(Context ctx) {
         Intent showIntent = new Intent(ctx, MessagingActivity.class);
-        showIntent.putExtra(PUSH_NOTIFICATION, true);
+        showIntent.putExtra(NOTIFICATION_EXTRA, true);
 
 		return PendingIntent.getActivity(ctx, 0, showIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-
-
     /************************ Example of app Icon Badge - For Samsung *******************************/
-
     public static void setBadge(Context context, int count) {
         String launcherClassName = getLauncherClassName(context);
         if (launcherClassName == null) {
@@ -124,7 +157,6 @@ public class NotificationUI {
         }
         return null;
     }
-
 
     /**
      * Listen to changes in unread messages counter and updating app icon badge

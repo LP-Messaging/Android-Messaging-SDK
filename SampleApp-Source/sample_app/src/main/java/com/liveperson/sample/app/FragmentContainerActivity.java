@@ -26,6 +26,7 @@ import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 import com.liveperson.sample.app.Utils.SampleAppUtils;
+import com.liveperson.sample.app.notification.NotificationUI;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
@@ -68,6 +69,12 @@ public class FragmentContainerActivity extends AppCompatActivity {
 						.setPhoneNumber(phoneNumber)
 						.build();
                 LivePerson.setUserProfile(consumerProfile);
+
+                //Constructing the notification builder for the upload/download foreground service and passing it to the SDK.
+                Notification.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(FragmentContainerActivity.this);
+                Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(FragmentContainerActivity.this);
+                LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
+                LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
             }
 
             @Override

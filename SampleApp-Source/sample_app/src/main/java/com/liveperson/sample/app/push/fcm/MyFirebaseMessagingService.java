@@ -11,7 +11,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
-import com.liveperson.sample.app.push.NotificationUI;
+import com.liveperson.sample.app.notification.NotificationUI;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -49,7 +49,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 			//Code snippet to add push UI notification
 			if (message != null){
-				NotificationUI.showNotification(this, message);
+				NotificationUI.showPushNotification(this, message);
 			}
 
 		}

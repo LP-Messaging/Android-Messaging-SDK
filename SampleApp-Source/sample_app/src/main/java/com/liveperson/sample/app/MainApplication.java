@@ -1,6 +1,6 @@
 package com.liveperson.sample.app;
 
-import android.support.multidex.MultiDexApplication;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import com.squareup.leakcanary.LeakCanary;
 /**
  * Created by shiranr on 4/9/17.
  */
-public class MainApplication extends MultiDexApplication {
+public class MainApplication extends Application {
 
 
     private static final String TAG = MainApplication.class.getSimpleName();
