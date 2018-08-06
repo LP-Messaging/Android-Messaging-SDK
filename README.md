@@ -1,15 +1,7 @@
-# Android Messaging SDK v3.2.0
+# Android Messaging SDK v3.2.1
 
 In-App Messaging SDK v3.2 for Android includes the following:
-* Audio Messaging
-* Unauthenticated In-App Messaging
-* Quick Replies
-* Structured Content Carousel
-* New Devices Certification
-* Experience and Branding Enhancements
-* New APIs
-* Deprecated APIs
-* New UI configurations
+* Bug fixes
 * Full release notes can be found [here](https://s3-eu-west-1.amazonaws.com/ce-sr/Release+Notes/Mobile+App+SDK+v3.2+Release+Notes+-+Android.pdf)
 
 
