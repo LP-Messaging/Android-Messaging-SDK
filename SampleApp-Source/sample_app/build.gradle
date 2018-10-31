@@ -8,8 +8,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 322
-        versionName "3.2.2"
+        versionCode 340
+        versionName "3.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,9 +33,7 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:1.0.2"
     testImplementation "junit:junit:4.12"
 
-
-    implementation 'com.liveperson.android:lp_messaging_sdk:3.3.0'
-
+    implementation 'com.liveperson.android:lp_messaging_sdk:3.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
