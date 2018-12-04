@@ -1,8 +1,7 @@
-# Android Messaging SDK v3.4.0
+# Android Messaging SDK v3.5.0
 
-In-App Messaging SDK v3.4.0 for Android includes the following:
-* Support for Post Conversation Survey
-* Update to Update for Google Maps API key meta tag
+In-App Messaging SDK v3.5.0 for Android includes the following:
+* Callback method **onConversationFragmentClosed** to indicate messaging window is closed.
 * Bug fixes
 * Full release notes can be found [here](https://s3-eu-west-1.amazonaws.com/ce-sr/Release+Notes/2018/Mobile+App+SDK/Mobile+App+SDK+v3.4+Release+Notes+-+Android.pdf)
 
