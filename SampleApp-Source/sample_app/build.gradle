@@ -2,14 +2,18 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+def versionMajor = 3
+def versionMinor = 6
+def versionPatch = 0
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion versions.compile_sdk
     defaultConfig {
         applicationId "com.liveperson.sample.app"
-        minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 360
-        versionName "3.6.0"
+        minSdkVersion versions.min_sdk
+        targetSdkVersion versions.compile_sdk
+        versionCode versionMajor * 100 + versionMinor * 10 * versionPatch
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,15 +29,15 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.google.firebase:firebase-messaging:11.0.2"
-    implementation "com.android.support:appcompat-v7:26.1.0"
-    implementation "com.android.support:design:26.1.0"
-    implementation "com.android.support:gridlayout-v7:26.1.0"
-    implementation "com.android.support.constraint:constraint-layout:1.0.2"
-    testImplementation "junit:junit:4.12"
+    implementation "com.google.firebase:firebase-messaging:${versions.firebase}"
+    implementation "com.android.support:appcompat-v7:${versions.appcompat}"
+    implementation "com.android.support:design:${versions.design}"
+    implementation "com.android.support:gridlayout-v7:${versions.gridlayout}"
+    implementation "com.android.support.constraint:constraint-layout:${versions.constraint_layout}"
+    testImplementation "junit:junit:${versions.junit}"
 
-    implementation 'com.liveperson.android:lp_messaging_sdk:3.6.0'
+    implementation "com.liveperson.android:lp_messaging_sdk:${versions.liveperson}"
 }
 
 apply plugin: 'com.google.gms.google-services'
+googleServices { disableVersionCheck = true } // TODO Remove this when LivePerson updates their dependency.
