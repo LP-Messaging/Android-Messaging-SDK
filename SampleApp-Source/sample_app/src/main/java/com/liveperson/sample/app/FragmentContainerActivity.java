@@ -22,11 +22,16 @@ import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.LPAuthenticationParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.messaging_ui.fragment.ConversationFragment;
+import com.liveperson.infra.model.LPWelcomeMessage;
+import com.liveperson.infra.model.MessageOption;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 import com.liveperson.sample.app.Utils.SampleAppUtils;
 import com.liveperson.sample.app.notification.NotificationUI;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
@@ -99,6 +104,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
 			CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
             ConversationViewParams params = new ConversationViewParams().setCampaignInfo(campaignInfo).setReadOnlyMode(isReadOnly());
+//            setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
             mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(authParams,params );
 
             if (isValidState()) {
@@ -131,6 +137,22 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }else{
              attachFragment();
         }
+    }
+
+    private void setWelcomeMessage(ConversationViewParams params) {
+        LPWelcomeMessage lpWelcomeMessage = new LPWelcomeMessage("Welcome Message");
+        List<MessageOption> optionItems = new ArrayList<>();
+        optionItems.add(new MessageOption("bill", "bill"));
+        optionItems.add(new MessageOption("sales", "sales"));
+        optionItems.add(new MessageOption("support", "support"));
+        try {
+            lpWelcomeMessage.setMessageOptions(optionItems);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        lpWelcomeMessage.setNumberOfItemsPerRow(8);
+        lpWelcomeMessage.setMessageFrequency(LPWelcomeMessage.MessageFrequency.EVERY_CONVERSATION);
+        params.setLpWelcomeMessage(lpWelcomeMessage);
     }
 
     private boolean isReadOnly() {

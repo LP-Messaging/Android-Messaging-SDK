@@ -1,6 +1,7 @@
-# Android Messaging SDK v3.7.0
+# Android Messaging SDK v3.8.0
 
-In-App Messaging SDK v3.7.0 for Android includes the Following:
+In-App Messaging SDK v3.8.0 for Android includes the Following:
+* Welcome message with Quick Replies
 * Bug fixes
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
