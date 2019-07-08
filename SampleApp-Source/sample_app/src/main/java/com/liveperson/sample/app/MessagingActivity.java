@@ -453,22 +453,13 @@ public class MessagingActivity extends AppCompatActivity {
         }
         Locale.setDefault(customLocale);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLocale(customLocale);
-            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        } else {
-            configuration.locale = customLocale;
-            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        }
+        configuration.setLocale(customLocale);
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
 
         Locale locale = getLocale();
         Log.d(TAG, "country = " + locale.getCountry() + ", language = " + locale.getLanguage());
-
     }
 
-    /**
-     * @return
-     */
     private Locale getLocale() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return getResources().getConfiguration().getLocales().get(0);

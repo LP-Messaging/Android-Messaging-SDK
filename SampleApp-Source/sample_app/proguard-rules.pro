@@ -25,24 +25,26 @@
 -keep public class * extends android.support.v4.app.DialogFragment
 -keep public class * extends android.app.Fragment
 
--dontwarn com.squareup.picasso.*
--dontwarn com.squareup.okhttp.*
 -dontwarn java.nio.file.*
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
-# from the king himself 9.2017
-# https://github.com/square/picasso/issues/1410
-### OKHTTP
--dontwarn okhttp3.**
+# ------------------ rules for OkHttp -------------------
+# https://github.com/square/okhttp#r8--proguard
 
-### OKIO
--dontwarn okio.**
+# JSR 305 annotations are for embedding nullability information.
+-dontwarn javax.annotation.**
 
-### PICASSO
-# Checks for OkHttp versions on the classpath to determine Downloader to use.
--dontnote com.squareup.picasso.Utils
-# Downloader used only when OkHttp 2.x is present on the classpath.
--dontwarn com.squareup.picasso.OkHttpDownloader
-# Downloader used only when OkHttp 3.x is present on the classpath.
--dontwarn com.squareup.picasso.OkHttp3Downloader
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+# Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+
+# OkHttp platform used only on JVM and when Conscrypt dependency is available.
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
+# ------------------ end of OkHttp rule -----------------
+
+# Keep field delegate if support Android 4.4
+# See https://github.com/square/okhttp/issues/2323#issuecomment-185055040 for more details.
+-keepclassmembers class * implements javax.net.ssl.SSLSocketFactory {
+    final javax.net.ssl.SSLSocketFactory delegate;
+}
