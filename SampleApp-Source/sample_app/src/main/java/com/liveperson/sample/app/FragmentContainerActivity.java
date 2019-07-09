@@ -160,11 +160,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }
 
     private boolean isValidState() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return !isFinishing() && !isDestroyed();
-        }else{
-            return !isFinishing();
-        }
+        return !isFinishing() && !isDestroyed();
     }
 
     private void attachFragment() {

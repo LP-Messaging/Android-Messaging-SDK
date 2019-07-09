@@ -1,9 +1,5 @@
 package com.liveperson.sample.app.push.fcm;
 
-/**
- * Created by nirni on 11/17/16.
- */
-
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -13,6 +9,9 @@ import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.Utils.SampleAppStorage;
 import com.liveperson.sample.app.notification.NotificationUI;
 
+/**
+ * Created by nirni on 11/17/16.
+ */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 	private static final String TAG = "MyFirebaseMsgService";
