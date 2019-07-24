@@ -42,7 +42,7 @@ public class NotificationUI {
 			setAutoCancel(true).
 			setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
 			setSmallIcon(R.mipmap.ic_launcher).
-			setNumber(pushMessage.getCurrentUnreadMessgesCounter()).
+			setNumber(pushMessage.getCurrentUnreadMessagesCounter()).
 			setStyle(new Notification.InboxStyle()
 
 					.addLine(pushMessage.getFrom())

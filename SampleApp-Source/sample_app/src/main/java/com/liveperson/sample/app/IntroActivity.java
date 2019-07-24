@@ -14,7 +14,7 @@ import com.liveperson.infra.MonitoringInitParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
-import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.notification.NotificationUI;
 
 public class IntroActivity extends AppCompatActivity {

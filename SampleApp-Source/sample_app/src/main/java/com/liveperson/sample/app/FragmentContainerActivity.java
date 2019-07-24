@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +25,8 @@ import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
-import com.liveperson.sample.app.Utils.SampleAppStorage;
-import com.liveperson.sample.app.Utils.SampleAppUtils;
+import com.liveperson.sample.app.utils.SampleAppStorage;
+import com.liveperson.sample.app.utils.SampleAppUtils;
 import com.liveperson.sample.app.notification.NotificationUI;
 
 import java.util.ArrayList;

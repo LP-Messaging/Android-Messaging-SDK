@@ -1,4 +1,4 @@
-package com.liveperson.sample.app.Utils;
+package com.liveperson.sample.app.utils;
 
 import android.content.Context;
 import android.content.Intent;
