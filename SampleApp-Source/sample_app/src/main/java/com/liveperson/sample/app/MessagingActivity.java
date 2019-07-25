@@ -37,8 +37,8 @@ import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
-import com.liveperson.sample.app.Utils.SampleAppStorage;
-import com.liveperson.sample.app.Utils.SampleAppUtils;
+import com.liveperson.sample.app.utils.SampleAppStorage;
+import com.liveperson.sample.app.utils.SampleAppUtils;
 import com.liveperson.sample.app.notification.NotificationUI;
 
 import java.text.DateFormat;
@@ -133,7 +133,7 @@ public class MessagingActivity extends AppCompatActivity {
 		mCampaignIdEditText = findViewById(R.id.campaign_id);
 		mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
 
-		mEngagementIdEditText = findViewById(R.id.emgagement_id);
+		mEngagementIdEditText = findViewById(R.id.engagement_id);
 		mEngagementIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
 
 		mSessionIdEditText = findViewById(R.id.session_id);
@@ -142,7 +142,7 @@ public class MessagingActivity extends AppCompatActivity {
 		mVisitorIdEditText = findViewById(R.id.visitor_id);
 		mVisitorIdEditText.setText(getIntent().getStringExtra(VISITOR_ID_KEY));
 
-		mEngagementContextIdEditText = findViewById(R.id.engaement_context_id);
+		mEngagementContextIdEditText = findViewById(R.id.engagement_context_id);
 		mEngagementContextIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_CONTEXT_ID_KEY));
 
 		updateTime();
@@ -434,7 +434,7 @@ public class MessagingActivity extends AppCompatActivity {
      * @param country
      */
     protected void createLocale(String language, @Nullable String country) {
-        Resources resources = getResources();
+        Resources resources = getBaseContext().getResources();
         Configuration configuration = resources.getConfiguration();
         Locale customLocale;
 
@@ -462,9 +462,9 @@ public class MessagingActivity extends AppCompatActivity {
 
     private Locale getLocale() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return getResources().getConfiguration().getLocales().get(0);
+            return getBaseContext().getResources().getConfiguration().getLocales().get(0);
         } else {
-            return getResources().getConfiguration().locale;
+            return getBaseContext().getResources().getConfiguration().locale;
         }
     }
 

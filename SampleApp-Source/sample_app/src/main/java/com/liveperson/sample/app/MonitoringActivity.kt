@@ -8,27 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.liveperson.monitoring.model.LPMonitoringIdentity
+import com.liveperson.monitoring.sdk.MonitoringParams
 import com.liveperson.monitoring.sdk.api.LivepersonMonitoring
+import com.liveperson.monitoring.sdk.callbacks.EngagementCallback
 import com.liveperson.monitoring.sdk.callbacks.MonitoringErrorType
 import com.liveperson.monitoring.sdk.callbacks.SdeCallback
 import com.liveperson.monitoring.sdk.responses.LPEngagementResponse
 import com.liveperson.monitoring.sdk.responses.LPSdeResponse
-import com.liveperson.sample.app.Utils.SampleAppStorage
-import com.liveperson.sdk.MonitoringParams
-import com.liveperson.sdk.callbacks.EngagementCallback
+import com.liveperson.sample.app.utils.SampleAppStorage
 import kotlinx.android.synthetic.main.activity_monitoring.*
 import org.json.JSONArray
 import org.json.JSONException
-import java.lang.Exception
-import java.util.*
 
 class MonitoringActivity : AppCompatActivity() {
 
-    private val TAG = "MonitoringActivity"
+    companion object {
+        private const val TAG = "MonitoringActivity"
+    }
 
 
-    var entryPoinstsEditText: EditText? = null
-    var engagementAttributesEditText: EditText? = null
+    private var entryPoinstsEditText: EditText? = null
+    private var engagementAttributesEditText: EditText? = null
 
     var currentCampaignId : String? = null
     var currentEngagementId : String? = null
@@ -59,8 +59,8 @@ class MonitoringActivity : AppCompatActivity() {
         entryPoinstsEditText = findViewById<EditText>(R.id.entry_points_edit_text)
         engagementAttributesEditText = findViewById<EditText>(R.id.engagement_attributes_edit_text)
 
-        entryPoinstsEditText?.setOnFocusChangeListener { view, hasFocus -> changeHeight(view, hasFocus) }
-        engagementAttributesEditText?.setOnFocusChangeListener { view, hasFocus -> changeHeight(view, hasFocus)}
+        entryPoinstsEditText?.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus -> changeHeight(view, hasFocus) }
+        engagementAttributesEditText?.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus -> changeHeight(view, hasFocus)}
 
         // TextViews
         engagementResultsTextView = findViewById<TextView>(R.id.resultTextView)
@@ -78,22 +78,24 @@ class MonitoringActivity : AppCompatActivity() {
         pageIdEditText.setText(SampleAppStorage.getInstance(this).pageId)
 
         /////////////// Get Engagement ////////////////////////////
-        getEngagementButton.setOnClickListener({
+        getEngagementButton.setOnClickListener {
 
             showProgressBar()
             try {
-                SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdEditText.text.toString()
+                val consumerIdFromUI = consumerIdEditText.text.toString()
 
-                var lpMonitoringIdentityList = Arrays.asList(LPMonitoringIdentity(consumerIdEditText.text.toString(), "brandIssuer"))
+                SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdFromUI
 
-                LivepersonMonitoring.getEngagement(this@MonitoringActivity, lpMonitoringIdentityList, buildSde(false), object : EngagementCallback{
+                val identity = LPMonitoringIdentity(consumerIdFromUI)
+
+                LivepersonMonitoring.getEngagement(this@MonitoringActivity, arrayListOf(identity), buildSde(false), object : EngagementCallback {
                     override fun onSuccess(lpEngagementResponse: LPEngagementResponse) {
 
                         hideProgressBar()
 
                         // Store the received campaignId, engagementId, sessionId and visitorId as the current ones. This is used to send them to the Messaging TestApp
                         val engagementList = lpEngagementResponse.engagementDetailsList
-                        if(engagementList != null && !engagementList.isEmpty()) {
+                        if(engagementList != null && engagementList.isNotEmpty()) {
                             // For demo we display the first engagement only
                             currentCampaignId = engagementList[0].campaignId
                             currentEngagementId = engagementList[0].engagementId
@@ -118,11 +120,10 @@ class MonitoringActivity : AppCompatActivity() {
                 updateResult("Data incompatible")
                 hideProgressBar()
             }
-
-        })
+        }
 
         //////////////// Send SDE ////////////////////////////
-        sendSdeButton.setOnClickListener({
+        sendSdeButton.setOnClickListener {
 
             if (TextUtils.isEmpty(engagementAttributesEditText?.text.toString())) {
 
@@ -132,11 +133,14 @@ class MonitoringActivity : AppCompatActivity() {
 
             showProgressBar()
             try {
-                SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdEditText.text.toString()
+                val consumerIdFromUI = consumerIdEditText.text.toString()
+
+                SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdFromUI
                 SampleAppStorage.getInstance(this@MonitoringActivity).pageId = pageIdEditText.text.toString()
 
-                var lpMonitoringIdentityList = Arrays.asList(LPMonitoringIdentity(consumerIdEditText.text.toString(), "brandIssuer"))
-                LivepersonMonitoring.sendSde(this@MonitoringActivity, lpMonitoringIdentityList, buildSde(true), object : SdeCallback{
+                val identity = LPMonitoringIdentity(consumerIdFromUI)
+
+                LivepersonMonitoring.sendSde(this@MonitoringActivity, arrayListOf(identity), buildSde(true), object : SdeCallback{
                     override fun onSuccess(lpSdeResponse: LPSdeResponse) {
                         hideProgressBar()
                         updateResult(lpSdeResponse.toString())
@@ -153,14 +157,13 @@ class MonitoringActivity : AppCompatActivity() {
                 updateResult("Data incompatible")
                 hideProgressBar()
             }
-
-        })
+        }
 
         ///////////// Open Messaging Button //////////////////////////////
-        openMessagingButton.setOnClickListener({
+        openMessagingButton.setOnClickListener {
             // Open the Messaging Activity only if both CampaignId and EngagementId are available
             if (!TextUtils.isEmpty(currentCampaignId) && !TextUtils.isEmpty(currentEngagementId)) {
-                val messagingIntent = Intent(MonitoringActivity@this, MessagingActivity::class.java)
+                val messagingIntent = Intent(this, MessagingActivity::class.java)
                 messagingIntent.putExtra(MessagingActivity.CAMPAIGN_ID_KEY, currentCampaignId)
                 messagingIntent.putExtra(MessagingActivity.ENGAGEMENT_ID_KEY, currentEngagementId)
                 messagingIntent.putExtra(MessagingActivity.SESSION_ID_KEY, currentSessionId)
@@ -169,9 +172,9 @@ class MonitoringActivity : AppCompatActivity() {
                 startActivity(messagingIntent)
             }
             else{
-                Toast.makeText(this@MonitoringActivity, "CampaingId or EngagementId are not available", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "CampaignId or EngagementId are not available", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 
     override fun onPause() {
@@ -212,7 +215,7 @@ class MonitoringActivity : AppCompatActivity() {
     /**
      * Build SDE from entryPoints and engagementAttributes
      */
-    fun buildSde(withPageId : Boolean) : MonitoringParams {
+    private fun buildSde(withPageId : Boolean) : MonitoringParams {
 
         var entryPoints : JSONArray? = null
         var engagementAttributes : JSONArray? = null

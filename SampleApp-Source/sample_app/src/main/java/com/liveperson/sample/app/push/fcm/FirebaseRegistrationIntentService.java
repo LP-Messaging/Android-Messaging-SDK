@@ -10,7 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.liveperson.sample.app.utils.SampleAppStorage;
 
 /**
  * Created by nirni on 11/20/16.

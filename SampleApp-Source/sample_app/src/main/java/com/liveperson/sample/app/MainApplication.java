@@ -18,7 +18,7 @@ import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.Utils.SampleAppStorage;
+import com.liveperson.sample.app.utils.SampleAppStorage;
 
 /**
  * Created by shiranr on 4/9/17.

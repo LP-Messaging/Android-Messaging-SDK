@@ -190,7 +190,7 @@
                 app:layout_gravity="fill">
 
             <EditText
-                    android:id="@+id/emgagement_id"
+                    android:id="@+id/engagement_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -239,7 +239,7 @@
                 app:layout_gravity="fill">
 
             <EditText
-                    android:id="@+id/engaement_context_id"
+                    android:id="@+id/engagement_context_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

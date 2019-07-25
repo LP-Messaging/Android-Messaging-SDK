@@ -193,7 +193,7 @@
 
 
     <!--Accessibility-->
-    <integer name="snachbar_duration_for_accessibility">60000</integer>
+    <integer name="snackbar_duration_for_accessibility">60000</integer>
     <bool name="announce_agent_typing">true</bool>
 
     <!-- Connection status bar -->
