@@ -1,8 +1,12 @@
-# Android Messaging SDK v4.1.0
+# Android Messaging SDK v4.2.0
 
-In-App Messaging SDK v4.1.0 for Android includes the Following:
-* Added a callback parameter to the `unregisterLPPusher` API, similar to the one that exists for the `registerLPPusher` API.
-* Bug fixes
+In-App Messaging SDK v4.2.0 for Android includes the Following:
+* Messages typed in the chat box are now saved when leaving and returning to the chat window.
+* Audio messages can now be stopped and previewed before sending them.
+* Added a parameter to the onCsatSubmitted callback containing the submitted survey's star rating.
+* Added Metadata support to Welcome Message Quick Replies.
+* Added `getUnreadMessagesCount` API to allow the user to get the count of unread messages without needing to be registered to receive Push Notifications.
+* Bug fixes.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
 
