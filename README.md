@@ -1,7 +1,10 @@
 # Android Messaging SDK v4.2.0
 
 In-App Messaging SDK v4.2.0 for Android includes the Following:
-* Added rating to the `onCsatSubmitted` callback.
+* Messages typed in the chat box are now saved when leaving and returning to the chat window.
+* Audio messages can now be stopped and previewed before sending them.
+* Added a parameter to the onCsatSubmitted callback containing the submitted survey's star rating.
+* Added Metadata support to Welcome Message Quick Replies.
 * Added `getUnreadMessagesCount` API, which returns the number of unread messages.
 * Bug fixes.
 
