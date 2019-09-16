@@ -5,7 +5,7 @@ In-App Messaging SDK v4.2.0 for Android includes the Following:
 * Audio messages can now be stopped and previewed before sending them.
 * Added a parameter to the onCsatSubmitted callback containing the submitted survey's star rating.
 * Added Metadata support to Welcome Message Quick Replies.
-* Added `getUnreadMessagesCount` API, which returns the number of unread messages.
+* Added `getUnreadMessagesCount` API to allow the user to get the count of unread messages without needing to be registered to receive Push Notifications.
 * Bug fixes.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
