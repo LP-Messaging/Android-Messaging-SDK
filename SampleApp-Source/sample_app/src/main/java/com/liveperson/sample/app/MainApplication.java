@@ -98,6 +98,10 @@ public class MainApplication extends Application {
                         onConversationStarted(lpConversationData1);
                         break;
 
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_CONVERSATION_FRAGMENT_CLOSED_INTENT_ACTION:
+                        onConversationFragmentClosed();
+                        break;
+
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_CSAT_LAUNCHED_INTENT_ACTION:
                         onCsatLaunched();
                         break;
@@ -112,7 +116,8 @@ public class MainApplication extends Application {
 
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_CSAT_SUBMITTED_INTENT_ACTION:
                         String conversationId = LivePersonIntents.getConversationID(intent);
-                        onCsatSubmitted(conversationId);
+                        int starRating = LivePersonIntents.getCsatStarRating(intent);
+                        onCsatSubmitted(conversationId,starRating);
                         break;
 
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_ERROR_INTENT_ACTION:
@@ -181,6 +186,11 @@ public class MainApplication extends Application {
             }
 
             @Override
+            public void onConversationFragmentClosed() {
+                MainApplication.this.onConversationFragmentClosed();
+            }
+
+            @Override
             public void onConversationResolved(CloseReason reason) {
                 /*Toast.makeText(getApplicationContext(), "onConversationResolved", Toast.LENGTH_LONG).show();*/
             }
@@ -211,8 +221,8 @@ public class MainApplication extends Application {
             }
 
             @Override
-            public void onCsatSubmitted(String conversationId) {
-                MainApplication.this.onCsatSubmitted(conversationId);
+            public void onCsatSubmitted(String conversationId, int starRating) {
+                MainApplication.this.onCsatSubmitted(conversationId, starRating);
             }
 
 			@Override
@@ -287,8 +297,8 @@ public class MainApplication extends Application {
         showToast("Conversation Marked As Urgent");
     }
 
-    private void onCsatSubmitted(String conversationId) {
-        showToast("on CSAT Submitted. ConversationID = " + conversationId);
+    private void onCsatSubmitted(String conversationId, int starRating) {
+        showToast("CSAT Submitted with ConversationID = " + conversationId + "Star Rating = " + starRating);
     }
 
     private void onCsatLaunched() {
@@ -323,6 +333,10 @@ public class MainApplication extends Application {
     private void onConversationStarted(LPConversationData convData) {
         showToast("Conversation started " + convData.getId()
                 + " reason " + convData.getCloseReason());
+    }
+
+    private void onConversationFragmentClosed() {
+        showToast("Conversation fragment closed");
     }
 
     private void onTokenExpired() {

@@ -189,8 +189,9 @@
 
     <!-- Off hours notification -->
 
-
-
+    <!--Enter message-->
+    <color name="lp_file_attach_icon_clip_color">#FF767678</color>
+    <color name="lp_file_close_icon_clip_color">#FF767678</color>
 
     <!--Accessibility-->
     <integer name="snackbar_duration_for_accessibility">60000</integer>
