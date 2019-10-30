@@ -2,8 +2,10 @@ package com.liveperson.messagingtest;
 
 import android.app.Application;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.test.ApplicationTestCase;
+
+import androidx.collection.ArrayMap;
 
 import com.liveperson.infra.messaging_ui.uicomponents.PushMessageParser;
 import com.liveperson.infra.model.PushMessage;
@@ -150,7 +152,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     @NonNull
     private Map<String, String> createDummyPush(String brandId, int unreadMessages) {
-        Map<String,String> data = new android.support.v4.util.ArrayMap<>();
+        Map<String,String> data = new ArrayMap<>();
         if (unreadMessages > -1){
             data.put("payload", "{\"conversationId\":\"164bc4a3-5147-4f61-b136-0a270e7c64aa\",\"brandId\":\""+brandId+"\",\"backendService\":\"ams\",\"originatorId\":\"36366796.627949310\",\"badge\":\""+unreadMessages+"\"}");
         }else{
@@ -162,7 +164,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     @NonNull
     private Map<String, String> createDummyBadFromPush(String brandId, int unreadMessages) {
-        Map<String,String> data = new android.support.v4.util.ArrayMap<>();
+        Map<String,String> data = new ArrayMap<>();
         if (unreadMessages > -1){
             data.put("payload", "{\"conversationId\":\"164bc4a3-5147-4f61-b136-0a270e7c64aa\",\"brandId\":\""+brandId+"\",\"backendService\":\"ams\",\"originatorId\":\"36366796.627949310\",\"badge\":\""+unreadMessages+"\"}");
         }else{

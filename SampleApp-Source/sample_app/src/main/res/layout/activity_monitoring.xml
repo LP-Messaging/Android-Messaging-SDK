@@ -15,14 +15,14 @@
         android:clickable="false">
 
 
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context="com.liveperson.monitoringsdk.MainActivity">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:hint="Consumer Id"
                 android:id="@+id/consumer_id_input_layout"
                 android:layout_width="165dp"
@@ -32,13 +32,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/consumer_id_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/page_id_input_layout"
                 android:hint="Page Id"
                 android:layout_width="165dp"
@@ -50,11 +50,11 @@
                 app:layout_constraintStart_toEndOf="@+id/consumer_id_input_layout"
                 app:layout_constraintTop_toTopOf="@+id/consumer_id_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/page_id_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/resultTextView"
@@ -98,7 +98,7 @@
                 app:layout_constraintTop_toTopOf="@+id/get_engagement_button" />
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/entry_points_input_layout"
                 android:hint="EntryPoints"
                 android:layout_width="338dp"
@@ -110,7 +110,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/consumer_id_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/entry_points_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -123,9 +123,9 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:layout_editor_absoluteY="323dp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/engagement_attributes_input_layout"
                 android:hint="EngagementAttr"
                 android:layout_width="338dp"
@@ -136,7 +136,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_points_input_layout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/engagement_attributes_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:layout_editor_absoluteY="345dp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/open_messaging_button"
@@ -174,7 +174,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/resultTextView" />
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </ScrollView>

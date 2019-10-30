@@ -2,7 +2,7 @@ package com.liveperson.sample.app.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.Button;
 
 import com.liveperson.infra.BadArgumentException;

@@ -30,7 +30,7 @@
                 android:orientation="horizontal">
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/account_id_layout"
                     android:hint="Account ID:"
                     android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/logout"
@@ -54,7 +54,7 @@
                     />
             </LinearLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/auth_code_layout"
                     android:hint="Auth Code:"
                     android:layout_width="300dp"
@@ -65,11 +65,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
 
-        <android.support.v7.widget.GridLayout
+        <androidx.gridlayout.widget.GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:rowCount="10"
@@ -114,7 +114,7 @@
 
 
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/first_name_layout"
             android:hint="First Name:"
             android:layout_width="match_parent"
@@ -129,9 +129,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/last_name_layout"
                 android:hint="Last Name:"
                 android:layout_width="match_parent"
@@ -146,10 +146,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_number_layout"
                 android:hint="Phone Number:"
                 android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="phone"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <Spinner
@@ -257,7 +257,7 @@
                 android:text="VERSION"
                 app:layout_columnSpan="2"
                 app:layout_gravity="center"/>
-        </android.support.v7.widget.GridLayout>
+        </androidx.gridlayout.widget.GridLayout>
 
 
 

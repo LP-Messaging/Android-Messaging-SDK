@@ -24,7 +24,7 @@
             android:padding="20dp"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
@@ -39,7 +39,7 @@
                     android:imeOptions="actionGo"
                     />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/left_panel_update"
@@ -69,7 +69,7 @@
         android:padding="20dp"
         >
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -83,7 +83,7 @@
 
                 />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:layout_width="wrap_content"

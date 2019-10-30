@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!--    colors of all views based on their position on the Screen -->
-    <color name="lp_colorOnPrimary">#000000</color>
-    <color name="lp_textColorSecondary">#000000</color>
-    <color name="lp_colorBackground">#FFFFFF</color>
-    <color name="lp_colorOnBackground0">@color/lp_dark_gray_0</color>
-    <color name="lp_colorOnBackground1">@color/lp_dark_gray_1</color>
+    <color name="lp_colorPrimaryDark">#000000</color>
+    <color name="lp_colorPrimary">#272727</color>
+    <color name="lp_colorOnPrimary">#FFFFFF</color>
+    <color name="lp_textColorSecondary">#FFFFFF</color>
+    <color name="lp_colorBackground">#121212</color>
     <color name="lp_colorOnBackground2">@color/lp_dark_gray_2</color>
-    <color name="lp_colorSurface">#f5f5f5</color>
-    <color name="lp_colorOnSurface">#000000</color>
-    <color name="lp_agent_message_bubble_color">#D6D6D6</color>
-    <color name="lp_onAgentMessage_bubble_color">#000000</color>
-    <color name="lp_consumer_message_bubble_color">#004dc9</color>
-    <color name="lp_onConsumerMessage_bubble_color">#FFFFFF</color>
-    <color name="lp_colorSecondary">#f5f5f5</color>
-    <color name="lp_colorOnSecondary">#000000</color>
-    <color name="lp_colorError">#de0a23</color>
-    <color name="lp_colorCorrectly">#229a49</color>
+    <color name="lp_colorOnBackground1">@color/lp_dark_gray_3</color>
+    <color name="lp_colorOnBackground0">@color/lp_gray</color>
+    <color name="lp_colorSurface">#272727</color>
+    <color name="lp_colorOnSurface">#FFFFFF</color> <!--100% RGB-->
+    <color name="lp_agent_message_bubble_color">#3B3B3B</color> <!--16% RGB-->
+    <color name="lp_onAgentMessage_bubble_color">#DEDEDE</color> <!--87% RGB -->
+    <color name="lp_consumer_message_bubble_color">#448AFF</color>
+    <color name="lp_onConsumerMessage_bubble_color">#DEDEDE</color>
+    <color name="lp_colorSecondary">#272727</color>
+    <color name="lp_colorOnSecondary">#FFFFFF</color>
+    <color name="lp_colorError">#CF6679</color>
+    <color name="lp_colorCorrectly">#30d158</color>
     <color name="lp_rippleEffect_SC">#3c9dae</color>
     <color name="lp_transparent">#00000000</color>
 
-    <color name="lp_linkPreviewColor">#f5f5f5</color>
-    <color name="lp_consumer_action_highLight_color">#004dc9</color>
+    <color name="lp_linkPreviewColor">#272727</color>
+    <color name="lp_consumer_action_highLight_color">#448AFF</color>
 
-    <color name="lp_progress_bar_color">#018786</color>
-    <color name="livePerson_brand_color">#EF6C00</color>
-    <color name="lp_unread_messages_count_highLight_color">#EB3B2F</color>
-
+    <color name="lp_progress_bar_color">#03DAC6</color>
+    <color name="livePerson_brand_color">#FF6F00</color>
+    <color name="lp_unread_messages_count_highLight_color">#F5786F</color>
 
     <!--- Activity Mode Only  -->
-
 
     <!-- Brand/Agent name header properties-->
     <color name="lp_brand_header_text_color">@color/lp_colorOnPrimary</color>
@@ -50,31 +51,32 @@
     <color name="pci_form_toolbar_background">@color/lp_consumer_action_highLight_color</color>
     <color name="pci_form_toolbar_textColor">#000000</color>
 
-    <color name="lp_menu_item_background">@color/lp_colorPrimary</color>
-    <color name="lp_menu_item_text_color">@color/lp_colorOnPrimary</color>
-
-    <!--Conversation Screen menu item-->
-    <bool name="clear_history_menu_item_visible">true</bool>
-
     <!--    Both Activity and Fragment mode-->
-
     <!-- Alert dialog-->
     <color name="lp_alert_dialog_background_color">@color/lp_colorSurface</color>
     <color name="lp_alert_dialog_accentColor">#3B8471</color>
     <color name="lp_alert_dialog_title_description_color">@color/lp_colorOnSurface</color>
 
-    <!-- Action Mode or contextual menu toolbar-->
-    <bool name="contextual_menu_on_toolbar">true</bool>
+    <!-- Action Mode-->
     <color name="lp_action_mode_background_color">@color/lp_colorPrimary</color>
     <color name="lp_action_mode_titleText_color">@color/lp_colorOnPrimary</color>
 
     <!--  Enter Message Voice recording -->
-    <integer name="lp_record_max_time_seconds">120</integer>
-    <integer name="lp_on_recording_max_time_vibrate_ms">100</integer>
     <color name="lp_voice_record_button_color">@android:color/darker_gray</color>
     <color name="lp_voice_stop_button_color">@android:color/darker_gray</color>
     <color name="lp_voice_replay_button_color">@android:color/darker_gray</color>
     <color name="lp_voice_trash_button_color">@android:color/darker_gray</color>
+
+    <!--EnterMessage view attach button-->
+    <color name="lp_file_attach_icon_clip_color">@android:color/darker_gray</color>
+    <color name="lp_file_close_icon_clip_color">@android:color/darker_gray</color>
+
+    <!--Enter Message Edit Text-->
+    <color name="edit_text_underline_color">#90CAF9</color>
+    <color name="lp_enter_msg_text">@color/lp_textColorSecondary</color>
+    <color name="lp_enter_msg_hint">@android:color/darker_gray</color>
+    <color name="lp_send_button_text_enable">@color/lp_consumer_action_highLight_color</color>
+    <color name="lp_send_button_text_disable">#b7b8b9</color>
 
     <!--enter message Separator color-->
     <color name="enter_message_top_separator_color">@android:color/darker_gray</color>
@@ -86,46 +88,32 @@
     <color name="enter_msg_url_preview_title">@color/lp_colorOnSurface</color>
     <color name="enter_msg_url_preview_description">@color/lp_colorOnSurface</color>
 
-    <!--Enter message-->
-    <color name="lp_file_attach_icon_clip_color">#FF767678</color>
-    <color name="lp_file_close_icon_clip_color">#FF767678</color>
-
-    <!--Enter Message Edit Text-->
-    <color name="edit_text_underline_color">#90CAF9</color>
-    <color name="lp_enter_msg_text">@color/lp_textColorSecondary</color>
-    <color name="lp_enter_msg_hint">@android:color/darker_gray</color>
-    <color name="lp_send_button_text_enable">@color/lp_consumer_action_highLight_color</color>
-    <color name="lp_send_button_text_disable">#b7b8b9</color>
-
-    <bool name="use_send_image_button">false</bool>
-
     <!--File Sharing attachment menu-->
     <color name="attachment_menu_item_background_color">@color/lp_consumer_action_highLight_color</color>
     <color name="lp_attachment_menu_item_icon_color">@color/lp_light_gray_1</color>
-    <color name="lp_attachment_menu_item_text_color">@color/lp_dark_gray_1</color>
-    <color name="lp_attachment_menu_background_color">@color/lp_light_gray_2</color>
-
+    <color name="lp_attachment_menu_item_text_color">@color/lp_light_gray_2</color>
+    <color name="lp_attachment_menu_background_color">@color/lp_colorSurface</color>
 
     <!-- Conversation Fragment-->
 
     <color name="conversation_background">@color/lp_colorBackground</color>
-    <drawable name="conversation_background"/>
+    <drawable name="conversation_background" />
 
-    <!--Date header properties-->
-    <color name="lp_header_text_color">@color/lp_dark_gray_1</color>
-    <color name="lp_header_background_color">@android:color/white</color>
+
+    <!-- Chat header properties -->
+    <color name="lp_header_text_color">@color/lp_colorOnSurface</color>
+    <color name="lp_header_background_color">@color/lp_colorSurface</color>
 
     <!-- Connection status bar -->
-    <color name="connection_status_connecting_bg_color">#F2F5F5F5</color>
+    <color name="connection_status_connecting_bg_color">#46474a</color>
     <color name="connection_status_not_connected_bg_color">#CC000000</color>
-    <color name="connection_status_connecting_text_color">#46474a</color>
+    <color name="connection_status_connecting_text_color">#F2F5F5F5</color>
     <color name="connection_status_not_connected_text_color">#FFFFFF</color>
 
     <!-- all bubbles -->
     <color name="bubble_selected_background_color">#5597a7e3</color>
 
-    <!-- brand bubble-->
-    <dimen name="brand_bubble_stroke_width">0dp</dimen>
+    <!-- brand bubble -->
     <color name="brand_bubble_stroke_color">@color/livePerson_brand_color</color>
     <color name="brand_bubble_message_text_color">@color/lp_onAgentMessage_bubble_color</color>
     <color name="brand_bubble_message_link_text_color">@color/lp_consumer_action_highLight_color</color>
@@ -134,25 +122,20 @@
     <color name="brand_logo_background_color">@color/livePerson_brand_color</color>
 
     <!--consumer bubble-->
-    <dimen name="consumer_bubble_stroke_width">1dp</dimen>
-    <color name="consumer_bubble_stroke_color">@color/lp_consumer_message_bubble_color</color>
+    <color name="consumer_bubble_stroke_color">@color/lp_consumer_message_bubble_color</color>-->
     <color name="consumer_bubble_message_text_color">@color/lp_onConsumerMessage_bubble_color</color>
     <color name="consumer_bubble_message_link_text_color">@android:color/white</color>
     <color name="consumer_bubble_timestamp_text_color">@color/lp_colorOnBackground1</color>
-    <color name="consumer_bubble_background_color">@color/lp_consumer_message_bubble_color</color>
     <color name="consumer_bubble_state_text_color">@color/lp_colorOnBackground1</color>
-
-    <!--  message status icons visibility -->
-    <integer name="message_receive_icons">0</integer>
+    <color name="consumer_bubble_background_color">@color/lp_consumer_message_bubble_color</color>
 
     <!--consumer message status icon color-->
-    <color name="consumer_bubble_read_status_color">@color/lp_purple_dark</color>
+    <color name="consumer_bubble_read_status_color">@color/lp_purple_light</color>
     <color name="consumer_bubble_received_status_color">#cecece</color>
     <color name="consumer_bubble_sent_status_color">#cecece</color>
     <color name="consumer_bubble_sending_status_color">@color/lp_gray</color>
 
-    <!-- agent bubble-->
-    <dimen name="agent_bubble_stroke_width">0dp</dimen>
+    <!-- agent bubble -->
     <color name="agent_bubble_stroke_color">@color/lp_agent_message_bubble_color</color>
     <color name="agent_bubble_message_text_color">@color/lp_onAgentMessage_bubble_color</color>
     <color name="agent_bubble_message_link_text_color">@color/lp_consumer_action_highLight_color</color>
@@ -160,7 +143,6 @@
     <color name="agent_bubble_background_color">@color/lp_agent_message_bubble_color</color>
     <color name="agent_avatar_background_color">@color/lp_gray</color>
     <color name="agent_avatar_icon_color">@android:color/white</color>
-    <bool name="show_agent_typing_in_message_bubble">false</bool>
 
     <!-- agent PCI bubble-->
     <color name="agent_bubble_pci_form_invitation_background_color">@color/lp_colorSurface</color>
@@ -180,49 +162,29 @@
     <color name="lp_voice_bubble_downloading_progress">@color/lp_progress_bar_color</color>
     <color name="lp_voice_duration_textView_color">#FFFFFF</color>
 
-    <!--Link Preview -->
-    <bool name="link_preview_enable_real_time_preview">true</bool>
-    <bool name="link_preview_use_big_picture">false</bool>
-    <bool name="link_preview_enable_feature">true</bool>
-    <bool name="link_preview_to_use_more_than_og_tags">true</bool>
-
     <!--consumer bubble link_preview -->
     <color name="consumer_bubble_link_preview_background_color">@color/lp_transparent</color>
     <color name="consumer_bubble_link_preview_title_text_color">@color/lp_colorOnBackground0</color>
     <color name="consumer_bubble_link_preview_description_text_color">@color/lp_colorOnBackground1</color>
     <color name="consumer_bubble_link_preview_background_stroke_color">@color/lp_linkPreviewColor</color>
-    <dimen name="consumer_bubble_link_preview_background_stroke_width">1dp</dimen>
 
     <!-- agent bubble link_preview -->
     <color name="agent_bubble_link_preview_background_color">@color/lp_transparent</color>
     <color name="agent_bubble_link_preview_title_text_color">@color/lp_colorOnBackground0</color>
     <color name="agent_bubble_link_preview_description_text_color">@color/lp_colorOnBackground1</color>
-    <color name="agent_bubble_link_preview_background_stroke_color">@color/lp_linkPreviewColor</color>
-    <dimen name="agent_bubble_link_preview_background_stroke_width">1dp</dimen>
+    <color name="agent_bubble_link_preview_background_stroke_color">@color/lp_agent_message_bubble_color</color>
 
     <!-- For all structured content cards elements -->
     <color name="structured_content_border_color">@color/lp_agent_message_bubble_color</color>
     <color name="structured_content_background_color">@color/lp_transparent</color>
 
-    <dimen name="structured_content_border_width">1dp</dimen>
-    <dimen name="structured_content_bottom_right_radius">5dp</dimen>
-    <dimen name="structured_content_top_left_radius">5dp</dimen>
-    <dimen name="structured_content_top_right_radius">5dp</dimen>
-    <dimen name="structured_content_bottom_left_radius">5dp</dimen>
-
     <!-- For individual structured content elements -->
-    <integer name="structured_content_button_no_text_lines">1</integer>
-    <integer name="structured_content_map_zoom">18</integer>
     <color name="sc_buttonElement_text_color">@color/lp_consumer_action_highLight_color</color>
     <color name="sc_buttonElement_background_color">@color/lp_colorSurface</color>
     <color name="sc_textElement_text_color">@color/lp_onAgentMessage_bubble_color</color>
     <color name="sc_textElement_background_color">@color/lp_transparent</color>
 
     <!-- Quick Replies -->
-    <integer name="lp_quick_replies_button_text_limit">25</integer>
-    <dimen name="quick_reply_button_radius">24dp</dimen>
-    <dimen name="lpui_quick_reply_button_border_width">1dp</dimen>
-
     <color name="quick_reply_button_text_color">@color/lp_consumer_action_highLight_color</color>
     <color name="quick_reply_button_background_color">@color/lp_colorSurface</color>
     <color name="quick_reply_button_stroke_color">@color/lp_agent_message_bubble_color</color>
@@ -231,14 +193,11 @@
     <color name="conversation_controller_message_text_color">@color/lp_colorOnBackground1</color>
 
     <!--Conversation Separator-->
-    <bool name="enable_conversation_resolved_message">true</bool>
-    <bool name="enable_conversation_resolved_separator">true</bool>
     <color name="conversation_separator_text_color">@color/lp_colorOnBackground1</color>
 
     <!-- unread messages bubble-->
     <color name="unread_indicator_bubble_text_color">@color/lp_unread_messages_count_highLight_color</color>
-    <color name="unread_indicator_bubble_background_color">@color/lp_light_gray_1</color>
-    <bool name="unread_indicator_bubble_enable">true</bool>
+    <color name="unread_indicator_bubble_background_color">@color/lp_colorSecondary</color>
 
     <!-- system bubble-->
     <color name="system_bubble_text_color">@color/lp_colorOnBackground0</color>
@@ -247,17 +206,13 @@
     <color name="scroll_down_indicator_unread_counter_text_color">@color/lp_colorOnSecondary</color>
     <color name="scroll_down_indicator_unread_summary_text_color">@color/lp_colorOnSecondary</color>
     <color name="scroll_down_indicator_unread_counter_stroke_color">@color/lp_unread_messages_count_highLight_color</color>
-    <dimen name="scroll_down_indicator_unread_counter_stroke_width">1dp</dimen>
     <color name="scroll_down_indicator_unread_counter_solid_color">@color/lp_unread_messages_count_highLight_color</color>
     <color name="scroll_down_indicator_background_color">@color/lp_colorSecondary</color>
     <color name="scroll_down_indicator_arrow_down_color">@color/lp_colorOnSecondary</color>
-    <bool name="scroll_down_indicator_enabled">true</bool>
-    <bool name="scroll_down_indicator_unread_summary_enabled">true</bool>
 
     <!--Progress Bar change. If empty, progress bar will use it's default drawable-->
     <drawable name="lp_progress_bar_image">@drawable/lp_load_more_progress_bar_image</drawable>
     <color name="lp_progress_bar_image_color">@color/lp_progress_bar_color</color>
-
 
     <!--Feedback Fragment-->
     <color name="feedback_fragment_background_color">@color/lp_colorBackground</color>
@@ -266,7 +221,6 @@
     <color name="feedback_fragment_rate_text">@color/lp_colorOnBackground0</color>
     <color name="feedback_fragment_agent_details_name">@color/lp_colorOnSurface</color>
     <color name="feedback_fragment_submitted_thank_you_text_color">@color/lp_colorOnSurface</color>
-
 
     <color name="feedback_fragment_title_yesno">@color/lp_colorOnBackground0</color>
     <color name="feedback_fragment_yesno_btn_selected_background">@color/lp_colorCorrectly</color>
@@ -277,9 +231,6 @@
     <color name="feedback_fragment_yesno_btn_stroke_selected">@color/lp_colorCorrectly</color>
     <color name="feedback_fragment_submit_message">@color/lp_colorOnBackground0</color>
 
-    <dimen name="feedback_fragment_yesno_btn_stroke_width_default">1dp</dimen>
-    <dimen name="feedback_fragment_yesno_btn_stroke_width_selected">1dp</dimen>
-
     <color name="feedback_fragment_submit_btn_enabled">@color/lp_colorCorrectly</color>
     <color name="feedback_fragment_submit_btn_text_enabled">@color/lp_colorOnSurface</color>
     <color name="feedback_fragment_submit_btn_disabled">@color/lp_colorSurface</color>
@@ -288,114 +239,7 @@
     <color name="feedback_fragment_submit_btn_stroke_enabled">@color/lp_colorCorrectly</color>
     <color name="feedback_fragment_submit_btn_stroke_disabled">@color/lp_colorSurface</color>
 
-    <dimen name="feedback_fragment_submit_btn_stroke_width_enabled">1dp</dimen>
-    <dimen name="feedback_fragment_submit_btn_stroke_width_disabled">1dp</dimen>
-
-    <bool name="show_yes_no_question">true</bool>
-    <bool name="show_agent_details_csat">true</bool>
-    <!-- if both show_yes_no_question & show_agent_details_csat are true, show_yes_no_question will be ignored-->
-    <bool name="show_csat_thank_you">true</bool>
-    <integer name="csatSurveyExpirationInMinutes">1440</integer>
-
     <!--SecureForm Fragment-->
     <color name="SecureForm_fragment_background_color">@color/lp_colorBackground</color>
-
-    <!-- TTR Snack bar -->
-    <bool name="show_timestamp_in_ttr_notification">true</bool>
-    <integer name="ttr_duration">3000</integer>
-    <integer name="ttrFirstTimeDelaySeconds">10</integer>
-    <integer name="ttrShowFrequencyInSeconds">8</integer>
-    <bool name="disableTTRPopup">false</bool>
-
-    <!-- Off hours notification -->
-    <bool name="ttr_message_off_hours_enabled">true</bool>
-
-    <!-- Off hours notification -->
-    <string name="language" translatable="false" />
-    <string name="country" translatable="false" />
-
-    <!--Links-->
-    <string name="lp_bubble_phone_links_regex" translatable="false" />
-    <string name="lp_bubble_url_links_regex" translatable="false" />
-    <string name="lp_bubble_email_links_regex" translatable="false" />
-
-    <!--Background-->
-    <integer name="background_timeout_short_ms">5000</integer>
-    <integer name="background_timeout_long_ms">30000</integer>
-
-    <!--Structured Content-->
-    <bool name="enable_structured_content">true</bool>
-    <bool name="structured_content_link_as_callback">false</bool>
-
-    <string name="lp_google_maps_key" translatable="false">AIzaSyA5YL58kXCyAnUok9_9LOmk0myMgF5-AU4</string>
-
-    <!--RecyclerView - this should not be exported to the hostApp unless required by customers-->
-    <integer name="recycler_view_cache_size">10</integer>
-
-    <!-- Enable Enlarging emoji message -->
-    <bool name="is_enable_enlarge_emojis">false</bool>
-
-    <!--Voice-->
-    <bool name="enable_voice_sharing">true</bool>
-    <integer name="max_number_stored_voice_files">20</integer>
-
-    <string name="custom_button_icon_name" translatable="false">t_mobile_call_icon</string>
-    <string name="custom_button_icon_description" translatable="false">call</string>
-
-    <string name="notification_large_icon_name" translatable="false">ic_launcher</string>
-
-    <integer name="encryptionVersion">1</integer>
-
-    <string name="csds_url" translatable="false">adminlogin.liveperson.net</string>
-    <string name="lptag_domain" translatable="false">lptag.liveperson.net</string>
-
-    <integer name="idp_num_history_conversation">2</integer>
-
-    <!--Credit card masking-->
-    <bool name="enable_client_only_masking">false</bool>
-    <bool name="enable_real_time_masking">false</bool>
-    <string name="client_only_masking_regex" translatable="false" />
-    <string name="real_time_masking_regex" translatable="false" />
-
-    <!--Clear History-->
-    <bool name="clear_history_show_confirm_dialog">true</bool>
-
-    <!--Photo sharing-->
-    <bool name="enable_photo_sharing">true</bool>
-    <bool name="upload_photo_using_service">true</bool>
-    <integer name="max_number_stored_images">20</integer>
-    <integer name="full_image_compression_rate">50</integer>
-    <integer name="thumbnail_longer_dimension_resize">100</integer>
-    <integer name="full_image_longer_dimension_resize">800</integer>
-    <integer name="max_image_size_kb">3000</integer>
-
-    <!--Resend pending message-->
-    <integer name="sendingMessageTimeoutInMinutes">60</integer>
-
-    <!-- Vibrate -->
-    <bool name="vibrate_enabled">false</bool>
-
-    <!--Accessibility-->
-    <integer name="snackbar_duration_for_accessibility">60000</integer>
-    <bool name="announce_agent_typing">true</bool>
-
-    <bool name="send_agent_profile_updates_when_conversation_closed">true</bool>
-
-    <string name="client_only_mask_character" translatable="false">*</string>
-    <string name="real_time_mask_character" translatable="false">*</string>
-
-    <!--PCI-->
-    <bool name="pci_form_hide_logo">false</bool>
-    <string name="pci_form_font_name" translatable="false" />
-
-    <!-- Fonts -->
-    <string name="custom_font_name_conversation_feed" translatable="false" />
-    <string name="custom_font_name_non_conversation_feed" translatable="false" />
-
-    <string name="push_notification_channel_id" translatable="false">LP_SDK_CHANNEL</string>
-    <string name="push_notification_channel_name" translatable="false">LP SDK</string>
-
-    <!--Enable HTTP interceptors. This enables setting interceptors to HTTP calls. This is a limited feature. DO NOT expose this in sample or host branding-->
-    <bool name="lp_interceptors_enabled">true</bool>
 
 </resources>

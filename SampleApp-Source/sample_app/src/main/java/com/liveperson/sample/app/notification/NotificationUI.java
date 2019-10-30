@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
