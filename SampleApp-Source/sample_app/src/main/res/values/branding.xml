@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--    colors of all views based on their position on the Screen -->
+    <color name="lp_colorPrimary">#f5f5f5</color>
+    <color name="lp_colorPrimaryDark">#000000</color>
     <color name="lp_colorOnPrimary">#000000</color>
     <color name="lp_textColorSecondary">#000000</color>
+
     <color name="lp_colorBackground">#FFFFFF</color>
     <color name="lp_colorOnBackground0">@color/lp_dark_gray_0</color>
     <color name="lp_colorOnBackground1">@color/lp_dark_gray_1</color>
@@ -20,16 +23,16 @@
     <color name="lp_rippleEffect_SC">#3c9dae</color>
     <color name="lp_transparent">#00000000</color>
 
-    <color name="lp_linkPreviewColor">#f5f5f5</color>
+    <color name="lp_disabledColor">#b7b8b9</color>
+    <color name="lp_feedback_option_selectedColor">#229a49</color>
     <color name="lp_consumer_action_highLight_color">#004dc9</color>
-
+    <color name="lp_linkPreviewColor">#f5f5f5</color>
     <color name="lp_progress_bar_color">#018786</color>
-    <color name="livePerson_brand_color">#EF6C00</color>
+    <color name="lp_brand_color">#EF6C00</color>
     <color name="lp_unread_messages_count_highLight_color">#EB3B2F</color>
 
 
     <!--- Activity Mode Only  -->
-
 
     <!-- Brand/Agent name header properties-->
     <color name="lp_brand_header_text_color">@color/lp_colorOnPrimary</color>
@@ -47,11 +50,12 @@
     <color name="captionPreview_toolbar_background">@color/lp_colorPrimary</color>
 
     <!-- PCI Form Tool bar-->
-    <color name="pci_form_toolbar_background">@color/lp_consumer_action_highLight_color</color>
-    <color name="pci_form_toolbar_textColor">#000000</color>
+    <color name="pci_form_toolbar_background">@color/lp_colorPrimary</color>
+    <color name="pci_form_toolbar_textColor">@color/lp_colorOnPrimary</color>
 
     <color name="lp_menu_item_background">@color/lp_colorPrimary</color>
-    <color name="lp_menu_item_text_color">@color/lp_colorOnPrimary</color>
+    <color name="lp_menu_item_enabled_textColor">@color/lp_colorOnPrimary</color>
+    <color name="lp_menu_item_disabled_textColor">@color/lp_disabledColor</color>
 
     <!--Conversation Screen menu item-->
     <bool name="clear_history_menu_item_visible">true</bool>
@@ -66,7 +70,8 @@
     <!-- Action Mode or contextual menu toolbar-->
     <bool name="contextual_menu_on_toolbar">true</bool>
     <color name="lp_action_mode_background_color">@color/lp_colorPrimary</color>
-    <color name="lp_action_mode_titleText_color">@color/lp_colorOnPrimary</color>
+    <color name="lp_action_mode_menuText_color">@color/lp_textColorSecondary</color>
+    <color name="lp_action_mode_closeBtn_color">@color/lp_textColorSecondary</color>
 
     <!--  Enter Message Voice recording -->
     <integer name="lp_record_max_time_seconds">120</integer>
@@ -75,6 +80,9 @@
     <color name="lp_voice_stop_button_color">@android:color/darker_gray</color>
     <color name="lp_voice_replay_button_color">@android:color/darker_gray</color>
     <color name="lp_voice_trash_button_color">@android:color/darker_gray</color>
+
+    <!-- Separator above enter message -->
+    <bool name="enter_message_divider_visible">false</bool>
 
     <!--enter message Separator color-->
     <color name="enter_message_top_separator_color">@android:color/darker_gray</color>
@@ -91,11 +99,12 @@
     <color name="lp_file_close_icon_clip_color">#FF767678</color>
 
     <!--Enter Message Edit Text-->
+    <color name="enter_message_background_color">@color/lp_colorSurface</color>
     <color name="edit_text_underline_color">#90CAF9</color>
     <color name="lp_enter_msg_text">@color/lp_textColorSecondary</color>
     <color name="lp_enter_msg_hint">@android:color/darker_gray</color>
     <color name="lp_send_button_text_enable">@color/lp_consumer_action_highLight_color</color>
-    <color name="lp_send_button_text_disable">#b7b8b9</color>
+    <color name="lp_send_button_text_disable">@color/lp_disabledColor</color>
 
     <bool name="use_send_image_button">false</bool>
 
@@ -103,7 +112,7 @@
     <color name="attachment_menu_item_background_color">@color/lp_consumer_action_highLight_color</color>
     <color name="lp_attachment_menu_item_icon_color">@color/lp_light_gray_1</color>
     <color name="lp_attachment_menu_item_text_color">@color/lp_dark_gray_1</color>
-    <color name="lp_attachment_menu_background_color">@color/lp_light_gray_2</color>
+    <color name="lp_attachment_menu_background_color">@color/lp_colorSurface</color>
 
 
     <!-- Conversation Fragment-->
@@ -112,13 +121,13 @@
     <drawable name="conversation_background"/>
 
     <!--Date header properties-->
-    <color name="lp_header_text_color">@color/lp_dark_gray_1</color>
-    <color name="lp_header_background_color">@android:color/white</color>
+    <color name="lp_header_text_color">@color/lp_colorOnSurface</color>
+    <color name="lp_header_background_color">@color/lp_colorSurface</color>
 
     <!-- Connection status bar -->
     <color name="connection_status_connecting_bg_color">#F2F5F5F5</color>
     <color name="connection_status_not_connected_bg_color">#CC000000</color>
-    <color name="connection_status_connecting_text_color">#46474a</color>
+    <color name="connection_status_connecting_text_color">#46474A</color>
     <color name="connection_status_not_connected_text_color">#FFFFFF</color>
 
     <!-- all bubbles -->
@@ -126,12 +135,12 @@
 
     <!-- brand bubble-->
     <dimen name="brand_bubble_stroke_width">0dp</dimen>
-    <color name="brand_bubble_stroke_color">@color/livePerson_brand_color</color>
+    <color name="brand_bubble_stroke_color">@color/lp_brand_color</color>
     <color name="brand_bubble_message_text_color">@color/lp_onAgentMessage_bubble_color</color>
     <color name="brand_bubble_message_link_text_color">@color/lp_consumer_action_highLight_color</color>
     <color name="brand_bubble_timestamp_text_color">@color/lp_colorOnBackground1</color>
-    <color name="brand_bubble_background_color">@color/livePerson_brand_color</color>
-    <color name="brand_logo_background_color">@color/livePerson_brand_color</color>
+    <color name="brand_bubble_background_color">@color/lp_brand_color</color>
+    <color name="brand_logo_background_color">@color/lp_brand_color</color>
 
     <!--consumer bubble-->
     <dimen name="consumer_bubble_stroke_width">1dp</dimen>
@@ -173,12 +182,12 @@
     <color name="agent_bubble_pci_form_invitation_progressBar_color">@color/lp_progress_bar_color</color>
 
     <!-- voice Message Bubble-->
-    <color name="lp_voice_play_button_color">#EDEDED</color>
-    <color name="lp_voice_pause_button_color">#EDEDED</color>
-    <color name="lp_voice_download_button_color">#EDEDED</color>
-    <color name="lp_voice_progressBar_tint">@color/lp_progress_bar_color</color>
-    <color name="lp_voice_bubble_downloading_progress">@color/lp_progress_bar_color</color>
-    <color name="lp_voice_duration_textView_color">#FFFFFF</color>
+    <color name="consumer_bubble_voice_play_button_color">#EDEDED</color>
+    <color name="consumer_bubble_voice_pause_button_color">#EDEDED</color>
+    <color name="consumer_bubble_voice_download_button_color">#EDEDED</color>
+    <color name="consumer_bubble_voice_progressBar_tint">@color/lp_progress_bar_color</color>
+    <color name="consumer_bubble_voice_downloading_progress">@color/lp_progress_bar_color</color>
+    <color name="consumer_bubble_voice_duration_textView_color">#FFFFFF</color>
 
     <!--Link Preview -->
     <bool name="link_preview_enable_real_time_preview">true</bool>
@@ -237,7 +246,7 @@
 
     <!-- unread messages bubble-->
     <color name="unread_indicator_bubble_text_color">@color/lp_unread_messages_count_highLight_color</color>
-    <color name="unread_indicator_bubble_background_color">@color/lp_light_gray_1</color>
+    <color name="unread_indicator_bubble_background_color">@color/lp_colorSurface</color>
     <bool name="unread_indicator_bubble_enable">true</bool>
 
     <!-- system bubble-->
@@ -262,30 +271,30 @@
     <!--Feedback Fragment-->
     <color name="feedback_fragment_background_color">@color/lp_colorBackground</color>
     <color name="feedback_fragment_title_question">@color/lp_colorOnSurface</color>
-    <color name="feedback_fragment_star">@color/lp_colorCorrectly</color>
+    <color name="feedback_fragment_star">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_rate_text">@color/lp_colorOnBackground0</color>
     <color name="feedback_fragment_agent_details_name">@color/lp_colorOnSurface</color>
     <color name="feedback_fragment_submitted_thank_you_text_color">@color/lp_colorOnSurface</color>
 
 
     <color name="feedback_fragment_title_yesno">@color/lp_colorOnBackground0</color>
-    <color name="feedback_fragment_yesno_btn_selected_background">@color/lp_colorCorrectly</color>
+    <color name="feedback_fragment_yesno_btn_selected_background">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_yesno_btn_default_background">@color/lp_colorSurface</color>
     <color name="feedback_fragment_yesno_btn_text_selected">@color/lp_colorOnSurface</color>
     <color name="feedback_fragment_yesno_btn_text_default">@color/lp_consumer_action_highLight_color</color>
     <color name="feedback_fragment_yesno_btn_stroke_default">@color/lp_colorSurface</color>
-    <color name="feedback_fragment_yesno_btn_stroke_selected">@color/lp_colorCorrectly</color>
+    <color name="feedback_fragment_yesno_btn_stroke_selected">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_submit_message">@color/lp_colorOnBackground0</color>
 
     <dimen name="feedback_fragment_yesno_btn_stroke_width_default">1dp</dimen>
     <dimen name="feedback_fragment_yesno_btn_stroke_width_selected">1dp</dimen>
 
-    <color name="feedback_fragment_submit_btn_enabled">@color/lp_colorCorrectly</color>
+    <color name="feedback_fragment_submit_btn_enabled">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_submit_btn_text_enabled">@color/lp_colorOnSurface</color>
     <color name="feedback_fragment_submit_btn_disabled">@color/lp_colorSurface</color>
     <color name="feedback_fragment_submit_btn_text_disabled">@color/lp_consumer_action_highLight_color</color>
 
-    <color name="feedback_fragment_submit_btn_stroke_enabled">@color/lp_colorCorrectly</color>
+    <color name="feedback_fragment_submit_btn_stroke_enabled">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_submit_btn_stroke_disabled">@color/lp_colorSurface</color>
 
     <dimen name="feedback_fragment_submit_btn_stroke_width_enabled">1dp</dimen>
@@ -298,7 +307,7 @@
     <integer name="csatSurveyExpirationInMinutes">1440</integer>
 
     <!--SecureForm Fragment-->
-    <color name="SecureForm_fragment_background_color">@color/lp_colorBackground</color>
+    <color name="secureForm_fragment_background_color">@color/lp_colorBackground</color>
 
     <!-- TTR Snack bar -->
     <bool name="show_timestamp_in_ttr_notification">true</bool>
