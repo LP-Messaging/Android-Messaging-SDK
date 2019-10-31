@@ -336,8 +336,6 @@
     <bool name="enable_structured_content">true</bool>
     <bool name="structured_content_link_as_callback">false</bool>
 
-    <string name="lp_google_maps_key" translatable="false">AIzaSyA5YL58kXCyAnUok9_9LOmk0myMgF5-AU4</string>
-
     <!--RecyclerView - this should not be exported to the hostApp unless required by customers-->
     <integer name="recycler_view_cache_size">10</integer>
 
