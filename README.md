@@ -7,4 +7,4 @@ Please note, the SDK can be integrated to the app using Gradle dependency. For m
 
 Full release notes can be found [here](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-latest-release-notes.html).
 
-For Android Messaging SDK V5.0.0 [here](https://github.com/LP-Messaging/Android-Messaging-SDK/tree/androidX_master).
+# For Android Messaging SDK V5.0.0 [here](https://github.com/LP-Messaging/Android-Messaging-SDK/tree/androidX_master).
