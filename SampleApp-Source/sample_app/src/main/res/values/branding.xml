@@ -249,10 +249,26 @@
     <integer name="max_number_stored_voice_files">20</integer>
 
     <!--  Start of scroll behavior settings.  -->
+
+    <!--  LastPosition: Conversation will scroll to the previous position regardless if there are new messages or not.(Default) -->
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.  -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
     <string name="lp_scroll_when_foreground" translatable="false">LastPosition</string>
-    <string name="lp_scroll_show_conversation" translatable="false">LastPosition</string>
+
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.(Default)  -->
+    <!--  LastPosition: Conversation will scroll to the previous position regardless if there are new messages or not. -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
+    <string name="lp_scroll_show_conversation" translatable="false">Bottom</string>
+
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.(Default)  -->
+    <!--  LastPosition: Conversation will scroll to the previous position regardless if there are new messages or not. -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
     <string name="lp_scroll_when_push_notification" translatable="false">Bottom</string>
+
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.(Default)  -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
     <string name="lp_scroll_when_scroll_down" translatable="false">Bottom</string>
+
     <!--  End of scroll behavior settings.  -->
 
 </resources>
