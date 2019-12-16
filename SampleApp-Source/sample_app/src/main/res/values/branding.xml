@@ -148,6 +148,7 @@
     <bool name="enable_photo_sharing">true</bool>
     <bool name="upload_photo_using_service">true</bool>
     <integer name="max_number_stored_images">20</integer>
+    <integer name="max_number_stored_documents">20</integer>
     <integer name="full_image_compression_rate">50</integer>
     <integer name="thumbnail_longer_dimension_resize">100</integer>
     <integer name="full_image_longer_dimension_resize">800</integer>
@@ -246,5 +247,12 @@
     <!--Voice-->
     <bool name="enable_voice_sharing">true</bool>
     <integer name="max_number_stored_voice_files">20</integer>
+
+    <!--  Start of scroll behavior settings.  -->
+    <string name="lp_scroll_when_foreground" translatable="false">LastPosition</string>
+    <string name="lp_scroll_show_conversation" translatable="false">LastPosition</string>
+    <string name="lp_scroll_when_push_notification" translatable="false">Bottom</string>
+    <string name="lp_scroll_when_scroll_down" translatable="false">Bottom</string>
+    <!--  End of scroll behavior settings.  -->
 
 </resources>

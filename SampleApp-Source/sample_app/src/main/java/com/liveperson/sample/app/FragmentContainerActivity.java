@@ -18,7 +18,7 @@ import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
-import com.liveperson.infra.LPAuthenticationParams;
+import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.messaging_ui.fragment.ConversationFragment;
 import com.liveperson.infra.model.LPWelcomeMessage;
@@ -55,6 +55,10 @@ public class FragmentContainerActivity extends AppCompatActivity {
             public void onInitSucceed() {
                 Log.i(TAG, "onInitSucceed");
 
+                if (getIntent().getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false)) {
+                    LivePerson.setPushNotificationTapped();
+                }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -86,6 +90,15 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Log.e(TAG, "onInitFailed : " + e.getMessage());
             }
         }));
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false)) {
+            LivePerson.setPushNotificationTapped();
+        }
     }
 
     private void initFragment() {
