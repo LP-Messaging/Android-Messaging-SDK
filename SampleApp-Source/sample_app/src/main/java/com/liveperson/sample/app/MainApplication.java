@@ -13,7 +13,7 @@ import com.liveperson.api.LivePersonIntents;
 import com.liveperson.api.response.types.CloseReason;
 import com.liveperson.api.sdk.PermissionType;
 import com.liveperson.api.sdk.LPConversationData;
-import com.liveperson.infra.LPAuthenticationParams;
+import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;

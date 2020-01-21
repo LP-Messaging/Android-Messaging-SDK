@@ -30,8 +30,8 @@ import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.ICallback;
 import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
-import com.liveperson.infra.LPAuthenticationParams;
 import com.liveperson.infra.LPConversationsHistoryStateToDisplay;
+import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
@@ -79,6 +79,7 @@ public class MessagingActivity extends AppCompatActivity {
     private EditText mSessionIdEditText;
     private EditText mVisitorIdEditText;
     private EditText mEngagementContextIdEditText;
+    private boolean isFromPush;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,7 +337,9 @@ public class MessagingActivity extends AppCompatActivity {
 
     	Intent in = new Intent(MessagingActivity.this, FragmentContainerActivity.class);
         in.putExtra(Infra.KEY_READ_ONLY, isReadOnly());
+        in.putExtra(NotificationUI.NOTIFICATION_EXTRA, isFromPush);
         startActivity(in);
+        isFromPush = false;
     }
 
     /**
@@ -345,6 +348,11 @@ public class MessagingActivity extends AppCompatActivity {
     private void openActivity() {
 
     	storeData();
+
+        if (isFromPush) {
+            LivePerson.setPushNotificationTapped();
+            isFromPush = false;
+        }
 
         String authCode = SampleAppStorage.getInstance(MessagingActivity.this).getAuthCode();
         String publicKey = SampleAppStorage.getInstance(MessagingActivity.this).getPublicKey();
@@ -404,7 +412,7 @@ public class MessagingActivity extends AppCompatActivity {
      * @param intent
      */
     private void handlePush(Intent intent) {
-        boolean isFromPush = intent.getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false);
+        isFromPush = intent.getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false);
 
         //Check if we came from Push Notification
         if (isFromPush) {
