@@ -371,6 +371,7 @@
     <bool name="enable_photo_sharing">true</bool>
     <bool name="upload_photo_using_service">true</bool>
     <integer name="max_number_stored_images">20</integer>
+    <integer name="max_number_stored_documents">20</integer>
     <integer name="full_image_compression_rate">50</integer>
     <integer name="thumbnail_longer_dimension_resize">100</integer>
     <integer name="full_image_longer_dimension_resize">800</integer>
@@ -404,5 +405,28 @@
 
     <!--Enable HTTP interceptors. This enables setting interceptors to HTTP calls. This is a limited feature. DO NOT expose this in sample or host branding-->
     <bool name="lp_interceptors_enabled">true</bool>
+
+    <!--  Start of scroll behavior settings.  -->
+
+    <!--  LastPosition: Conversation will scroll to the previous position regardless if there are new messages or not.(Default) -->
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.  -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
+    <string name="lp_scroll_when_foreground" translatable="false">LastPosition</string>
+
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.(Default)  -->
+    <!--  LastPosition: Conversation will scroll to the previous position regardless if there are new messages or not. -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
+    <string name="lp_scroll_show_conversation" translatable="false">Bottom</string>
+
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.(Default)  -->
+    <!--  LastPosition: Conversation will scroll to the previous position regardless if there are new messages or not. -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
+    <string name="lp_scroll_when_push_notification" translatable="false">Bottom</string>
+
+    <!--  Bottom: Conversation will scroll to the bottom regardless if there are unread messages or not.(Default)  -->
+    <!--  FirstUnreadMessage: Conversation will scroll to first unread message. If no unread messages exist, conversation will scroll to the bottom.  -->
+    <string name="lp_scroll_when_scroll_down" translatable="false">Bottom</string>
+
+    <!--  End of scroll behavior settings.  -->
 
 </resources>

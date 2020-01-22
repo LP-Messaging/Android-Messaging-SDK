@@ -8,8 +8,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 500
-        versionName "5.0.0"
+        versionCode 510
+        versionName "5.1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -35,12 +35,12 @@ dependencies {
     implementation ("com.google.firebase:firebase-messaging:18.0.0") {
         exclude group: "com.android.support"
     }
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.12"
 
-    implementation ("com.liveperson.android:lp_messaging_sdk:5.0.0")
+    implementation ("com.liveperson.android:lp_messaging_sdk:5.1.0")
 }
 
 apply plugin: 'com.google.gms.google-services'
