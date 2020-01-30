@@ -8,8 +8,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 510
-        versionName "5.1.0"
+        versionCode 511
+        versionName "5.1.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,7 +40,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.12"
 
-    implementation ("com.liveperson.android:lp_messaging_sdk:5.1.0")
+    implementation ("com.liveperson.android:lp_messaging_sdk:5.1.1")
 }
 
 apply plugin: 'com.google.gms.google-services'
