@@ -32,6 +32,7 @@ import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.LPConversationsHistoryStateToDisplay;
 import com.liveperson.infra.auth.LPAuthenticationParams;
+import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
@@ -69,7 +70,6 @@ public class MessagingActivity extends AppCompatActivity {
     private EditText mAuthCodeView;
     private EditText mPublicKey;
     private Button mOpenConversationButton;
-    private TextInputLayout mAccountIdLayout;
     private TextView mTime;
     private TextView mDate;
     private CheckBox mCallbackToastCheckBox;
@@ -104,9 +104,6 @@ public class MessagingActivity extends AppCompatActivity {
      * Init Views
      */
     private void initSampleAppViews() {
-        // Set the default account in the view
-        mAccountIdLayout = findViewById(R.id.account_id_layout);
-
         mFirstNameView = findViewById(R.id.first_name);
         mFirstNameView.setText(SampleAppStorage.getInstance(this).getFirstName());
 
@@ -357,7 +354,12 @@ public class MessagingActivity extends AppCompatActivity {
         String authCode = SampleAppStorage.getInstance(MessagingActivity.this).getAuthCode();
         String publicKey = SampleAppStorage.getInstance(MessagingActivity.this).getPublicKey();
 
-        LPAuthenticationParams authParams = new LPAuthenticationParams();
+        LPAuthenticationParams authParams;
+        if (!TextUtils.isEmpty(SampleAppStorage.getInstance(this).getAppInstallId())) {
+            authParams = new LPAuthenticationParams(LPAuthenticationType.UN_AUTH);
+        } else {
+            authParams = new LPAuthenticationParams();
+        }
         authParams.setAuthKey(authCode);
         authParams.addCertificatePinningKey(publicKey);
 

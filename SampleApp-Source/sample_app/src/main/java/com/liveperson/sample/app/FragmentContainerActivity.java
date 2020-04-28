@@ -19,6 +19,7 @@ import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.auth.LPAuthenticationParams;
+import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.messaging_ui.fragment.ConversationFragment;
 import com.liveperson.infra.model.LPWelcomeMessage;
@@ -110,7 +111,12 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
             Log.d(TAG, "initFragment. authCode = "+ authCode);
             Log.d(TAG, "initFragment. publicKey = "+ publicKey);
-            LPAuthenticationParams authParams = new LPAuthenticationParams();
+            LPAuthenticationParams authParams;
+            if (!TextUtils.isEmpty(SampleAppStorage.getInstance(this).getAppInstallId())) {
+                authParams = new LPAuthenticationParams(LPAuthenticationType.UN_AUTH);
+            } else {
+                authParams = new LPAuthenticationParams();
+            }
             authParams.setAuthKey(authCode);
             authParams.addCertificatePinningKey(publicKey);
 
