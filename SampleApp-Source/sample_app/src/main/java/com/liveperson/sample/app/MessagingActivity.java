@@ -154,7 +154,7 @@ public class MessagingActivity extends AppCompatActivity {
 	}
 
 	private void setBadgeButton() {
-		(findViewById(R.id.badge)).setOnClickListener(v -> LivePerson.getNumUnreadMessages(SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, new ICallback<Integer, Exception>() {
+		(findViewById(R.id.badge)).setOnClickListener(v -> LivePerson.getUnreadMessagesCount(SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, getLPAuthenticationParams(), new ICallback<Integer, Exception>() {
 			@Override
 			public void onSuccess(Integer value) {
 				Toast.makeText(MessagingActivity.this, "New badge value: " + value, Toast.LENGTH_LONG).show();
@@ -325,20 +325,13 @@ public class MessagingActivity extends AppCompatActivity {
 			isFromPush = false;
 		}
 
-		String authCode = SampleAppStorage.getInstance(MessagingActivity.this).getAuthCode();
-		String publicKey = SampleAppStorage.getInstance(MessagingActivity.this).getPublicKey();
-
-		LPAuthenticationParams authParams = new LPAuthenticationParams(getAuthType());
-		authParams.setAuthKey(authCode);
-		authParams.addCertificatePinningKey(publicKey);
-
 		CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
 		ConversationViewParams params = new ConversationViewParams(isReadOnly())
 				.setHistoryConversationsStateToDisplay(LPConversationsHistoryStateToDisplay.ALL)
 				.setCampaignInfo(campaignInfo)
 				.setReadOnlyMode(isReadOnly());
 //        setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
-		LivePerson.showConversation(MessagingActivity.this, authParams, params);
+		LivePerson.showConversation(MessagingActivity.this, getLPAuthenticationParams(), params);
 
 		ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
 				.setFirstName(mFirstNameView.getText().toString())
@@ -471,6 +464,15 @@ public class MessagingActivity extends AppCompatActivity {
 	protected void onPause() {
 		unregisterReceiver(unreadMessagesCounter);
 		super.onPause();
+	}
+
+	private LPAuthenticationParams getLPAuthenticationParams() {
+		LPAuthenticationParams authParams = new LPAuthenticationParams(getAuthType());
+		String authCode = mAuthCodeView.getText().toString().trim();
+		String publicKey = mPublicKey.getText().toString().trim();
+		authParams.setAuthKey(authCode);
+		authParams.addCertificatePinningKey(publicKey);
+		return authParams;
 	}
 
 	/**
