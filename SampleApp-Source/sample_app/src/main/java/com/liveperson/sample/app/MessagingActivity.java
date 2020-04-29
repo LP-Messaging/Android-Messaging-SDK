@@ -456,7 +456,21 @@ public class MessagingActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		updateToolBar(LivePerson.getNumUnreadMessages(SampleAppStorage.getInstance(MessagingActivity.this).getAccount()));
+		LPAuthenticationParams lpAuthenticationParams = getLPAuthenticationParams();
+		if (lpAuthenticationParams.getAuthType() == LPAuthenticationType.AUTH && TextUtils.isEmpty(lpAuthenticationParams.getAuthKey())) {
+			lpAuthenticationParams = null;
+		}
+		LivePerson.getUnreadMessagesCount(SampleAppStorage.getInstance(MessagingActivity.this).getAccount(), lpAuthenticationParams, new ICallback<Integer, Exception>() {
+			@Override
+			public void onSuccess(Integer count) {
+				updateToolBar(count);
+			}
+
+			@Override
+			public void onError(Exception e) {
+				Log.e(TAG, "Failed to get unread messages count");
+			}
+		});
 		registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter);
 	}
 
