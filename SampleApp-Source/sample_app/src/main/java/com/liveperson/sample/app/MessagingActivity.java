@@ -151,6 +151,7 @@ public class MessagingActivity extends AppCompatActivity {
 		authTypeSpinner = findViewById(R.id.auth_type_spinner);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.supported_auth_types));
 		authTypeSpinner.setAdapter(adapter);
+		authTypeSpinner.setSelection(SampleAppStorage.getInstance(this).getAuthenticateItemPosition());
 	}
 
 	private void setBadgeButton() {
@@ -228,6 +229,7 @@ public class MessagingActivity extends AppCompatActivity {
 		String phoneNumber = mPhoneNumberView.getText().toString().trim();
 		String authCode = mAuthCodeView.getText().toString().trim();
 		String publicKey = mPublicKey.getText().toString().trim();
+		SampleAppStorage.getInstance(this).setAuthenticateItemPosition(authTypeSpinner.getSelectedItemPosition());
 		SampleAppStorage.getInstance(this).setFirstName(firstName);
 		SampleAppStorage.getInstance(this).setLastName(lastName);
 		SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
