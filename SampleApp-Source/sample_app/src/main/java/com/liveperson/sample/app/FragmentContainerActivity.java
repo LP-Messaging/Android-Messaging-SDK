@@ -16,9 +16,9 @@ import android.widget.LinearLayout;
 
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
-import com.liveperson.infra.Infra;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.auth.LPAuthenticationParams;
+import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.messaging_ui.fragment.ConversationFragment;
 import com.liveperson.infra.model.LPWelcomeMessage;
@@ -41,6 +41,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
     private static final String TAG = FragmentContainerActivity.class.getSimpleName();
     private static final String LIVEPERSON_FRAGMENT = "liveperson_fragment";
+    public static final String KEY_READ_ONLY = "read_only";
+    public static final String KEY_AUTH_TYPE = "auth_type";
     private ConversationFragment mConversationFragment;
 
     @Override
@@ -59,12 +61,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
                     LivePerson.setPushNotificationTapped();
                 }
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initFragment();
-                    }
-                });
+                runOnUiThread(() -> initFragment());
                 setCallBack();
                 SampleAppUtils.handleGCMRegistration(FragmentContainerActivity.this);
                 String firstName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getFirstName();
@@ -110,7 +107,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
             Log.d(TAG, "initFragment. authCode = "+ authCode);
             Log.d(TAG, "initFragment. publicKey = "+ publicKey);
-            LPAuthenticationParams authParams = new LPAuthenticationParams();
+            LPAuthenticationParams authParams = new LPAuthenticationParams(LPAuthenticationType.Companion.fromStorageVal(getIntent().getIntExtra(KEY_AUTH_TYPE, 0)));
             authParams.setAuthKey(authCode);
             authParams.addCertificatePinningKey(publicKey);
 
@@ -151,6 +148,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("unused")
     private void setWelcomeMessage(ConversationViewParams params) {
         LPWelcomeMessage lpWelcomeMessage = new LPWelcomeMessage("Welcome Message");
         List<MessageOption> optionItems = new ArrayList<>();
@@ -168,7 +166,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }
 
     private boolean isReadOnly() {
-        return getIntent().getBooleanExtra(Infra.KEY_READ_ONLY, false);
+        return getIntent().getBooleanExtra(KEY_READ_ONLY, false);
     }
 
     private boolean isValidState() {
@@ -209,7 +207,6 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
     /**
      * Relevant only for tablet. called from XML
-     * @param v
      */
     public void onLeftPanelUpdate(View v){
         String size = ((EditText)findViewById(R.id.left_panel_size)).getText().toString();
@@ -228,7 +225,6 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
     /**
      * Relevant only for tablet. called from XML
-     * @param v
      */
     public void onFooterPanelUpdate(View v){
         String size = ((EditText)findViewById(R.id.footer_panel_size)).getText().toString();

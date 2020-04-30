@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/auth_code_layout"
-                android:hint="Auth Code:"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:hint="Auth Code:">
 
                 <EditText
                     android:id="@+id/auth_code"
@@ -35,38 +37,48 @@
 
             <Button
                 android:id="@+id/badge"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Badge"
-
-                />
+                android:text="Badge" />
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="300dp"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/public_key_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Public Key:">
+
+            <EditText
+                android:id="@+id/public_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:orientation="horizontal">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/public_key_layout"
-                android:hint="Public Key:"
+            <TextView
+                android:id="@+id/auth_type_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Auth type:" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/auth_type_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/auth_type_title" />
 
-                <EditText
-                    android:id="@+id/public_key"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </android.support.design.widget.TextInputLayout>
-
-        </LinearLayout>
+        </RelativeLayout>
 
         <android.support.v7.widget.GridLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:columnCount="2"
             app:rowCount="14">
@@ -87,9 +99,7 @@
                 android:text="@string/open_fragment"
                 app:layout_column="1"
                 app:layout_gravity="fill"
-                app:layout_row="0"
-
-                />
+                app:layout_row="0" />
 
             <CheckBox
                 android:id="@+id/check_box_toasts"
@@ -97,9 +107,7 @@
                 android:gravity="center"
                 android:text="Show callbacks toasts"
                 app:layout_column="0"
-                app:layout_row="1"
-
-                />
+                app:layout_row="1" />
 
             <CheckBox
                 android:id="@+id/check_box_read_only"
@@ -109,12 +117,11 @@
                 app:layout_column="1"
                 app:layout_row="1" />
 
-
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/first_name_layout"
-                android:hint="First Name:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="First Name:"
                 app:layout_column="0"
                 app:layout_columnSpan="2"
                 app:layout_gravity="fill"
@@ -129,9 +136,9 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/last_name_layout"
-                android:hint="Last Name:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Last Name:"
                 app:layout_column="0"
                 app:layout_columnSpan="2"
                 app:layout_gravity="fill"
@@ -144,12 +151,11 @@
 
             </android.support.design.widget.TextInputLayout>
 
-
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/phone_number_layout"
-                android:hint="Phone Number:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Phone Number:"
                 app:layout_column="0"
                 app:layout_columnSpan="2"
                 app:layout_gravity="fill"
@@ -163,15 +169,14 @@
 
             </android.support.design.widget.TextInputLayout>
 
-
             <android.support.design.widget.TextInputLayout
-                android:hint="Campaign ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Campaign ID"
                 app:layout_column="0"
-                app:layout_row="5"
                 app:layout_columnSpan="2"
-                app:layout_gravity="fill">
+                app:layout_gravity="fill"
+                app:layout_row="5">
 
                 <EditText
                     android:id="@+id/campaign_id"
@@ -181,15 +186,15 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:hint="Engagement ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Engagement ID"
                 app:layout_column="0"
-                app:layout_row="6"
                 app:layout_columnSpan="2"
-                app:layout_gravity="fill">
+                app:layout_gravity="fill"
+                app:layout_row="6">
 
-            <EditText
+                <EditText
                     android:id="@+id/engagement_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -198,13 +203,13 @@
 
 
             <android.support.design.widget.TextInputLayout
-                android:hint="Session ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="Session ID"
                 app:layout_column="0"
-                app:layout_row="7"
                 app:layout_columnSpan="2"
-                app:layout_gravity="fill">
+                app:layout_gravity="fill"
+                app:layout_row="7">
 
                 <EditText
                     android:id="@+id/session_id"
@@ -214,15 +219,15 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:hint="Visitor ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="Visitor ID"
                 app:layout_column="0"
-                app:layout_row="8"
                 app:layout_columnSpan="2"
-                app:layout_gravity="fill">
+                app:layout_gravity="fill"
+                app:layout_row="8">
 
-            <EditText
+                <EditText
                     android:id="@+id/visitor_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -230,21 +235,20 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:hint="Engagement Context ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="Engagement Context ID"
                 app:layout_column="0"
-                app:layout_row="9"
                 app:layout_columnSpan="2"
-                app:layout_gravity="fill">
+                app:layout_gravity="fill"
+                app:layout_row="9">
 
-            <EditText
+                <EditText
                     android:id="@+id/engagement_context_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
-
 
             <Spinner
                 android:id="@+id/spinner_locale"
@@ -254,7 +258,6 @@
                 app:layout_columnSpan="2"
                 app:layout_gravity="center"
                 app:layout_row="10" />
-
 
             <EditText
                 android:id="@+id/language_editText"
@@ -266,7 +269,6 @@
                 app:layout_gravity="center"
                 app:layout_row="11" />
 
-
             <EditText
                 android:id="@+id/country_editText"
                 android:layout_width="wrap_content"
@@ -277,7 +279,6 @@
                 app:layout_gravity="center"
                 app:layout_row="11" />
 
-
             <Button
                 android:id="@+id/update_language_button"
                 android:layout_width="wrap_content"
@@ -285,9 +286,7 @@
                 android:text="Update Language"
                 app:layout_column="0"
                 app:layout_gravity="fill"
-                app:layout_row="12"
-
-                />
+                app:layout_row="12" />
 
             <Button
                 android:id="@+id/clear_locale_button"
@@ -296,10 +295,7 @@
                 android:text="Clear"
                 app:layout_column="1"
                 app:layout_gravity="fill"
-                app:layout_row="12"
-
-                />
-
+                app:layout_row="12" />
 
             <TextView
                 android:id="@+id/date_sample_textView"
@@ -309,8 +305,7 @@
                 app:layout_column="0"
                 app:layout_gravity="fill"
                 app:layout_row="13"
-
-                />
+                tools:text="April 01, 2020" />
 
             <TextView
                 android:id="@+id/time_sample_textView"
@@ -320,8 +315,7 @@
                 app:layout_column="1"
                 app:layout_gravity="fill"
                 app:layout_row="13"
-
-                />
+                tools:text="8:30:00 PM" />
 
         </android.support.v7.widget.GridLayout>
 
