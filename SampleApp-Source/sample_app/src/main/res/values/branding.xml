@@ -120,6 +120,9 @@
     <color name="conversation_background">@color/lp_colorBackground</color>
     <drawable name="conversation_background"/>
 
+    <!--  Empty history view -->
+    <color name="empty_history_view_text_color">@color/lp_colorOnBackground1</color>
+
     <!--Date header properties-->
     <color name="lp_header_text_color">@color/lp_colorOnSurface</color>
     <color name="lp_header_background_color">@color/lp_colorSurface</color>

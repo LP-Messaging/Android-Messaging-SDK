@@ -107,6 +107,8 @@
     <color name="conversation_background">@color/lp_colorBackground</color>
     <drawable name="conversation_background" />
 
+    <!--  Empty history view -->
+    <color name="empty_history_view_text_color">@color/lp_colorOnBackground1</color>
 
     <!-- Chat header properties -->
     <color name="lp_header_text_color">@color/lp_colorOnSurface</color>
