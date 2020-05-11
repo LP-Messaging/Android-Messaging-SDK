@@ -17,6 +17,8 @@ public class SampleAppStorage {
     public static final String SDK_SAMPLE_APP_ID = "com.liveperson.sdksample";
     public static final String SDK_SAMPLE_FCM_APP_ID = "com.liveperson.sdksampleFcm";
 
+    private static final String AUTHENTICATE_ITEM_POSITION = "authenticate_item_position";
+
     // Messaging
     private static final String FIRST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
@@ -56,6 +58,14 @@ public class SampleAppStorage {
         }
         return Instance;
     }
+
+	public void setAuthenticateItemPosition(int position) {
+		mDefaultSharedPreferences.edit().putInt(AUTHENTICATE_ITEM_POSITION, position).apply();
+	}
+
+	public int getAuthenticateItemPosition() {
+		return mDefaultSharedPreferences.getInt(AUTHENTICATE_ITEM_POSITION, 0);
+	}
 
     public void setFirstName(String firstName) {
         mDefaultSharedPreferences.edit().putString(FIRST_NAME, firstName).apply();

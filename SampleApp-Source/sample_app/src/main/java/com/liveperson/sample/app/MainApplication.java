@@ -14,7 +14,6 @@ import com.liveperson.api.response.types.CloseReason;
 import com.liveperson.api.sdk.PermissionType;
 import com.liveperson.api.sdk.LPConversationData;
 import com.liveperson.infra.auth.LPAuthenticationParams;
-import com.liveperson.infra.log.LPMobileLog;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
@@ -276,7 +275,7 @@ public class MainApplication extends Application {
         if (showToastOnCallback){
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
         }else{
-            LPMobileLog.d(TAG + "_CALLBACK", message);
+            Log.d(TAG + "_CALLBACK", message);
         }
     }
 
