@@ -26,7 +26,6 @@ class MonitoringActivity : AppCompatActivity() {
         private const val TAG = "MonitoringActivity"
     }
 
-
     private var entryPoinstsEditText: EditText? = null
     private var engagementAttributesEditText: EditText? = null
 
@@ -49,26 +48,23 @@ class MonitoringActivity : AppCompatActivity() {
         val openMessagingButton = findViewById<Button>(R.id.open_messaging_button)
 
         // EditTexts
-        val accountIdEditText = findViewById<EditText>(R.id.account_id_edit_text)
         val consumerIdEditText = findViewById<EditText>(R.id.consumer_id_edit_text)
         val pageIdEditText = findViewById<EditText>(R.id.page_id_edit_text)
 
         // TextViews
         val sdkVersionTextView = findViewById<TextView>(R.id.sdk_version_text_view)
 
-        entryPoinstsEditText = findViewById<EditText>(R.id.entry_points_edit_text)
-        engagementAttributesEditText = findViewById<EditText>(R.id.engagement_attributes_edit_text)
+        entryPoinstsEditText = findViewById(R.id.entry_points_edit_text)
+        engagementAttributesEditText = findViewById(R.id.engagement_attributes_edit_text)
 
         entryPoinstsEditText?.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus -> changeHeight(view, hasFocus) }
         engagementAttributesEditText?.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus -> changeHeight(view, hasFocus)}
 
         // TextViews
-        engagementResultsTextView = findViewById<TextView>(R.id.resultTextView)
+        engagementResultsTextView = findViewById(R.id.resultTextView)
 
         // Progress bar
-        progressBar = findViewById<LinearLayout>(R.id.action_progress_bar)
-
-        var allParamsValid = false
+        progressBar = findViewById(R.id.action_progress_bar)
 
         // Display the SDK version
         sdkVersionTextView.text = "SDK Version: ${LivepersonMonitoring.getSDKVersion()}"
@@ -196,12 +192,10 @@ class MonitoringActivity : AppCompatActivity() {
                 view.layoutParams = layoutParams
             }
         }
-
     }
 
     private fun updateResult(result : String){
         engagementResultsTextView?.text = result
-
     }
 
     private fun showProgressBar(){
@@ -233,6 +227,4 @@ class MonitoringActivity : AppCompatActivity() {
         val pageId : String? = if (withPageId)  page_id_edit_text.text.toString() else null
         return MonitoringParams(pageId, entryPoints, engagementAttributes)
     }
-
-
 }

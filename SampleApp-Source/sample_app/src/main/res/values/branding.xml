@@ -2,6 +2,8 @@
 <resources>
 
     <color name="conversation_background">#ffffff</color>
+    <color name="lp_caption_preview_fragment_background_color">#ffffff</color>
+    <bool name="lp_hide_ui_until_auth">true</bool>
 
     <!-- all bubbles -->
     <color name="bubble_selected_background_color">#5597a7e3</color>
@@ -20,11 +22,13 @@
     <color name="agent_bubble_stroke_color">@color/lp_blue</color>
     <color name="agent_bubble_message_text_color">@android:color/white</color>
     <color name="agent_bubble_message_link_text_color">@android:color/white</color>
+    <color name="agent_bubble_message_markdown_hyperlink_text_color">@android:color/white</color>
     <color name="agent_bubble_timestamp_text_color">@color/lp_dark_gray_1</color>
     <color name="agent_bubble_background_color">@color/lp_blue</color>
     <color name="agent_avatar_background_color">@color/lp_gray</color>
     <color name="agent_avatar_icon_color">@android:color/white</color>
     <bool name="show_agent_typing_in_message_bubble">false</bool>
+    <bool name="lp_markdown_hyperlink_copy_text_only">false</bool>
 
     <!--consumer bubble-->
     <dimen name="consumer_bubble_stroke_width">1dp</dimen>
@@ -140,6 +144,7 @@
     <color name="lp_send_button_text_disable">#b7b8b9</color>
 
     <bool name="use_send_image_button">false</bool>
+    <bool name="enable_ime_options_action_send">false</bool>
 
     <!--Clear History-->
     <bool name="clear_history_show_confirm_dialog">true</bool>
@@ -175,6 +180,8 @@
     <bool name="link_preview_enable_feature">true</bool>
     <bool name="link_preview_to_use_more_than_og_tags">true</bool>
 
+    <!--  Hyperlink in messaging -->
+    <bool name="enable_markdown_hyperlink">true</bool>
 
     <!--Resend pending message-->
     <integer name="sendingMessageTimeoutInMinutes">60</integer>
