@@ -175,6 +175,11 @@ public class MainApplication extends Application {
             }
 
             @Override
+            public void onUnauthenticatedUserExpired() {
+
+            }
+
+            @Override
             public void onConversationStarted(LPConversationData convData) {
                 MainApplication.this.onConversationStarted(convData);
             }
