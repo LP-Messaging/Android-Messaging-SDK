@@ -2,6 +2,8 @@
 <resources>
 
     <color name="conversation_background">#ffffff</color>
+    <color name="lp_caption_preview_fragment_background_color">#ffffff</color>
+    <bool name="lp_hide_ui_until_auth">true</bool>
 
     <!-- all bubbles -->
     <color name="bubble_selected_background_color">#5597a7e3</color>
@@ -20,11 +22,13 @@
     <color name="agent_bubble_stroke_color">@color/lp_blue</color>
     <color name="agent_bubble_message_text_color">@android:color/white</color>
     <color name="agent_bubble_message_link_text_color">@android:color/white</color>
+    <color name="agent_bubble_message_markdown_hyperlink_text_color">@android:color/white</color>
     <color name="agent_bubble_timestamp_text_color">@color/lp_dark_gray_1</color>
     <color name="agent_bubble_background_color">@color/lp_blue</color>
     <color name="agent_avatar_background_color">@color/lp_gray</color>
     <color name="agent_avatar_icon_color">@android:color/white</color>
     <bool name="show_agent_typing_in_message_bubble">false</bool>
+    <bool name="lp_markdown_hyperlink_copy_text_only">false</bool>
 
     <!--consumer bubble-->
     <dimen name="consumer_bubble_stroke_width">1dp</dimen>
@@ -104,31 +108,29 @@
     <bool name="show_csat_thank_you">true</bool>
     <integer name="csatSurveyExpirationInMinutes">1440</integer>
 
-
     <!--TTR-->
     <bool name="disableTTRPopup">false</bool>
     <integer name="ttrShowFrequencyInSeconds">8</integer>
 
-    <string name="custom_button_icon_name">t_mobile_call_icon</string>
-    <string name="custom_button_icon_description">call</string>
+    <string name="custom_button_icon_name" translatable="false">t_mobile_call_icon</string>
+    <string name="custom_button_icon_description" translatable="false">call</string>
 
     <bool name="contextual_menu_on_toolbar">true</bool>
 
-    <string name="notification_large_icon_name">ic_launcher</string>
-
+    <string name="notification_large_icon_name" translatable="false">ic_launcher</string>
 
     <integer name="encryptionVersion">1</integer>
 
-    <string name="csds_url">adminlogin.liveperson.net</string>
-    <string name="lptag_domain">lptag.liveperson.net</string>
+    <string name="csds_url" translatable="false">adminlogin.liveperson.net</string>
+    <string name="lptag_domain" translatable="false">lptag.liveperson.net</string>
 
     <integer name="idp_num_history_conversation">2</integer>
 
     <!--Credit card masking-->
     <bool name="enable_client_only_masking">false</bool>
     <bool name="enable_real_time_masking">false</bool>
-    <string name="client_only_masking_regex" />
-    <string name="real_time_masking_regex" />
+    <string name="client_only_masking_regex" translatable="false" />
+    <string name="real_time_masking_regex" translatable="false" />
 
     <bool name="show_timestamp_in_ttr_notification">true</bool>
 
@@ -140,6 +142,7 @@
     <color name="lp_send_button_text_disable">#b7b8b9</color>
 
     <bool name="use_send_image_button">false</bool>
+    <bool name="enable_ime_options_action_send">false</bool>
 
     <!--Clear History-->
     <bool name="clear_history_show_confirm_dialog">true</bool>
@@ -160,9 +163,9 @@
     <color name="lp_attachment_menu_background_color">@color/lp_light_gray_2</color>
 
     <!--Links-->
-    <string name="lp_bubble_phone_links_regex" />
-    <string name="lp_bubble_url_links_regex" />
-    <string name="lp_bubble_email_links_regex" />
+    <string name="lp_bubble_phone_links_regex" translatable="false" />
+    <string name="lp_bubble_url_links_regex" translatable="false" />
+    <string name="lp_bubble_email_links_regex" translatable="false" />
 
     <!--Conversation Separator-->
     <bool name="enable_conversation_resolved_message">true</bool>
@@ -175,6 +178,8 @@
     <bool name="link_preview_enable_feature">true</bool>
     <bool name="link_preview_to_use_more_than_og_tags">true</bool>
 
+    <!--  Hyperlink in messaging -->
+    <bool name="enable_markdown_hyperlink">true</bool>
 
     <!--Resend pending message-->
     <integer name="sendingMessageTimeoutInMinutes">60</integer>
@@ -207,8 +212,8 @@
 
     <bool name="send_agent_profile_updates_when_conversation_closed">true</bool>
 
-    <string name="client_only_mask_character">*</string>
-    <string name="real_time_mask_character">*</string>
+    <string name="client_only_mask_character" translatable="false">*</string>
+    <string name="real_time_mask_character" translatable="false">*</string>
 
     <!-- agent PCI bubble-->
     <color name="agent_bubble_pci_form_invitation_background_color">@android:color/white</color>
@@ -221,11 +226,11 @@
 
     <!--PCI-->
     <bool name="pci_form_hide_logo">false</bool>
-    <string name="pci_form_font_name"></string>
+    <string name="pci_form_font_name" translatable="false" />
 
     <!-- Fonts -->
-    <string name="custom_font_name_conversation_feed"></string>
-    <string name="custom_font_name_non_conversation_feed"></string>
+    <string name="custom_font_name_conversation_feed" translatable="false" />
+    <string name="custom_font_name_non_conversation_feed" translatable="false" />
 
     <!--Structured Content-->
     <bool name="enable_structured_content">true</bool>
@@ -234,7 +239,8 @@
     <dimen name="structured_content_border_width">1dp</dimen>
     <bool name="structured_content_link_as_callback">false</bool>
     <bool name="structured_content_button_background_enabled">false</bool>
-    <string name="lp_google_maps_key"></string>
+
+    <string name="lp_google_maps_key" translatable="false" />
 
     <!--Controller messages-->
     <color name="conversation_controller_message_text_color">@color/lp_dark_gray_2</color>
@@ -248,6 +254,7 @@
     <!--Voice-->
     <bool name="enable_voice_sharing">true</bool>
     <integer name="max_number_stored_voice_files">20</integer>
+    <integer name="lp_record_max_time_seconds">120</integer>
 
     <!--  Start of scroll behavior settings.  -->
 

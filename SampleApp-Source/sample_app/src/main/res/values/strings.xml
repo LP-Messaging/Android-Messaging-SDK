@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">Sample Application</string>
-    <string name="monitoring_title">Monitoring</string>
-    <string name="messaging_title">Messaging</string>
-    <string name="initializing">Initializing…</string>
-    <string name="open_fragment">Open Fragment</string>
-    <string name="open_activity">Open Activity</string>
+
+    <string name="app_name" translatable="false">Sample Application</string>
+    <string name="monitoring_title" translatable="false">Monitoring</string>
+    <string name="messaging_title" translatable="false">Messaging</string>
+    <string name="initializing" translatable="false">Initializing…</string>
+    <string name="open_fragment" translatable="false">Open Fragment</string>
+    <string name="open_activity" translatable="false">Open Activity</string>
 
     <string-array name="message_receive_text">
         <item>"Sent"</item>
@@ -15,11 +16,11 @@
     </string-array>
 
     <!-- <string name="lp_date_time_format">mm/dd/yyyy HH:mm</string>-->
-    <string name="lp_date_time_format"></string>
-    <string name="lp_date_format"></string>
-    <string name="lp_time_format"></string>
-    <string name="lp_ttr_message_off_hours_time_zone_id"></string>
-    <string name="logout_failed">Logout Failed!</string>
+    <string name="lp_date_time_format" translatable="false" />
+    <string name="lp_date_format" translatable="false" />
+    <string name="lp_time_format" translatable="false" />
+    <string name="lp_ttr_message_off_hours_time_zone_id" translatable="false" />
 
+    <string name="logout_failed" translatable="false">Logout Failed!</string>
 
 </resources>

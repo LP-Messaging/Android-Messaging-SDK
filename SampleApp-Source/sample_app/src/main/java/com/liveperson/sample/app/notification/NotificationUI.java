@@ -125,7 +125,15 @@ public class NotificationUI {
         Intent showIntent = new Intent(ctx, MessagingActivity.class);
         showIntent.putExtra(NOTIFICATION_EXTRA, true);
 
-		return PendingIntent.getActivity(ctx, 0, showIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        int intentFlags;
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+            // Workaround for KitKat notification action Pending Intent fails after application re-install
+            intentFlags = PendingIntent.FLAG_ONE_SHOT;
+        } else {
+            intentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        }
+
+		return PendingIntent.getActivity(ctx, 0, showIntent, intentFlags);
     }
 
     /************************ Example of app Icon Badge - For Samsung *******************************/
