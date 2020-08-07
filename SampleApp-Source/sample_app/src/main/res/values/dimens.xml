@@ -3,10 +3,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="end_bubble_bottom_left_radius">       10dp</dimen>
-    <dimen name="end_bubble_top_left_radius">          10dp</dimen>
-    <dimen name="end_bubble_top_right_radius">           10dp</dimen>
-    <dimen name="end_bubble_bottom_right_radius">       0dp</dimen>
+    <dimen name="end_bubble_bottom_left_radius">10dp</dimen>
+    <dimen name="end_bubble_top_left_radius">10dp</dimen>
+    <dimen name="end_bubble_top_right_radius">10dp</dimen>
+    <dimen name="end_bubble_bottom_right_radius">0dp</dimen>
 
     <dimen name="start_bubble_bottom_left_radius">0dp</dimen>
     <dimen name="start_bubble_top_left_radius">10dp</dimen>

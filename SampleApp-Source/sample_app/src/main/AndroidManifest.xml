@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- Vibrate on new incoming msg -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -79,9 +81,7 @@
         </service>
         <service
             android:name=".push.fcm.FirebaseRegistrationIntentService"
-            android:exported="false">
-
-        </service>
+            android:exported="false" />
 
         <receiver android:name=".notification.NotificationUI$BadgeBroadcastReceiver">
             <intent-filter>
@@ -89,43 +89,6 @@
             </intent-filter>
         </receiver>
         <!-- End of FCM -->
-
-
-        <!--
-        &lt;!&ndash; [START gcm_receiver] &ndash;&gt;
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="gcm.play.android.samples.com.gcmquickstart" />
-            </intent-filter>
-        </receiver>
-        &lt;!&ndash; [END gcm_receiver] &ndash;&gt;
-
-         &lt;!&ndash;[START gcm_listener] &ndash;&gt;
-        <service
-            android:name="com.liveperson.sample.app.push.gcm.MyGcmListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-        &lt;!&ndash; [END gcm_listener] &ndash;&gt;
-        &lt;!&ndash; [START instanceId_listener] &ndash;&gt;
-        <service
-            android:name="com.liveperson.sample.app.push.gcm.MyInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
-        &lt;!&ndash; [END instanceId_listener] &ndash;&gt;
-        <service
-            android:name="com.liveperson.sample.app.push.gcm.RegistrationIntentService"
-            android:exported="false"></service>
-        -->
 
     </application>
 
