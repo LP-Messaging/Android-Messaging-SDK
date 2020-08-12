@@ -149,6 +149,7 @@
     <color name="agent_bubble_stroke_color">@color/lp_agent_message_bubble_color</color>
     <color name="agent_bubble_message_text_color">@color/lp_onAgentMessage_bubble_color</color>
     <color name="agent_bubble_message_link_text_color">@color/lp_consumer_action_highLight_color</color>
+    <color name="agent_bubble_message_markdown_hyperlink_text_color">@color/lp_consumer_action_highLight_color</color>
     <color name="agent_bubble_timestamp_text_color">@color/lp_colorOnBackground1</color>
     <color name="agent_bubble_background_color">@color/lp_agent_message_bubble_color</color>
     <color name="agent_avatar_background_color">@color/lp_gray</color>

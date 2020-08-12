@@ -131,12 +131,12 @@ public class IntroActivity extends AppCompatActivity {
 								// Remove the notification (if any)
 								NotificationUI.hideNotification(IntroActivity.this);
 
-								Toast.makeText(IntroActivity.this, "Logout success", Toast.LENGTH_SHORT).show();
+								Toast.makeText(IntroActivity.this, "Logout succeeded", Toast.LENGTH_SHORT).show();
 							}
 
 							@Override
 							public void onLogoutFailed() {
-								mAccountIdEditText.setText(R.string.logout_failed);
+								Toast.makeText(IntroActivity.this, R.string.logout_failed, Toast.LENGTH_SHORT).show();
 							}
 						});
 
