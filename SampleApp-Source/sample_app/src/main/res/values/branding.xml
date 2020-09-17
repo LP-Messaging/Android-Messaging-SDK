@@ -3,7 +3,6 @@
 
     <color name="conversation_background">#ffffff</color>
     <color name="lp_caption_preview_fragment_background_color">#ffffff</color>
-    <bool name="lp_hide_ui_until_auth">true</bool>
 
     <!-- all bubbles -->
     <color name="bubble_selected_background_color">#5597a7e3</color>
@@ -239,6 +238,7 @@
     <dimen name="structured_content_border_width">1dp</dimen>
     <bool name="structured_content_link_as_callback">false</bool>
     <bool name="structured_content_button_background_enabled">false</bool>
+    <integer name="structured_content_button_no_text_lines">1</integer>
 
     <string name="lp_google_maps_key" translatable="false" />
 
