@@ -14,6 +14,7 @@ import com.liveperson.api.response.types.CloseReason;
 import com.liveperson.api.sdk.PermissionType;
 import com.liveperson.api.sdk.LPConversationData;
 import com.liveperson.infra.auth.LPAuthenticationParams;
+import com.liveperson.messaging.LpError;
 import com.liveperson.messaging.TaskType;
 import com.liveperson.messaging.model.AgentData;
 import com.liveperson.messaging.sdk.api.LivePerson;
@@ -125,6 +126,12 @@ public class MainApplication extends Application {
                         onError(type, message);
                         break;
 
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_ERROR_TYPE_INTENT_ACTION:
+                        String errorMessage = LivePersonIntents.getOnErrorMessage(intent);
+                        LpError lpError = LivePersonIntents.getErrorType(intent);
+                        onError(lpError, errorMessage);
+                        break;
+
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_OFFLINE_HOURS_CHANGES_INTENT_ACTION:
                         onOfflineHoursChanges(LivePersonIntents.getOfflineHoursOn(intent));
                         break;
@@ -167,6 +174,11 @@ public class MainApplication extends Application {
             @Override
             public void onError(TaskType type, String message) {
                 MainApplication.this.onError(type, message);
+            }
+
+            @Override
+            public void onError(LpError lpError, String message) {
+                MainApplication.this.onError(lpError, message);
             }
 
             @Override
@@ -352,6 +364,10 @@ public class MainApplication extends Application {
 
     private void onError(TaskType type, String message) {
         showToast(" problem " + type.name());
+    }
+
+    private void onError(LpError lpError, String message) {
+        showToast("error: " + lpError.name() + "\n error message: " + message);
     }
 
 	private void onUserDeniedPermission(PermissionType permissionType, boolean doNotShowAgainMarked) {
