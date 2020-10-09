@@ -121,7 +121,6 @@
     <color name="conversation_background">@color/lp_colorBackground</color>
     <drawable name="conversation_background"/>
     <color name="lp_caption_preview_fragment_background_color">@color/lp_colorBackground</color>
-    <bool name="lp_hide_ui_until_auth">true</bool>
 
     <!--  Empty history view -->
     <color name="empty_history_view_text_color">@color/lp_colorOnBackground1</color>
