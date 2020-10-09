@@ -2,7 +2,7 @@
 
 In-App Messaging SDK v5.4.0 for Android includes the same change as 4.6.1:
 * Auto logout
-* Changed retry mechanism. Notify host app immediately when there is an error.
+* Notify host app immediately when failed to authenticate consumer instead of performing periodic reties.
 * Bug fixes.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
