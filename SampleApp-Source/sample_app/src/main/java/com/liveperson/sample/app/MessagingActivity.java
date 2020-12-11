@@ -77,6 +77,7 @@ public class MessagingActivity extends AppCompatActivity {
 	private EditText mVisitorIdEditText;
 	private EditText mEngagementContextIdEditText;
 	private boolean isFromPush;
+	private String pushMessageId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -310,6 +311,7 @@ public class MessagingActivity extends AppCompatActivity {
 		Intent in = new Intent(MessagingActivity.this, FragmentContainerActivity.class);
 		in.putExtra(FragmentContainerActivity.KEY_READ_ONLY, isReadOnly());
 		in.putExtra(NotificationUI.NOTIFICATION_EXTRA, isFromPush);
+		in.putExtra(NotificationUI.NOTIFICATION_MESSAGE_ID, pushMessageId);
 		in.putExtra(FragmentContainerActivity.KEY_AUTH_TYPE, getAuthType().getStorageVal());
 		startActivity(in);
 		isFromPush = false;
@@ -323,7 +325,7 @@ public class MessagingActivity extends AppCompatActivity {
 		storeData();
 
 		if (isFromPush) {
-			LivePerson.setPushNotificationTapped();
+			LivePerson.setPushNotificationTapped(pushMessageId);
 			isFromPush = false;
 		}
 
@@ -379,6 +381,7 @@ public class MessagingActivity extends AppCompatActivity {
 
 		//Check if we came from Push Notification
 		if (isFromPush) {
+			pushMessageId = intent.getStringExtra(NotificationUI.NOTIFICATION_MESSAGE_ID);
 			clearPushNotifications();
 			switch (SampleAppStorage.getInstance(this).getSDKMode()) {
 				//Initialize the SDK with "Activity mode"

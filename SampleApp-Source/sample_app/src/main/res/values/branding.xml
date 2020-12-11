@@ -279,4 +279,7 @@
 
     <!--  End of scroll behavior settings.  -->
 
+    <!-- Use last proactive/C2M push message -->
+    <bool name="show_outbound_in_app_message">true</bool>
+
 </resources>

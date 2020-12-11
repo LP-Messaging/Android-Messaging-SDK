@@ -58,7 +58,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Log.i(TAG, "onInitSucceed");
 
                 if (getIntent().getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false)) {
-                    LivePerson.setPushNotificationTapped();
+                    String pushMessageId = getIntent().getStringExtra(NotificationUI.NOTIFICATION_MESSAGE_ID);
+                    LivePerson.setPushNotificationTapped(pushMessageId);
                 }
 
                 runOnUiThread(() -> initFragment());
@@ -109,6 +110,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
             Log.d(TAG, "initFragment. publicKey = "+ publicKey);
             LPAuthenticationParams authParams = new LPAuthenticationParams(LPAuthenticationType.Companion.fromStorageVal(getIntent().getIntExtra(KEY_AUTH_TYPE, 0)));
             authParams.setAuthKey(authCode);
+            authParams.setHostAppJWT("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImFsZ29yaXRobSI6IlJTMjU2In0.eyJzdWIiOiJhYiIsImV4cCI6MTYwNzcyNTkyMCwiaWF0IjoxNjA3NjAzNTIwfQ.P5zcK88hzJCQpwjwEWt6u_DrB8AYaLtAvQMI6om2oT8EOo9dqrX2ndvoGpEwLY89tz-NX5mwfApemVa_K4OSWHz2wWipC_h8n8XhAKO530FN8cIzjGxIbOQhG8r2qvgvuoPUw2cFAeQJ9bX0w4rqLUydDTCcBrGPEJmKYsQGBI0");
             authParams.addCertificatePinningKey(publicKey);
 
 			CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
