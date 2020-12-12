@@ -32,12 +32,13 @@ public class NotificationUI {
 
     private static final String CHANNEL_SERVICE_NOTIFICATION_ID = "channel_service_notification";
     private static final String CHANNEL_PUSH_NOTIFICATION_ID = "channel_push_notification";
+    public static final String NOTIFICATION_MESSAGE_ID = "notification_message_id";
 
 
 	public static void showPushNotification(Context ctx, PushMessage pushMessage) {
         Notification.Builder builder = createNotificationBuilder(ctx, CHANNEL_PUSH_NOTIFICATION_ID, "Push Notification", true);
 
-		builder.setContentIntent(getPendingIntent(ctx)).
+		builder.setContentIntent(getPendingIntent(ctx, pushMessage.getPushMessageId())).
 			setContentTitle(pushMessage.getMessage()).
 			setAutoCancel(true).
 			setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
@@ -60,6 +61,10 @@ public class NotificationUI {
                     setPriority(Notification.PRIORITY_HIGH);
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setTimeoutAfter(pushMessage.getLookBackPeriod());
+        }
+
         getNotificationManager(ctx).notify(PUSH_NOTIFICATION_ID, builder.build());
     }
 
@@ -80,7 +85,7 @@ public class NotificationUI {
         Notification.Builder notificationBuilder = createNotificationBuilder(ctx, CHANNEL_SERVICE_NOTIFICATION_ID, "Foreground Service", false);
 
         notificationBuilder
-                .setContentIntent(getPendingIntent(ctx))
+                .setContentIntent(getPendingIntent(ctx, null))
                 .setContentTitle(contentTitle)
                 .setSmallIcon(smallIcon)
                 .setProgress(0, 0, true);
@@ -121,9 +126,10 @@ public class NotificationUI {
     }
 
 
-    private static PendingIntent getPendingIntent(Context ctx) {
+    private static PendingIntent getPendingIntent(Context ctx, String pushMessageId) {
         Intent showIntent = new Intent(ctx, MessagingActivity.class);
         showIntent.putExtra(NOTIFICATION_EXTRA, true);
+        showIntent.putExtra(NOTIFICATION_MESSAGE_ID, pushMessageId);
 
         int intentFlags;
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){

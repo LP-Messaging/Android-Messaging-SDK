@@ -58,7 +58,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Log.i(TAG, "onInitSucceed");
 
                 if (getIntent().getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false)) {
-                    LivePerson.setPushNotificationTapped();
+                    String messageId = getIntent().getStringExtra(NotificationUI.NOTIFICATION_MESSAGE_ID);
+                    LivePerson.setPushNotificationTapped(messageId);
                 }
 
                 runOnUiThread(() -> initFragment());
@@ -94,7 +95,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         if (intent.getBooleanExtra(NotificationUI.NOTIFICATION_EXTRA, false)) {
-            LivePerson.setPushNotificationTapped();
+            String messageId = getIntent().getStringExtra(NotificationUI.NOTIFICATION_MESSAGE_ID);
+            LivePerson.setPushNotificationTapped(messageId);
         }
     }
 
