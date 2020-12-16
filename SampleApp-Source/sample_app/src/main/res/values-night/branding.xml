@@ -251,7 +251,4 @@
     <color name="feedback_fragment_submit_btn_stroke_enabled">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_submit_btn_stroke_disabled">@color/lp_colorSurface</color>
 
-    <!--SecureForm Fragment-->
-    <color name="secureForm_fragment_background_color">@color/lp_colorBackground</color>
-
 </resources>

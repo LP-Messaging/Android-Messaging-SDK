@@ -317,9 +317,6 @@
     <bool name="show_csat_thank_you">true</bool>
     <integer name="csatSurveyExpirationInMinutes">1440</integer>
 
-    <!--SecureForm Fragment-->
-    <color name="secureForm_fragment_background_color">@color/lp_colorBackground</color>
-
     <!-- TTR Snack bar -->
     <bool name="show_timestamp_in_ttr_notification">true</bool>
     <integer name="ttr_duration">3000</integer>
@@ -438,4 +435,6 @@
 
     <!--  End of scroll behavior settings.  -->
 
+    <!-- Use last proactive/C2M push message -->
+    <bool name="show_outbound_in_app_message">true</bool>
 </resources>
