@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.liveperson.sample.app"
-        minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 540
-        versionName "5.4.0"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 550
+        versionName "5.5.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,15 +32,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation ("com.google.firebase:firebase-messaging:18.0.0") {
-        exclude group: "com.android.support"
-    }
+    implementation 'com.google.firebase:firebase-messaging:20.3.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.12"
 
-    implementation ("com.liveperson.android:lp_messaging_sdk:5.4.0")
+    implementation 'com.liveperson.android:lp_messaging_sdk:5.5.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
