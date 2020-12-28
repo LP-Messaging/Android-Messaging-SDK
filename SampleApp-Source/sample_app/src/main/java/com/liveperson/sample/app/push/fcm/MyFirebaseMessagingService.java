@@ -1,5 +1,6 @@
 package com.liveperson.sample.app.push.fcm;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -8,6 +9,8 @@ import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.notification.NotificationUI;
+
+import org.json.JSONObject;
 
 /**
  * Created by nirni on 11/17/16.
@@ -44,6 +47,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 			// Send the data into the SDK
 			String account = SampleAppStorage.getInstance(this).getAccount();
+			// If SDK is not initialized, try to get brandId from push message.
+			if (TextUtils.isEmpty(account)) {
+				try {
+					account = new JSONObject(remoteMessage.getData().entrySet().iterator().next().getValue()).getString("brandId");
+				} catch (Exception e) {
+					Log.e(TAG, "Failed to get brandId from push message: ", e);
+				}
+			}
 			PushMessage message = LivePerson.handlePushMessage(this, remoteMessage.getData(), account, false);
 
 			//Code snippet to add push UI notification

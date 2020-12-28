@@ -237,7 +237,7 @@
     <color name="structured_content_border_color">@color/lp_light_gray_1</color>
     <dimen name="structured_content_border_width">1dp</dimen>
     <bool name="structured_content_link_as_callback">false</bool>
-    <bool name="structured_content_button_background_enabled">false</bool>
+    <bool name="structured_content_button_background_enabled">true</bool>
     <integer name="structured_content_button_no_text_lines">1</integer>
 
     <string name="lp_google_maps_key" translatable="false" />
@@ -279,4 +279,6 @@
 
     <!--  End of scroll behavior settings.  -->
 
+    <!-- Use last proactive/C2M push message -->
+    <bool name="show_outbound_in_app_message">true</bool>
 </resources>
