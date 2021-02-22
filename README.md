@@ -1,7 +1,7 @@
-# Android Messaging SDK v5.5.0
+# Android Messaging SDK v5.5.1
 
-In-App Messaging SDK v5.5.0 for Android includes the same change as 4.7.0:
-* New logOut API.
+In-App Messaging SDK v5.5.1 for Android includes the same change as 4.7.1:
+* New registerLPPusher API.
 * Bug fixes.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).

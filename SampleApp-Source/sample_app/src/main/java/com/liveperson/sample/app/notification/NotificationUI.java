@@ -9,13 +9,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+
 import androidx.annotation.RequiresApi;
 
 import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.sample.app.MessagingActivity;
 import com.liveperson.sample.app.R;
+import com.liveperson.sample.app.push.PushUtils;
 
 import java.util.List;
 
@@ -155,6 +159,22 @@ public class NotificationUI {
         context.sendBroadcast(intent);
     }
 
+    /**
+     * Example of app icon badge for Huawei.
+     *
+     * @param context     The context
+     * @param badgeNumber The badge number
+     */
+    public static void setBadgeForHuawei(Context context, int badgeNumber) {
+        if (PushUtils.INSTANCE.isHuaweiServicesAvailable(context)) {
+            Bundle extra = new Bundle();
+            extra.putString("package", "com.liveperson.messaging.test");
+            extra.putString("class", "com.liveperson.messaging.test.ui.activities.IntroActivity");
+            extra.putInt("badgenumber", badgeNumber);
+            context.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", null, extra);
+        }
+    }
+
     public static String getLauncherClassName(Context context) {
 
         PackageManager pm = context.getPackageManager();
@@ -183,6 +203,7 @@ public class NotificationUI {
         public void onReceive(Context context, Intent intent) {
             int unreadCounter = intent.getIntExtra(LivePerson.ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_EXTRA, 0);
             NotificationUI.setBadge(context, unreadCounter);
+            NotificationUI.setBadgeForHuawei(context, unreadCounter);
         }
     }
 }
