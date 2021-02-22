@@ -1,7 +1,7 @@
-# Android Messaging SDK v4.7.0
+# Android Messaging SDK v4.7.1
 
-In-App Messaging SDK v4.7.0 for Android includes the Following:
-* New logOut API.
+In-App Messaging SDK v4.7.1 for Android includes the Following:
+* New registerLPPusher API.
 * Bug fixes.
 
 

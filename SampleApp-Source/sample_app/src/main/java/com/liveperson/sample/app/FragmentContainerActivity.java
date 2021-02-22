@@ -17,17 +17,15 @@ import android.widget.LinearLayout;
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.InitLivePersonProperties;
-import com.liveperson.infra.auth.LPAuthenticationParams;
-import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.messaging_ui.fragment.ConversationFragment;
 import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
+import com.liveperson.sample.app.notification.NotificationUI;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.utils.SampleAppUtils;
-import com.liveperson.sample.app.notification.NotificationUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,6 @@ public class FragmentContainerActivity extends AppCompatActivity {
     private static final String TAG = FragmentContainerActivity.class.getSimpleName();
     private static final String LIVEPERSON_FRAGMENT = "liveperson_fragment";
     public static final String KEY_READ_ONLY = "read_only";
-    public static final String KEY_AUTH_TYPE = "auth_type";
     private ConversationFragment mConversationFragment;
 
     @Override
@@ -64,7 +61,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> initFragment());
                 setCallBack();
-                SampleAppUtils.handleGCMRegistration(FragmentContainerActivity.this);
+                SampleAppUtils.handlePusherRegistration(FragmentContainerActivity.this);
                 String firstName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getFirstName();
                 String lastName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getLastName();
                 String phoneNumber = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
@@ -104,19 +101,10 @@ public class FragmentContainerActivity extends AppCompatActivity {
         mConversationFragment = (ConversationFragment) getSupportFragmentManager().findFragmentByTag(LIVEPERSON_FRAGMENT);
         Log.d(TAG, "initFragment. mConversationFragment = "+ mConversationFragment);
         if (mConversationFragment == null) {
-            String authCode = SampleAppStorage.getInstance(FragmentContainerActivity.this).getAuthCode();
-            String publicKey = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPublicKey();
-
-            Log.d(TAG, "initFragment. authCode = "+ authCode);
-            Log.d(TAG, "initFragment. publicKey = "+ publicKey);
-            LPAuthenticationParams authParams = new LPAuthenticationParams(LPAuthenticationType.Companion.fromStorageVal(getIntent().getIntExtra(KEY_AUTH_TYPE, 0)));
-            authParams.setAuthKey(authCode);
-            authParams.addCertificatePinningKey(publicKey);
-
 			CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
             ConversationViewParams params = new ConversationViewParams().setCampaignInfo(campaignInfo).setReadOnlyMode(isReadOnly());
 //            setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
-            mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(authParams,params );
+            mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(SampleAppUtils.createLPAuthParams(this), params);
 
             if (isValidState()) {
 
@@ -215,7 +203,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(size)){
             return;
         }
-        int width = Integer.valueOf(size);
+        int width = Integer.parseInt(size);
         View layout_panel = findViewById(R.id.left_panel_layout);
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout_panel.getLayoutParams();
@@ -233,7 +221,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(size)){
             return;
         }
-        int height = Integer.valueOf(size);
+        int height = Integer.parseInt(size);
         View layout_panel = findViewById(R.id.footer_panel_layout);
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout_panel.getLayoutParams();
