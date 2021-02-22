@@ -15,6 +15,12 @@
         <item>"Sending"</item>
     </string-array>
 
+    <string-array name="supported_auth_types">
+        <item>Authenticated</item>
+        <item>Unauthenticated</item>
+        <item>Sign Up(Deprecated since July 2019)</item>
+    </string-array>
+
     <!-- <string name="lp_date_time_format">mm/dd/yyyy HH:mm</string>-->
     <string name="lp_date_time_format" translatable="false" />
     <string name="lp_date_format" translatable="false" />
