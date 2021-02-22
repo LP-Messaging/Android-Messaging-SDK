@@ -2,14 +2,18 @@ package com.liveperson.sample.app.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.Nullable;
+import android.text.TextUtils;
 import android.widget.Button;
+
+import androidx.annotation.Nullable;
 
 import com.liveperson.infra.BadArgumentException;
 import com.liveperson.infra.CampaignInfo;
+import com.liveperson.infra.auth.LPAuthenticationParams;
+import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.sample.app.FragmentContainerActivity;
 import com.liveperson.sample.app.MessagingActivity;
-import com.liveperson.sample.app.push.fcm.FirebaseRegistrationIntentService;
+import com.liveperson.sample.app.push.PushRegistrationIntentService;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
@@ -18,7 +22,6 @@ import com.liveperson.sample.app.push.fcm.FirebaseRegistrationIntentService;
  * simple as possible.
  */
 public class SampleAppUtils {
-
 
     /**
      * Enable a button and change the text
@@ -31,7 +34,6 @@ public class SampleAppUtils {
         btn.setEnabled(true);
     }
 
-
     /**
      * Disable a button and change the text
      *
@@ -43,37 +45,49 @@ public class SampleAppUtils {
         btn.setEnabled(false);
     }
 
-
-    /**
-     * Call to the {@link FirebaseRegistrationIntentService} class which was taken from Google's
-     * sample app for GCM integration
-     */
-    public static void handleGCMRegistration(Context ctx) {
-        Intent intent = new Intent(ctx, FirebaseRegistrationIntentService.class);
+    public static void handlePusherRegistration(Context ctx) {
+        Intent intent = new Intent(ctx, PushRegistrationIntentService.class);
         ctx.startService(intent);
     }
 
-	/**
-	 * Get the CampaignInfo stored in the SampleAppStorage (if available). If not available return null
-	 * @param context
-	 * @return
-	 */
-	@Nullable
-	public static CampaignInfo getCampaignInfo(Context context) {
-		CampaignInfo campaignInfo = null;
-		if(SampleAppStorage.getInstance(context).getCampaignId() != null || SampleAppStorage.getInstance(context).getEngagementId() != null ||
-				SampleAppStorage.getInstance(context).getSessionId() != null || SampleAppStorage.getInstance(context).getVisitorId() != null){
+    /**
+     * Get the CampaignInfo stored in the SampleAppStorage (if available). If not available return null
+     */
+    @Nullable
+    public static CampaignInfo getCampaignInfo(Context context) {
+        CampaignInfo campaignInfo = null;
+        if (SampleAppStorage.getInstance(context).getCampaignId() != null || SampleAppStorage.getInstance(context).getEngagementId() != null ||
+                SampleAppStorage.getInstance(context).getSessionId() != null || SampleAppStorage.getInstance(context).getVisitorId() != null) {
 
-			try {
-				campaignInfo = new CampaignInfo(SampleAppStorage.getInstance(context).getCampaignId(), SampleAppStorage.getInstance(context).getEngagementId(),
-						SampleAppStorage.getInstance(context).getInteractionContextId(),
-						SampleAppStorage.getInstance(context).getSessionId(), SampleAppStorage.getInstance(context).getVisitorId());
-			} catch (BadArgumentException e) {
-				return null;
-			}
-		}
-		return campaignInfo;
-	}
+            try {
+                campaignInfo = new CampaignInfo(SampleAppStorage.getInstance(context).getCampaignId(), SampleAppStorage.getInstance(context).getEngagementId(),
+                        SampleAppStorage.getInstance(context).getInteractionContextId(),
+                        SampleAppStorage.getInstance(context).getSessionId(), SampleAppStorage.getInstance(context).getVisitorId());
+            } catch (BadArgumentException e) {
+                return null;
+            }
+        }
+        return campaignInfo;
+    }
 
+    /**
+     * Create the {@link LPAuthenticationParams} object.
+     */
+    public static LPAuthenticationParams createLPAuthParams(Context context) {
+        LPAuthenticationType authType = SampleAppStorage.getInstance(context).getAuthenticateType();
+        String authCode = SampleAppStorage.getInstance(context).getAuthCode();
+        String publicKey = SampleAppStorage.getInstance(context).getPublicKey();
 
+        LPAuthenticationParams lpAuthenticationParams = new LPAuthenticationParams(authType);
+        lpAuthenticationParams.setAuthKey(authCode);
+//		lpAuthenticationParams.setHostAppJWT("host app jwt");  // Set the jwt if needed.
+
+        if (!TextUtils.isEmpty(publicKey.trim())) {
+            String[] keys = publicKey.split(",");
+            for (String key : keys) {
+                lpAuthenticationParams.addCertificatePinningKey(key);
+            }
+        }
+        return lpAuthenticationParams;
+    }
 }

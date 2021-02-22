@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion 30
@@ -8,8 +9,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 550
-        versionName "5.5.0"
+        versionCode 551
+        versionName "5.5.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,12 +34,13 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.firebase:firebase-messaging:20.3.0'
+    implementation "com.huawei.hms:push:5.0.4.302" // Huawei push notification
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.12"
 
-    implementation 'com.liveperson.android:lp_messaging_sdk:5.5.0'
+    implementation 'com.liveperson.android:lp_messaging_sdk:5.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

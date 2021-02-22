@@ -157,7 +157,7 @@ public class MessagingActivity extends AppCompatActivity {
 	}
 
 	private void setBadgeButton() {
-		(findViewById(R.id.badge)).setOnClickListener(v -> LivePerson.getUnreadMessagesCount(SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, getLPAuthenticationParams(), new ICallback<Integer, Exception>() {
+		(findViewById(R.id.badge)).setOnClickListener(v -> LivePerson.getUnreadMessagesCount(SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, SampleAppUtils.createLPAuthParams(this), new ICallback<Integer, Exception>() {
 			@Override
 			public void onSuccess(Integer value) {
 				Toast.makeText(MessagingActivity.this, "New badge value: " + value, Toast.LENGTH_LONG).show();
@@ -223,23 +223,6 @@ public class MessagingActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * Save the user input such as: account, first name, last name, phone number and auth code
-	 */
-	private void saveAccountAndUserSettings() {
-		String firstName = mFirstNameView.getText().toString().trim();
-		String lastName = mLastNameView.getText().toString().trim();
-		String phoneNumber = mPhoneNumberView.getText().toString().trim();
-		String authCode = mAuthCodeView.getText().toString().trim();
-		String publicKey = mPublicKey.getText().toString().trim();
-		SampleAppStorage.getInstance(this).setAuthenticateItemPosition(authTypeSpinner.getSelectedItemPosition());
-		SampleAppStorage.getInstance(this).setFirstName(firstName);
-		SampleAppStorage.getInstance(this).setLastName(lastName);
-		SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
-		SampleAppStorage.getInstance(this).setAuthCode(authCode);
-		SampleAppStorage.getInstance(this).setPublicKey(publicKey);
-	}
-
-	/**
 	 * Set the listener on the "open_conversation" button (Activity mode)
 	 */
 	private void initOpenConversationButton() {
@@ -248,7 +231,7 @@ public class MessagingActivity extends AppCompatActivity {
 			//Sample app setting - used to initialize the SDK with "Activity mode" when entering from push notification
 			SampleAppStorage.getInstance(MessagingActivity.this).setSDKMode(SampleAppStorage.SDKMode.ACTIVITY);
 			SampleAppUtils.disableButtonAndChangeText(mOpenConversationButton, getString(R.string.initializing));
-			saveAccountAndUserSettings();
+			storeData();
 			removeNotification();
 			initActivityConversation();
 		});
@@ -262,7 +245,7 @@ public class MessagingActivity extends AppCompatActivity {
 		openFragmentButton.setOnClickListener(v -> {
 			//Sample app setting - used to initialize the SDK with "Fragment mode" when entering from push notification
 			SampleAppStorage.getInstance(MessagingActivity.this).setSDKMode(SampleAppStorage.SDKMode.FRAGMENT);
-			saveAccountAndUserSettings();
+			storeData();
 			removeNotification();
 			MainApplication.getInstance().setShowToastOnCallback(mCallbackToastCheckBox.isChecked());
 			openFragmentContainer();
@@ -286,8 +269,6 @@ public class MessagingActivity extends AppCompatActivity {
 				// in main application class.
 				//setCallBack();
 				MainApplication.getInstance().setShowToastOnCallback(mCallbackToastCheckBox.isChecked());
-				// you can't register pusher before initialization
-				SampleAppUtils.handleGCMRegistration(MessagingActivity.this);
 				runOnUiThread(() -> {
 					openActivity();
 					SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_activity));
@@ -308,12 +289,10 @@ public class MessagingActivity extends AppCompatActivity {
 	 * Start {@link FragmentContainerActivity} that handles the SDK the Messaging SDK and start the SDK in "Fragment Mode"
 	 */
 	private void openFragmentContainer() {
-		storeData();
 		Intent in = new Intent(MessagingActivity.this, FragmentContainerActivity.class);
 		in.putExtra(FragmentContainerActivity.KEY_READ_ONLY, isReadOnly());
 		in.putExtra(NotificationUI.NOTIFICATION_EXTRA, isFromPush);
 		in.putExtra(NotificationUI.NOTIFICATION_MESSAGE_ID, notificationId);
-		in.putExtra(FragmentContainerActivity.KEY_AUTH_TYPE, getAuthType().getStorageVal());
 		startActivity(in);
 		isFromPush = false;
 	}
@@ -322,9 +301,6 @@ public class MessagingActivity extends AppCompatActivity {
 	 * Calling to "showConversation" API
 	 */
 	private void openActivity() {
-
-		storeData();
-
 		if (isFromPush) {
 			LivePerson.setPushNotificationTapped(notificationId);
 			isFromPush = false;
@@ -336,7 +312,7 @@ public class MessagingActivity extends AppCompatActivity {
 				.setCampaignInfo(campaignInfo)
 				.setReadOnlyMode(isReadOnly());
 //        setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
-		LivePerson.showConversation(MessagingActivity.this, getLPAuthenticationParams(), params);
+		LivePerson.showConversation(MessagingActivity.this, SampleAppUtils.createLPAuthParams(this), params);
 
 		ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
 				.setFirstName(mFirstNameView.getText().toString())
@@ -350,6 +326,9 @@ public class MessagingActivity extends AppCompatActivity {
 		Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
 		LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
 		LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
+
+		// you can't register pusher before initialization
+		SampleAppUtils.handlePusherRegistration(MessagingActivity.this);
 	}
 
 	@SuppressWarnings("unused")
@@ -462,7 +441,7 @@ public class MessagingActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		LPAuthenticationParams lpAuthenticationParams = getLPAuthenticationParams();
+		LPAuthenticationParams lpAuthenticationParams = SampleAppUtils.createLPAuthParams(this);
 		if (lpAuthenticationParams.getAuthType() == LPAuthenticationType.AUTH && TextUtils.isEmpty(lpAuthenticationParams.getAuthKey())) {
 			lpAuthenticationParams = null;
 		}
@@ -484,15 +463,6 @@ public class MessagingActivity extends AppCompatActivity {
 	protected void onPause() {
 		unregisterReceiver(unreadMessagesCounter);
 		super.onPause();
-	}
-
-	private LPAuthenticationParams getLPAuthenticationParams() {
-		LPAuthenticationParams authParams = new LPAuthenticationParams(getAuthType());
-		String authCode = mAuthCodeView.getText().toString().trim();
-		String publicKey = mPublicKey.getText().toString().trim();
-		authParams.setAuthKey(authCode);
-		authParams.addCertificatePinningKey(publicKey);
-		return authParams;
 	}
 
 	/**
@@ -518,6 +488,19 @@ public class MessagingActivity extends AppCompatActivity {
 	}
 
 	private void storeData() {
+
+		String firstName = mFirstNameView.getText().toString().trim();
+		String lastName = mLastNameView.getText().toString().trim();
+		String phoneNumber = mPhoneNumberView.getText().toString().trim();
+		String authCode = mAuthCodeView.getText().toString().trim();
+		String publicKey = mPublicKey.getText().toString().trim();
+		SampleAppStorage.getInstance(this).setAuthenticateItemPosition(authTypeSpinner.getSelectedItemPosition());
+		SampleAppStorage.getInstance(this).setAuthenticateTypeOrdinal(getAuthType().ordinal());
+		SampleAppStorage.getInstance(this).setFirstName(firstName);
+		SampleAppStorage.getInstance(this).setLastName(lastName);
+		SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
+		SampleAppStorage.getInstance(this).setAuthCode(authCode);
+		SampleAppStorage.getInstance(this).setPublicKey(publicKey);
 
 		// Store CampaignId if available
 		if (!TextUtils.isEmpty(mCampaignIdEditText.getText().toString())) {

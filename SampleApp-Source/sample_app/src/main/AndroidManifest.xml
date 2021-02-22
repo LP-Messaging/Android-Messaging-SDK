@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+
     <!-- [START gcm_permission] -->
     <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> -->
     <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
@@ -74,14 +76,11 @@
         </service>
 
         <!-- This service is used to receive and register the token when it is refreshed -->
-        <service android:name=".push.fcm.MyFirebaseInstanceIDService">
+        <service android:name=".push.PushRegistrationIntentService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".push.fcm.FirebaseRegistrationIntentService"
-            android:exported="false" />
 
         <receiver android:name=".notification.NotificationUI$BadgeBroadcastReceiver">
             <intent-filter>
@@ -90,6 +89,19 @@
         </receiver>
         <!-- End of FCM -->
 
+        <!-- Huawei Push Kit -->
+        <!--  The name and value in meta-data cannot be modified. -->
+        <meta-data
+            android:name="push_kit_auto_init_enabled"
+            android:value="true" />
+        <service
+            android:name=".push.huawei.LpHmsPushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!--End of Huawei Push Kit -->
     </application>
 
 </manifest>

@@ -128,6 +128,7 @@ public class IntroActivity extends AppCompatActivity {
 
 								// Reset badge
 								NotificationUI.setBadge(IntroActivity.this, 0);
+								NotificationUI.setBadgeForHuawei(IntroActivity.this, 0);
 								// Remove the notification (if any)
 								NotificationUI.hideNotification(IntroActivity.this);
 
