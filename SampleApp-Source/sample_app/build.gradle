@@ -9,9 +9,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 471
-        versionName "4.7.1"
-        vectorDrawables.useSupportLibrary = true
+        versionCode 481
+        versionName "4.8.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -42,7 +41,7 @@ dependencies {
     implementation "com.android.support:gridlayout-v7:28.0.0"
     testImplementation "junit:junit:4.12"
 
-    implementation ("com.liveperson.android:lp_messaging_sdk:4.7.1") {
+    implementation ("com.liveperson.android:lp_messaging_sdk:4.8.1") {
         exclude group: "com.android.support", module: "support-v4"
     }
 }

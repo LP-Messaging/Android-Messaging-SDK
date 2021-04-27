@@ -1,7 +1,8 @@
-# Android Messaging SDK v4.7.1
+# Android Messaging SDK v4.8.1
 
-In-App Messaging SDK v4.7.1 for Android includes the Following:
-* New registerLPPusher API.
+In-App Messaging SDK v4.8.1 for Android includes the Following:
+* Voice & Video support.
+* Accessibility enhancements.
 * Bug fixes.
 
 
