@@ -437,4 +437,25 @@
 
     <!-- Use last proactive/C2M push message -->
     <bool name="show_outbound_in_app_message">true</bool>
+
+    <!-- Voice & Video -->
+    <bool name="lp_enable_voice_video_call">true</bool>
+    <color name="lp_voice_video_invite_icon_tint">#BDBDBD</color>
+    <color name="lp_voice_video_accept_button_tint">#FFFFFF</color>
+    <color name="lp_voice_video_accept_button_background_color">#6AC189</color>
+    <color name="lp_voice_video_decline_button_tint">#D15366</color>
+    <color name="lp_voice_video_decline_button_background_color">@android:color/transparent</color>
+    <color name="lp_voice_video_invitation_bubble_background_color">#f7f7f7</color>
+    <color name="lp_voice_video_text_color">#000000</color>
+
+    <!--  Set to true, sdk will take the original image for lp_video_call_image_icon and lp_voice_call_image_icon drawables  -->
+    <bool name="lp_voice_video_invite_icon_render_original_image">false</bool>
+    <!--  Set to true, sdk will take the original image for lp_voice_video_accept_call_button_image and lp_voice_video_join_call_button_image drawables  -->
+    <bool name="lp_voice_video_accept_button_render_original_image">false</bool>
+    <!--  Set to true, sdk will take the original image for lp_voice_video_decline_call_button_image and lp_voice_video_end_call_button_image drawables  -->
+    <bool name="lp_voice_video_decline_button_render_original_image">false</bool>
+
+    <!--  0: Close (Default). 1: Hangup  -->
+    <integer name="lp_voice_video_end_call_button_type">0</integer>
+
 </resources>
