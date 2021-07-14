@@ -1,9 +1,10 @@
-# Android Messaging SDK v4.8.1
+# Android Messaging SDK v4.9.0
 
-In-App Messaging SDK v4.8.1 for Android includes the Following:
-* Switched to Maven Central.
-* Voice & Video support.
-* Accessibility enhancements.
+In-App Messaging SDK v4.9.0 for Android includes the Following:
+* Support for Date Picker Structured Content.
+* History Control API re-work.
+* Support bold and italic formatting in system messages.
+* Support five additional languages.
 * Bug fixes.
 
 
