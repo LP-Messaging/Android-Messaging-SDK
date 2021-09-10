@@ -1,10 +1,7 @@
-# Android Messaging SDK v4.9.0
+# Android Messaging SDK v4.9.1
 
-In-App Messaging SDK v4.9.0 for Android includes the Following:
-* Support for Date Picker Structured Content.
-* History Control API re-work.
-* Support bold and italic formatting in system messages.
-* Support five additional languages.
+In-App Messaging SDK v4.9.1 for Android includes the Following:
+* Support for Rich Content payload for Proactive push notifications.
 * Bug fixes.
 
 
