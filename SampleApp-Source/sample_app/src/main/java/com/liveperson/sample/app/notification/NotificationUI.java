@@ -12,6 +12,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.annotation.RequiresApi;
 
@@ -42,22 +43,29 @@ public class NotificationUI {
 	public static void showPushNotification(Context ctx, PushMessage pushMessage) {
         Notification.Builder builder = createNotificationBuilder(ctx, CHANNEL_PUSH_NOTIFICATION_ID, "Push Notification", true);
 
-		builder.setContentIntent(getPendingIntent(ctx, pushMessage.getPushMessageId())).
-			setContentTitle(pushMessage.getMessage()).
-			setAutoCancel(true).
-			setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
-			setSmallIcon(R.mipmap.ic_launcher).
-			setNumber(pushMessage.getCurrentUnreadMessagesCounter()).
-			setStyle(new Notification.InboxStyle()
+        builder.setContentIntent(getPendingIntent(ctx, pushMessage.getPushMessageId())).
+            setContentTitle(pushMessage.getMessage()).
+            setAutoCancel(true).
+            setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
+            setSmallIcon(R.mipmap.ic_launcher).
+            setNumber(pushMessage.getCurrentUnreadMessagesCounter()).
+            setStyle(new Notification.InboxStyle()
 
-					.addLine(pushMessage.getFrom())
-					.addLine(pushMessage.getBrandId())
-					.addLine(pushMessage.getConversationId())
-					.addLine(pushMessage.getBackendService())
-					.addLine(pushMessage.getCollapseKey())
-					.addLine("Unread messages : " + LivePerson.getNumUnreadMessages(pushMessage.getBrandId()))
+                    .addLine(TextUtils.isEmpty(pushMessage.getTitle()) ? "" : pushMessage.getMessage())
+                    .addLine(pushMessage.getFrom())
+                    .addLine(pushMessage.getBrandId())
+                    .addLine(pushMessage.getConversationId())
+                    .addLine(pushMessage.getBackendService())
+                    .addLine(pushMessage.getCollapseKey())
+                    .addLine("Unread messages : " + LivePerson.getNumUnreadMessages(pushMessage.getBrandId()))
 
-			);
+            );
+
+        // If payload contains title and message, set title as contentTitle
+        if (!TextUtils.isEmpty(pushMessage.getTitle())) {
+            builder.setContentTitle(pushMessage.getTitle()).
+                    setContentText(pushMessage.getMessage());
+        }
 
 		if (Build.VERSION.SDK_INT >= 21) {
             builder = builder.
