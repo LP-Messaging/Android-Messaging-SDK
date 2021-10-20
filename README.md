@@ -3,6 +3,7 @@
 In-App Messaging SDK v5.8.0 for Android includes the the following:
 - Schedule Slot List allows brand agents to send the Structured Content to consumers to share available appointment slots within in-app messaging.
 - Date Picker now supports Dark Mode.
+- Android 12 Support.
 
 # Bugs Fixed:
 - Crash on initialization/logout.
