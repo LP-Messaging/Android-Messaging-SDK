@@ -1,7 +1,7 @@
 # Android Messaging SDK v4.10.0
 
 In-App Messaging SDK v4.10.0 for Android includes the Following:
-- Schedule Slot List allows brand agents to send the Structured Content to consumers to share available appointment slots within in-app messaging.
+- [Schedule Slot List](https://developers.liveperson.com/mobile-sdk-and-web-templates-schedule-slot-list-template.html) allows brand agents to send the Structured Content to consumers to share available appointment slots within in-app messaging.
 
 # Bugs Fixed:
 - Crash on initialization/logout.
