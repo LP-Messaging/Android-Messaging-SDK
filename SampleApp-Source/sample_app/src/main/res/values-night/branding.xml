@@ -251,4 +251,6 @@
     <color name="feedback_fragment_submit_btn_stroke_enabled">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_submit_btn_stroke_disabled">@color/lp_colorSurface</color>
 
+    <dimen name="quick_reply_button_radius">1dp</dimen>
+
 </resources>

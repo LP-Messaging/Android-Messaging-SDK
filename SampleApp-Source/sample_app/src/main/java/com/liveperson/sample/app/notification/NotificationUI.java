@@ -151,7 +151,11 @@ public class NotificationUI {
             intentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
         }
 
-		return PendingIntent.getActivity(ctx, 0, showIntent, intentFlags);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            intentFlags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
+        return PendingIntent.getActivity(ctx, 0, showIntent, intentFlags);
     }
 
     /************************ Example of app Icon Badge - For Samsung *******************************/
@@ -174,13 +178,14 @@ public class NotificationUI {
      * @param badgeNumber The badge number
      */
     public static void setBadgeForHuawei(Context context, int badgeNumber) {
-        if (PushUtils.INSTANCE.isHuaweiServicesAvailable(context)) {
-            Bundle extra = new Bundle();
-            extra.putString("package", "com.liveperson.messaging.test");
-            extra.putString("class", "com.liveperson.messaging.test.ui.activities.IntroActivity");
-            extra.putInt("badgenumber", badgeNumber);
-            context.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", null, extra);
-        }
+        // Uncomment this once Huawei releases new version with API 31 support
+//        if (PushUtils.INSTANCE.isHuaweiServicesAvailable(context)) {
+//            Bundle extra = new Bundle();
+//            extra.putString("package", "com.liveperson.messaging.test");
+//            extra.putString("class", "com.liveperson.messaging.test.ui.activities.IntroActivity");
+//            extra.putInt("badgenumber", badgeNumber);
+//            context.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", null, extra);
+//        }
     }
 
     public static String getLauncherClassName(Context context) {
