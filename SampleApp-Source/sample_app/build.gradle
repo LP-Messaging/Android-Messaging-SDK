@@ -4,13 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.huawei.agconnect'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 580
-        versionName "5.8.0"
+        targetSdkVersion 31
+        versionCode 590
+        versionName "5.9.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,13 +33,13 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.firebase:firebase-messaging:20.3.0'
-    implementation "com.huawei.hms:push:5.0.4.302" // Huawei push notification
+//    implementation "com.huawei.hms:push:5.0.4.302" // Huawei push notification
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.12"
 
-    implementation 'com.liveperson.android:lp_messaging_sdk:5.8.0'
+    implementation 'com.liveperson.android:lp_messaging_sdk:5.9.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
