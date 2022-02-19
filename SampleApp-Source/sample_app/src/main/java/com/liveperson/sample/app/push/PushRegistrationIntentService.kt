@@ -6,14 +6,14 @@ import android.content.Intent
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.huawei.agconnect.config.AGConnectServicesConfig
-import com.huawei.hms.aaid.HmsInstanceId
-import com.huawei.hms.common.ApiException
+//import com.huawei.agconnect.config.AGConnectServicesConfig
+//import com.huawei.hms.aaid.HmsInstanceId
+//import com.huawei.hms.common.ApiException
 import com.liveperson.infra.ICallback
 import com.liveperson.infra.PushType
 import com.liveperson.messaging.sdk.api.LivePerson
 import com.liveperson.sample.app.push.PushUtils.isGooglePlayServicesAvailable
-import com.liveperson.sample.app.push.PushUtils.isHuaweiServicesAvailable
+//import com.liveperson.sample.app.push.PushUtils.isHuaweiServicesAvailable
 import com.liveperson.sample.app.utils.SampleAppStorage
 import com.liveperson.sample.app.utils.SampleAppUtils
 
@@ -33,19 +33,21 @@ class PushRegistrationIntentService : IntentService(TAG) {
 				val token = task.result!!.token
 				registerLPPusher(baseContext, token, PushType.FCM)
 			})
-		} else if (isHuaweiServicesAvailable(this)) {
-			object : Thread() {
-				override fun run() {
-					try {
-						val appId = AGConnectServicesConfig.fromContext(baseContext).getString("client/app_id")
-						val token = HmsInstanceId.getInstance(baseContext).getToken(appId, "HCM")
-						registerLPPusher(baseContext, token, PushType.HUAWEI)
-					} catch (e: ApiException) {
-						Log.e(TAG, "get token failed, $e")
-					}
-				}
-			}.start()
 		}
+		// Uncomment this once Huawei releases new version with API 31 support
+//		else if (isHuaweiServicesAvailable(this)) {
+//			object : Thread() {
+//				override fun run() {
+//					try {
+//						val appId = AGConnectServicesConfig.fromContext(baseContext).getString("client/app_id")
+//						val token = HmsInstanceId.getInstance(baseContext).getToken(appId, "HCM")
+//						registerLPPusher(baseContext, token, PushType.HUAWEI)
+//					} catch (e: ApiException) {
+//						Log.e(TAG, "get token failed, $e")
+//					}
+//				}
+//			}.start()
+//		}
 	}
 
 	private fun registerLPPusher(context: Context, token: String, pushType: PushType) {

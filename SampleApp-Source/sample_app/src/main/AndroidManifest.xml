@@ -34,7 +34,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".IntroActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +54,8 @@
             android:name=".FragmentContainerActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".DeepLinkActivity"
-            tools:ignore="AppLinkUrlError">
+            tools:ignore="AppLinkUrlError"
+            android:exported="true">
             <!-- Error ignored because our sample app doesn't need to be indexed by Google for any reason. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -69,20 +71,23 @@
 
         <!-- FCM -->
         <!-- This service is used to receive any incoming message -->
-        <service android:name=".push.fcm.MyFirebaseMessagingService">
+        <service android:name=".push.fcm.MyFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <!-- This service is used to receive and register the token when it is refreshed -->
-        <service android:name=".push.PushRegistrationIntentService">
+        <service android:name=".push.PushRegistrationIntentService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <receiver android:name=".notification.NotificationUI$BadgeBroadcastReceiver">
+        <receiver android:name=".notification.NotificationUI$BadgeBroadcastReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="ACTION_LP_UPDATE_NUM_UNREAD_MESSAGES_ACTION" />
             </intent-filter>
@@ -94,13 +99,13 @@
         <meta-data
             android:name="push_kit_auto_init_enabled"
             android:value="true" />
-        <service
-            android:name=".push.huawei.LpHmsPushService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".push.huawei.LpHmsPushService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
         <!--End of Huawei Push Kit -->
     </application>
 
