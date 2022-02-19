@@ -458,4 +458,7 @@
     <!--  0: Close (Default). 1: Hangup  -->
     <integer name="lp_voice_video_end_call_button_type">0</integer>
 
+    <!--  When set to true, SDK won't show default welcome message when cleared history -->
+    <bool name="lp_hide_welcome_message_on_clear_history">false</bool>
+
 </resources>
