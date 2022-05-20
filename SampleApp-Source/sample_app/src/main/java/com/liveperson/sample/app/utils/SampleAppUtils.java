@@ -80,6 +80,8 @@ public class SampleAppUtils {
 
         LPAuthenticationParams lpAuthenticationParams = new LPAuthenticationParams(authType);
         lpAuthenticationParams.setAuthKey(authCode);
+        lpAuthenticationParams.setPerformStepUp(authType.equals(LPAuthenticationType.AUTH) &&
+                SampleAppStorage.getInstance(context).getPerformStepUpAuthentication());
 //		lpAuthenticationParams.setHostAppJWT("host app jwt");  // Set the jwt if needed.
 
         if (!TextUtils.isEmpty(publicKey.trim())) {
