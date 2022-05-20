@@ -79,6 +79,7 @@ public class MessagingActivity extends AppCompatActivity {
 	private EditText mEngagementContextIdEditText;
 	private boolean isFromPush;
 	private String notificationId;
+	private CheckBox mStepupAuthenCheckBox;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +143,8 @@ public class MessagingActivity extends AppCompatActivity {
 
 		mEngagementContextIdEditText = findViewById(R.id.engagement_context_id);
 		mEngagementContextIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_CONTEXT_ID_KEY));
+
+		mStepupAuthenCheckBox = findViewById(R.id.check_box_stepup_authen);
 
 		updateTime();
 		initLocaleSpinner();
@@ -501,6 +504,7 @@ public class MessagingActivity extends AppCompatActivity {
 		SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
 		SampleAppStorage.getInstance(this).setAuthCode(authCode);
 		SampleAppStorage.getInstance(this).setPublicKey(publicKey);
+		SampleAppStorage.getInstance(this).setPerformStepUpAuthentication(mStepupAuthenCheckBox.isChecked());
 
 		// Store CampaignId if available
 		if (!TextUtils.isEmpty(mCampaignIdEditText.getText().toString())) {

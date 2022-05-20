@@ -368,8 +368,12 @@
     <string name="client_only_masking_regex" translatable="false" />
     <string name="real_time_masking_regex" translatable="false" />
 
+    <!-- Menu options configuration -->
     <!--Clear History-->
     <bool name="clear_history_show_confirm_dialog">true</bool>
+    <bool name="lp_urgency_menu_item_visible">true</bool>
+    <bool name="lp_resolve_conversation_menu_item_visible">true</bool>
+    <!-- Menu options configuration -->
 
     <!--Photo sharing-->
     <bool name="enable_photo_sharing">true</bool>
@@ -460,5 +464,10 @@
 
     <!--  When set to true, SDK won't show default welcome message when cleared history -->
     <bool name="lp_hide_welcome_message_on_clear_history">false</bool>
+
+    <!-- Message status/timestamp configurations -->
+    <bool name="lp_enable_read_receipts">true</bool>
+    <bool name="lp_enable_timestamps">true</bool>
+    <dimen name="lp_timestamps_font_size">12sp</dimen>
 
 </resources>

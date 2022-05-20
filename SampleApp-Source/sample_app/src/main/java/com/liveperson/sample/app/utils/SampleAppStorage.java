@@ -22,6 +22,8 @@ public class SampleAppStorage {
     private static final String AUTHENTICATE_ITEM_POSITION = "authenticate_item_position";
     private static final String AUTHENTICATE_TYPE_ORDINAL = "AUTHENTICATE_TYPE_ORDINAL";
 
+    private static final String PERFORM_STEP_UP_AUTHENTICATION = "PERFORM_STEP_UP_AUTHENTICATION";
+
     // Messaging
     private static final String FIRST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
@@ -199,4 +201,12 @@ public class SampleAppStorage {
 	public void setInteractionContextId(String interactionContextId) {
 		mInteractionContextId = interactionContextId;
 	}
+
+    public void setPerformStepUpAuthentication(boolean enable) {
+        mDefaultSharedPreferences.edit().putBoolean(PERFORM_STEP_UP_AUTHENTICATION, enable).apply();
+    }
+
+    public boolean getPerformStepUpAuthentication() {
+        return mDefaultSharedPreferences.getBoolean(PERFORM_STEP_UP_AUTHENTICATION, false);
+    }
 }

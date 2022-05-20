@@ -318,6 +318,14 @@
 
         </androidx.gridlayout.widget.GridLayout>
 
+        <CheckBox
+            android:id="@+id/check_box_stepup_authen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_margin="10dp"
+            android:text="Enable StepUp Authen" />
+
         <TextView
             android:id="@+id/sdk_version"
             android:layout_width="wrap_content"
