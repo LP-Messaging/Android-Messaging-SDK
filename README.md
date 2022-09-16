@@ -11,7 +11,7 @@ SDK now supports file sharing image thumbnail obfuscation to protect PII of a co
 - Failed to detect email address in a message.
 - SDK fails to display link preview for some of the valid links.
 
-### Accessibility enhancements
+# Accessibility enhancements
 Improvements on the TalkBack accessible experience for vision-impaired users.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
