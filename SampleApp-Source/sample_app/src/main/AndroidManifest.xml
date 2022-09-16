@@ -17,6 +17,7 @@
     <!--Required for Audio Messaging and Image Sharing-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 
