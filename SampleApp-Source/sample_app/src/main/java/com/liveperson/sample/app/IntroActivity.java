@@ -1,8 +1,19 @@
 package com.liveperson.sample.app;
 
+import android.Manifest;
 import android.content.Intent;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -143,6 +154,7 @@ public class IntroActivity extends AppCompatActivity {
 
 			}
 		});
+		requestNotificationPermission();
 	}
 
 	private void enableLogoutButton(final boolean enable) {
@@ -166,5 +178,47 @@ public class IntroActivity extends AppCompatActivity {
 	private void storeParams(){
 		SampleAppStorage.getInstance(IntroActivity.this).setAccount(mAccountIdEditText.getText().toString());
 		SampleAppStorage.getInstance(IntroActivity.this).setAppInstallId(mAppinstallidEditText.getText().toString());
+	}
+
+	private void requestNotificationPermission() {
+		if (Build.VERSION.SDK_INT >= 33) {
+			if (ContextCompat.checkSelfPermission(
+					this, Manifest.permission.ACCESS_NOTIFICATION_POLICY) == PackageManager.PERMISSION_GRANTED) {
+				// Permission already granted.
+				return;
+			}
+		} else {
+			// Prior Android versions don't need to request push notification permissions
+			return;
+		}
+		ActivityResultLauncher<String> requestPermissionLauncher =
+				registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+					if (isGranted) {
+						// Permission is granted. Continue the action or workflow in your
+						// app.
+					} else {
+						// Explain to the user that the feature is unavailable because the
+						// features requires a permission that the user has denied. At the
+						// same time, respect the user's decision. Don't link to system
+						// settings in an effort to convince the user to change their
+						// decision.
+						new AlertDialog.Builder(this)
+								.setIcon(R.mipmap.ic_launcher)
+								.setTitle(getResources().getString(R.string.notification_permission_dialog_title))
+								.setMessage(getResources().getString(R.string.notification_permission_dialog_message))
+								.setCancelable(false)
+								.setNegativeButton("Don't Allow", null)
+								.setPositiveButton("Allow", (dialog, which) -> {
+									Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									Uri uri = Uri.fromParts("package", getPackageName(), null);
+									intent.setData(uri);
+									startActivity(intent);
+								})
+								.show();
+					}
+				});
+
+		requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
 	}
 }

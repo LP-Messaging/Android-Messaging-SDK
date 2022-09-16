@@ -28,5 +28,7 @@
     <string name="lp_ttr_message_off_hours_time_zone_id" translatable="false" />
 
     <string name="logout_failed" translatable="false">Logout Failed!</string>
+    <string name="notification_permission_dialog_title" translatable="false">Push Notifications</string>
+    <string name="notification_permission_dialog_message" translatable="false">Go to settings to allow app to receive notifications?</string>
 
 </resources>
