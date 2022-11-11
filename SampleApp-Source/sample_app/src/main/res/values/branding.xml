@@ -470,4 +470,6 @@
     <bool name="lp_enable_timestamps">true</bool>
     <dimen name="lp_timestamps_font_size">12sp</dimen>
 
+    <bool name="lp_pusher_clear_badge_count">false</bool>
+
 </resources>
