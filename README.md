@@ -1,4 +1,4 @@
-# Android Messaging SDK v5.12.1
+# Android Messaging SDK v5.13.0
 
 Android Mobile Messaging SDK version 5.13.0 release includes new features, enhancements and bug fixes.
 
