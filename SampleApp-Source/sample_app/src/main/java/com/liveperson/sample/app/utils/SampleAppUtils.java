@@ -83,7 +83,10 @@ public class SampleAppUtils {
         lpAuthenticationParams.setPerformStepUp(authType.equals(LPAuthenticationType.AUTH) &&
                 SampleAppStorage.getInstance(context).getPerformStepUpAuthentication());
 //		lpAuthenticationParams.setHostAppJWT("host app jwt");  // Set the jwt if needed.
-
+/*
+        This API is available from v5.14.0
+        lpAuthenticationParams.setIssuerDisplayName("issuer display name");
+*/
         if (!TextUtils.isEmpty(publicKey.trim())) {
             String[] keys = publicKey.split(",");
             for (String key : keys) {
