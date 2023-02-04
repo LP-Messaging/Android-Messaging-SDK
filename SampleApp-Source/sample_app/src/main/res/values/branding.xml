@@ -236,7 +236,7 @@
     <color name="sc_buttonElement_background_color">@color/lp_colorSurface</color>
     <color name="sc_textElement_text_color">@color/lp_onAgentMessage_bubble_color</color>
     <color name="sc_textElement_background_color">@color/lp_transparent</color>
-    <bool name="structured_content_button_background_enabled">false</bool>
+    <bool name="structured_content_button_background_enabled">true</bool>
 
     <!-- Quick Replies -->
     <integer name="lp_quick_replies_button_text_limit">25</integer>

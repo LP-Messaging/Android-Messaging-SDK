@@ -1,26 +1,21 @@
-# Android Messaging SDK v5.13.0
+**Release date:** February 03, 2023
 
-Android Mobile Messaging SDK version 5.13.0 release includes new features, enhancements and bug fixes.
+# Android Messaging SDK v5.14.0
+
+Android Mobile Messaging SDK version 5.14.0 release includes new feature and bug fixes.
 
 ## New features
 
-### Capability to turn on/off voice sharing at a run-time
-- Provide API to enable/disable audio messaging at a run-time by using [enable_voice_sharing](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#enable_voice_sharing) configuration.
-```java
-LPConfig.set(R.bool.enable_voice_sharing, true)
-// Or
-LPConfig.set(R.bool.enable_voice_sharing, false)
-```
+### Support for Multiple Consumer IDPs
 
-### Capability to clear all unread badge counts from Pusher irrespective of the current conversation displayed
-- Expose a branding/configuration of type boolean ([lp_pusher_clear_badge_count](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_pusher_clear_badge_count)) that when set by host/brand app, SDK will determine whether to clear all unread badge counts from Pusher.
+Brands have the ability to configure multiple Consumer Identity Providers (know as - Authentication Server). SDK now supports consumer authentication based upon different brand identities information provided by the host application. For more information, follow [feature documentation](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-advanced-features-multiple-consumer-idps.html).
 
-## Accessibility enhancements
-Improvements on the TalkBack accessible experience for vision-impaired users.
 
 ## Bugs fixed
-- Agent typing indicator isn't removed on conversation close.
-- Consumer typos render as links.
+
+- Wrong message delivery status of messages after consumer re-login.
+- SDK crashes randomly while upgrading from older versions to the latest.
+- Fixed text gets truncated when increasing the device fonts size.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
 
