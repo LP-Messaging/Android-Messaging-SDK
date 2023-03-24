@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -112,7 +113,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
 				// Pending intent for image foreground service
 				Intent notificationIntent = new Intent(this, FragmentContainerActivity.class);
 				notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+                int intentFlags = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    intentFlags = PendingIntent.FLAG_IMMUTABLE;
+                }
+				PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, intentFlags);
 				LivePerson.setImageServicePendingIntent(pendingIntent);
 
 				// Notification builder for image upload foreground service
