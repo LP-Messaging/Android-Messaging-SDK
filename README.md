@@ -1,14 +1,12 @@
-**Release date:** March 24, 2023
+**Release date:** May 4, 2023
 
-# Android Messaging SDK v5.15.0
+# Android Messaging SDK v5.15.1
 
-Android Mobile Messaging SDK version 5.15.0 release includes bug fixes.
+Android Mobile Messaging SDK version 5.15.1 release includes a bug fix.
 
 ## Bugs fixed
 
-- SDK fails to perform step-up authentication when tried to authenticate consumer from background before displaying conversation window.
-- 'LpAlertDialogCustom' style is not being used by all AlertDialogs within SDK.
-- Crash on conversation screen.
+- App Crashes when initializing Liveperson SDK through a separate process.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
 
