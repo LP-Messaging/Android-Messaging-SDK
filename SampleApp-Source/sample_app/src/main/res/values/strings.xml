@@ -28,7 +28,20 @@
     <string name="lp_ttr_message_off_hours_time_zone_id" translatable="false" />
 
     <string name="logout_failed" translatable="false">Logout Failed!</string>
+
     <string name="notification_permission_dialog_title" translatable="false">Push Notifications</string>
     <string name="notification_permission_dialog_message" translatable="false">Go to settings to allow app to receive notifications?</string>
+
+    <string name="title_dynamic_welcome_message">Dynamic Welcome Message</string>
+    <string name="hint_welcome_message">Welcome Message</string>
+    <string name="hint_quick_reply_actions">Quick Reply actions</string>
+    <string name="hint_option_text">Option text</string>
+    <string name="hint_timeout">Timeout</string>
+    <string name="heading_welcome_message_frequency">Welcome Message frequency</string>
+    <string name="text_first_conversation_option">First conversation</string>
+    <string name="text_every_conversation_option">Every conversation</string>
+    <string name="text_action_apply">Apply</string>
+    <string name="title_action_set_welcome_message">Set welcome message</string>
+    <string name="toast_message_max_options_quanity">Maximum of message options quantity was reached.</string>
 
 </resources>

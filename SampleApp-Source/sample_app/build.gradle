@@ -10,7 +10,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 5170
-        versionName "5.17.0"
+        versionName "5.18.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,7 +39,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.12"
 
-    implementation 'com.liveperson.android:lp_messaging_sdk:5.17.0'
+    implementation 'com.liveperson.android:lp_messaging_sdk:5.18.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -6,15 +6,20 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
@@ -25,6 +30,7 @@ import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
+import com.liveperson.sample.app.dialogs.DynamicWelcomeMessageDialog;
 import com.liveperson.sample.app.notification.NotificationUI;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.utils.SampleAppUtils;
@@ -43,6 +49,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
     private static final String LIVEPERSON_FRAGMENT = "liveperson_fragment";
     public static final String KEY_READ_ONLY = "read_only";
     private ConversationFragment mConversationFragment;
+
+    private static final String TAG_WELCOME_MESSAGE_DIALOG = "dialog.welcome.id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +76,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 String lastName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getLastName();
                 String phoneNumber = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
 
-				ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
-						.setFirstName(firstName)
-						.setLastName(lastName)
-						.setPhoneNumber(phoneNumber)
-						.build();
+                ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
+                        .setFirstName(firstName)
+                        .setLastName(lastName)
+                        .setPhoneNumber(phoneNumber)
+                        .build();
                 LivePerson.setUserProfile(consumerProfile);
 
                 //Constructing the notification builder for the upload/download foreground service and passing it to the SDK.
@@ -103,44 +111,44 @@ public class FragmentContainerActivity extends AppCompatActivity {
         mConversationFragment = (ConversationFragment) getSupportFragmentManager().findFragmentByTag(LIVEPERSON_FRAGMENT);
         Log.d(TAG, "initFragment. mConversationFragment = "+ mConversationFragment);
         if (mConversationFragment == null) {
-			CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
+            CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
             ConversationViewParams params = new ConversationViewParams().setCampaignInfo(campaignInfo).setReadOnlyMode(isReadOnly());
 //            setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
             mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(SampleAppUtils.createLPAuthParams(this), params);
 
             if (isValidState()) {
 
-				// Pending intent for image foreground service
-				Intent notificationIntent = new Intent(this, FragmentContainerActivity.class);
-				notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // Pending intent for image foreground service
+                Intent notificationIntent = new Intent(this, FragmentContainerActivity.class);
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 int intentFlags = 0;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     intentFlags = PendingIntent.FLAG_IMMUTABLE;
                 }
-				PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, intentFlags);
-				LivePerson.setImageServicePendingIntent(pendingIntent);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, intentFlags);
+                LivePerson.setImageServicePendingIntent(pendingIntent);
 
-				// Notification builder for image upload foreground service
-				Notification.Builder uploadBuilder = 	new Notification.Builder(this.getApplicationContext());
-				Notification.Builder downloadBuilder = 	new Notification.Builder(this.getApplicationContext());
-				uploadBuilder.setContentTitle("Uploading image")
-						.setSmallIcon(android.R.drawable.arrow_up_float)
-						.setContentIntent(pendingIntent)
-						.setProgress(0, 0, true);
+                // Notification builder for image upload foreground service
+                Notification.Builder uploadBuilder = 	new Notification.Builder(this.getApplicationContext());
+                Notification.Builder downloadBuilder = 	new Notification.Builder(this.getApplicationContext());
+                uploadBuilder.setContentTitle("Uploading image")
+                        .setSmallIcon(android.R.drawable.arrow_up_float)
+                        .setContentIntent(pendingIntent)
+                        .setProgress(0, 0, true);
 
-				downloadBuilder.setContentTitle("Downloading image")
-						.setSmallIcon(android.R.drawable.arrow_down_float)
-						.setContentIntent(pendingIntent)
-						.setProgress(0, 0, true);
+                downloadBuilder.setContentTitle("Downloading image")
+                        .setSmallIcon(android.R.drawable.arrow_down_float)
+                        .setContentIntent(pendingIntent)
+                        .setProgress(0, 0, true);
 
-				LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
-				LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
+                LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
+                LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
 
-				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.add(R.id.custom_fragment_container, mConversationFragment, LIVEPERSON_FRAGMENT).commitAllowingStateLoss();
             }
         }else{
-             attachFragment();
+            attachFragment();
         }
     }
 
@@ -179,6 +187,17 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
+    private void setCallBack() {
+        //register via callback, also available to listen via BroadCastReceiver in Main Application
+        MainApplication.getInstance().registerToLivePersonCallbacks();
+    }
+
+    private void showWelcomeMessageSettings() {
+        String account = SampleAppStorage.getInstance(this).getAccount();
+        DynamicWelcomeMessageDialog dialog = DynamicWelcomeMessageDialog.newInstance(account);
+        dialog.show(getSupportFragmentManager(), TAG_WELCOME_MESSAGE_DIALOG);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -187,19 +206,32 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
-    private void setCallBack() {
-        //register via callback, also available to listen via BroadCastReceiver in Main Application
-        MainApplication.getInstance().registerToLivePersonCallbacks();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.fragment_container_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
-    public void onBackPressed() {
-        if (mConversationFragment == null || !mConversationFragment.onBackPressed()) {
-            super.onBackPressed();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.item_add_welcome_message) {
+            showWelcomeMessageSettings();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_WELCOME_MESSAGE_DIALOG);
+        if (fragment != null) {
+            super.onBackPressed();
+        } else if (mConversationFragment == null || !mConversationFragment.onBackPressed()) {
+            super.onBackPressed();
+        }
+    }
 
     /**
      * Relevant only for tablet. called from XML
