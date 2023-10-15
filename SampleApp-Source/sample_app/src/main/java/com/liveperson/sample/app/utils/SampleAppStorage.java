@@ -32,6 +32,8 @@ public class SampleAppStorage {
     private static final String SDK_MODE = "sdk_mode";
     private static final String BRAND_ID = "brand_id";
     private static final String PUBLIC_KEY = "public_key";
+    private static final String CODE_VERIFIER = "CODE_VERIFIER";
+    private static final String PKCE_ENABLED = "PKCE_ENABLED";
 
     // Monitoring
 	private static final String APP_INSTALL_ID = "app_install_id";
@@ -94,6 +96,22 @@ public class SampleAppStorage {
 
     public void setAuthCode(String authCode) {
         mDefaultSharedPreferences.edit().putString(AUTH_CODE, authCode).apply();
+    }
+
+    public void setCodeVerifier(String code_verifier) {
+        mDefaultSharedPreferences.edit().putString(CODE_VERIFIER, code_verifier).apply();
+    }
+
+    public String getCodeVerifier() {
+        return mDefaultSharedPreferences.getString(CODE_VERIFIER, null);
+    }
+
+    public void setPkceEnabled(boolean isChecked) {
+        mDefaultSharedPreferences.edit().putBoolean(PKCE_ENABLED, isChecked).apply();
+    }
+
+    public boolean isPkceEnabled() {
+        return mDefaultSharedPreferences.getBoolean(PKCE_ENABLED, false);
     }
 
     public void setPublicKey(String publicKey) {

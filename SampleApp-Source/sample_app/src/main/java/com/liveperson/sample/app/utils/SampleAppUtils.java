@@ -11,9 +11,15 @@ import com.liveperson.infra.BadArgumentException;
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.auth.LPAuthenticationType;
+import com.liveperson.infra.model.PKCEParams;
 import com.liveperson.sample.app.FragmentContainerActivity;
 import com.liveperson.sample.app.MessagingActivity;
 import com.liveperson.sample.app.push.PushRegistrationIntentService;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
@@ -22,6 +28,10 @@ import com.liveperson.sample.app.push.PushRegistrationIntentService;
  * simple as possible.
  */
 public class SampleAppUtils {
+
+    static final String AUTHORIZE_ENDPOINT = "your_authorize_endpoint"; // Replace with the actual endpoint
+    static final String CLIENT_ID = "your_client_id"; // Replace with the actual client ID
+    static final String REDIRECT_URI = "your_redirect_uri"; // Replace with the actual redirect URI
 
     /**
      * Enable a button and change the text
@@ -83,10 +93,18 @@ public class SampleAppUtils {
         lpAuthenticationParams.setPerformStepUp(authType.equals(LPAuthenticationType.AUTH) &&
                 SampleAppStorage.getInstance(context).getPerformStepUpAuthentication());
 //		lpAuthenticationParams.setHostAppJWT("host app jwt");  // Set the jwt if needed.
-/*
-        This API is available from v5.14.0
-        lpAuthenticationParams.setIssuerDisplayName("issuer display name");
-*/
+
+//        This API is available from v5.14.0
+//        lpAuthenticationParams.setIssuerDisplayName("issuer display name");
+
+        //
+        if (SampleAppStorage.getInstance(context).isPkceEnabled() &&
+                SampleAppStorage.getInstance(context).getCodeVerifier() != null) {
+            lpAuthenticationParams.setCodeVerifier(
+                    SampleAppStorage.getInstance(context).getCodeVerifier()
+            );
+            lpAuthenticationParams.setHostAppRedirectUri(REDIRECT_URI);
+        }
         if (!TextUtils.isEmpty(publicKey.trim())) {
             String[] keys = publicKey.split(",");
             for (String key : keys) {
@@ -94,5 +112,29 @@ public class SampleAppUtils {
             }
         }
         return lpAuthenticationParams;
+    }
+
+    public static String generateAuthorizeEndpoint(PKCEParams pkceParams) throws UnsupportedEncodingException {
+        Map<String, String> authParams = new HashMap<>();
+        authParams.put("client_id", CLIENT_ID);
+        authParams.put("redirect_uri", REDIRECT_URI);
+        authParams.put("response_type", "code");
+        authParams.put("scope", "email openid profile");
+        authParams.put("code_challenge", pkceParams.getCodeChallenge());
+        authParams.put("code_challenge_method", pkceParams.getCodeChallengeMethod());
+
+        StringBuilder paramBuilder = new StringBuilder();
+        for (Map.Entry<String, String> entry : authParams.entrySet()) {
+            if (paramBuilder.length() > 0) {
+                paramBuilder.append("&");
+            }
+            paramBuilder.append(urlEncode(entry.getKey()) + "=" + urlEncode(entry.getValue()));
+        }
+
+        return AUTHORIZE_ENDPOINT + "?" + paramBuilder;
+    }
+
+    private static String urlEncode(String value) throws UnsupportedEncodingException {
+        return URLEncoder.encode(value, "UTF-8");
     }
 }

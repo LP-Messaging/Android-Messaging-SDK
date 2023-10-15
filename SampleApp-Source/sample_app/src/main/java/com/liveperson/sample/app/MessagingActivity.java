@@ -8,20 +8,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
@@ -31,14 +36,18 @@ import com.liveperson.infra.LPConversationsHistoryStateToDisplay;
 import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
+import com.liveperson.infra.callbacks.PKCEParamsCallBack;
 import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
+import com.liveperson.infra.model.PKCEParams;
+import com.liveperson.infra.model.errors.PkceGenerateError;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.notification.NotificationUI;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.utils.SampleAppUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,6 +89,7 @@ public class MessagingActivity extends AppCompatActivity {
 	private boolean isFromPush;
 	private String notificationId;
 	private CheckBox mStepupAuthenCheckBox;
+	private SwitchCompat mPkceSwitcher;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +107,21 @@ public class MessagingActivity extends AppCompatActivity {
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		handlePush(intent);
+
+		// handle auth login
+		handleAuthLoginDeepLink(intent);
+	}
+
+	private void handleAuthLoginDeepLink(Intent intent) {
+		if (intent != null && intent.getDataString() != null) {
+			Uri callbackURI = Uri.parse(intent.getDataString());
+			Log.d(TAG, "callbackURI " + callbackURI.toString());
+			String code = callbackURI.getQueryParameter("code");
+			Log.d(TAG, "code " + code);
+			if (code != null && code.length() > 0) {
+				SampleAppStorage.getInstance(this).setAuthCode(code);
+			}
+		}
 	}
 
 	/**
@@ -150,6 +175,9 @@ public class MessagingActivity extends AppCompatActivity {
 		initLocaleSpinner();
 
 		setBadgeButton();
+
+		//pkce
+		initPkce();
 	}
 
 	private void initAuthTypeSpinner() {
@@ -173,6 +201,48 @@ public class MessagingActivity extends AppCompatActivity {
 			}
 		}));
 	}
+
+	private void initPkce() {
+		Button generate = findViewById(R.id.generate_pkce_param);
+		generate.setOnClickListener(v -> {
+			generatePkce();
+		});
+
+		mPkceSwitcher = findViewById(R.id.enable_pkce);
+		mPkceSwitcher.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			SampleAppStorage.getInstance(this).setPkceEnabled(isChecked);
+		});
+	}
+
+	private void generatePkce() {
+		PKCEParamsCallBack callback = new PKCEParamsCallBack() {
+			@Override
+			public void onPKCEGenerateSuccess(@NonNull PKCEParams pkceParams) {
+				Log.d(TAG, pkceParams.toString());
+				// store code verifier to use later
+				SampleAppStorage.getInstance(getBaseContext()).setCodeVerifier(pkceParams.getCodeVerifier());
+
+				// generate auth endpoint and open using system browser to login
+				try {
+					String authEndpoint = SampleAppUtils.generateAuthorizeEndpoint(pkceParams);
+					Log.d(TAG, "authEndpoint: " + authEndpoint);
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authEndpoint));
+					startActivity(browserIntent);
+				} catch (UnsupportedEncodingException e) {
+					Log.e(TAG, "Exception when generate auth endpoint: " + e.getMessage());
+				}
+			}
+
+			@Override
+			public void onPKCEGenerateFailed(@NonNull PkceGenerateError pkceGenerateError) {
+
+			}
+		};
+
+		LivePerson.getPKCEParams(this, SampleAppUtils.createLPAuthParams(this), callback);
+
+	}
+
 
 	private void updateTime() {
 		Locale locale = getLocale();
@@ -444,22 +514,30 @@ public class MessagingActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		LPAuthenticationParams lpAuthenticationParams = SampleAppUtils.createLPAuthParams(this);
-		if (lpAuthenticationParams.getAuthType() == LPAuthenticationType.AUTH && TextUtils.isEmpty(lpAuthenticationParams.getAuthKey())) {
-			lpAuthenticationParams = null;
-		}
-		LivePerson.getUnreadMessagesCount(SampleAppStorage.getInstance(MessagingActivity.this).getAccount(), lpAuthenticationParams, new ICallback<Integer, Exception>() {
-			@Override
-			public void onSuccess(Integer count) {
-				updateToolBar(count);
-			}
+//		LPAuthenticationParams lpAuthenticationParams = SampleAppUtils.createLPAuthParams(this);
+//		if (lpAuthenticationParams.getAuthType() == LPAuthenticationType.AUTH && TextUtils.isEmpty(lpAuthenticationParams.getAuthKey())) {
+//			lpAuthenticationParams = null;
+//		}
+//		LivePerson.getUnreadMessagesCount(SampleAppStorage.getInstance(MessagingActivity.this).getAccount(), lpAuthenticationParams, new ICallback<Integer, Exception>() {
+//			@Override
+//			public void onSuccess(Integer count) {
+//				updateToolBar(count);
+//			}
+//
+//			@Override
+//			public void onError(Exception e) {
+//				Log.e(TAG, "Failed to get unread messages count");
+//			}
+//		});
 
-			@Override
-			public void onError(Exception e) {
-				Log.e(TAG, "Failed to get unread messages count");
-			}
-		});
 		registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter);
+
+		// update auth code if it's available
+		String authCode = SampleAppStorage.getInstance(this).getAuthCode();
+		if (!TextUtils.isEmpty(authCode) && mAuthCodeView != null) {
+			mAuthCodeView.setText(authCode);
+		}
+		mPkceSwitcher.setChecked(SampleAppStorage.getInstance(this).isPkceEnabled());
 	}
 
 	@Override

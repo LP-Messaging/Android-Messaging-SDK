@@ -46,7 +46,14 @@
         <activity
             android:name=".MessagingActivity"
             android:launchMode="singleTop"
-            android:label="@string/messaging_title">
+            android:label="@string/messaging_title"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="your_redirect_uri" android:pathPrefix="/pathPrefix if needed" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MonitoringActivity"

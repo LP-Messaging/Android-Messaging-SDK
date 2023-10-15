@@ -44,4 +44,7 @@
     <string name="title_action_set_welcome_message">Set welcome message</string>
     <string name="toast_message_max_options_quanity">Maximum of message options quantity was reached.</string>
 
+    <string name="text_generate_pkce" translatable="false">Generate PKCE</string>
+    <string name="pkce_enable" translatable="false">Enable PKCE</string>
+
 </resources>

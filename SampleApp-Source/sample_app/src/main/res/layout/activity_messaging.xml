@@ -326,6 +326,37 @@
             android:layout_margin="10dp"
             android:text="Enable StepUp Authen" />
 
+        <LinearLayout
+            android:id="@+id/pkce_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/generate_pkce_param"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/text_generate_pkce"
+                />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/enable_pkce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:checked="false"
+                android:text="@string/pkce_enable"
+                app:switchPadding="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/pkce_layout"/>
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/sdk_version"
             android:layout_width="wrap_content"
@@ -334,5 +365,8 @@
             android:layout_margin="10dp"
             android:text="VERSION" />
 
+
     </LinearLayout>
+
+
 </ScrollView>
