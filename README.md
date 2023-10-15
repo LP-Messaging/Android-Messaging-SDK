@@ -1,4 +1,4 @@
-**Release date:** October 10, 2023
+**Release date:** October 13, 2023
 
 # Overview
 
@@ -21,7 +21,7 @@ The Android Mobile Messaging SDK version 5.18.0 uses:
 ### Support PKCE in addition to OAuth2 code flow for Consumer SSO 
 Support PKCE in addition to OAuth2 code flow to be used in the SDK now. It adds a new function to get the required parameters for the PKCE flow - `getPKCEParams()`.
 
-### More control over the way SDK displays the PII data to consumers.
+### Customize welcome message for specific consumer targeting
 Brands can customize the welcome message when starting a new conversation without releasing a new version of the host application. Document can be found [here](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-advanced-features-dynamic-welcome-message.html).
 
 ## Enhancements
@@ -30,13 +30,7 @@ Brands can customize the welcome message when starting a new conversation withou
 
 ## Bugs fixed
 
-- Remove “null” in announcement of image which does not have tooltip.
-- Making structured content components be focusable via bluetooth keyboard.
 - Update alert dialog buttons when using material dialog theme.
-- Fixed wrong connectorId when authenticate for multiple idps, stepup.
-- Fixed links become truncated when its preview doesn't have an image.
-- Fixed consumer could not send messages when cobrowse conversation is active.
-- Fixed changes handling for first-time welcome message.
-- Fixed consumer authorization when app moves to foreground
+- Internal bug fixes.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
