@@ -25,7 +25,7 @@ Support PKCE in addition to OAuth2 code flow to be used in the SDK now. It adds 
 Brands can customize the welcome message when starting a new conversation without releasing a new version of the host application. Document can be found [here](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-advanced-features-dynamic-welcome-message.html).
 
 ## Enhancements
-- A11y - Add heading role for all date headers in conversation sation list.
+- A11y - Add heading role for all date headers in conversation list.
 - Update to use more secure cipher transformation.
 
 ## Bugs fixed
