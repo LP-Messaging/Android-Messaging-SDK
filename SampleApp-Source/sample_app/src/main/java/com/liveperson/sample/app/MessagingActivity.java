@@ -530,7 +530,11 @@ public class MessagingActivity extends AppCompatActivity {
 //			}
 //		});
 
-		registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter, RECEIVER_NOT_EXPORTED);
+		} else {
+			registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter);
+		}
 
 		// update auth code if it's available
 		String authCode = SampleAppStorage.getInstance(this).getAuthCode();
