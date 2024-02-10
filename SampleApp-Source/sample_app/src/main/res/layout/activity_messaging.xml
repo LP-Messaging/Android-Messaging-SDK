@@ -324,7 +324,15 @@
             android:layout_height="wrap_content"
             android:checked="false"
             android:layout_margin="10dp"
-            android:text="Enable StepUp Authen" />
+            android:text="@string/enable_stepup_authen" />
+
+        <CheckBox
+            android:id="@+id/check_box_offline_messaging"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_margin="10dp"
+            android:text="@string/enable_offline_messaging" />
 
         <LinearLayout
             android:id="@+id/pkce_layout"
