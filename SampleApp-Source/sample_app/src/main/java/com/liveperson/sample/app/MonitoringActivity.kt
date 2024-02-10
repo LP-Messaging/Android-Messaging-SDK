@@ -15,8 +15,8 @@ import com.liveperson.monitoring.sdk.callbacks.MonitoringErrorType
 import com.liveperson.monitoring.sdk.callbacks.SdeCallback
 import com.liveperson.monitoring.sdk.responses.LPEngagementResponse
 import com.liveperson.monitoring.sdk.responses.LPSdeResponse
+import com.liveperson.sample.app.databinding.ActivityMonitoringBinding
 import com.liveperson.sample.app.utils.SampleAppStorage
-import kotlinx.android.synthetic.main.activity_monitoring.*
 import org.json.JSONArray
 import org.json.JSONException
 
@@ -25,6 +25,8 @@ class MonitoringActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MonitoringActivity"
     }
+
+    private lateinit var binding: ActivityMonitoringBinding
 
     private var entryPoinstsEditText: EditText? = null
     private var engagementAttributesEditText: EditText? = null
@@ -40,7 +42,8 @@ class MonitoringActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_monitoring)
+        binding = ActivityMonitoringBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Buttons
         val getEngagementButton = findViewById<Button>(R.id.get_engagement_button)
@@ -67,18 +70,18 @@ class MonitoringActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.action_progress_bar)
 
         // Display the SDK version
-        sdkVersionTextView.text = "SDK Version: ${LivepersonMonitoring.getSDKVersion()}"
+        binding.sdkVersionTextView.text = "SDK Version: ${LivepersonMonitoring.getSDKVersion()}"
 
         // Set values to editTests
-        consumerIdEditText.setText(SampleAppStorage.getInstance(this).consumerId)
-        pageIdEditText.setText(SampleAppStorage.getInstance(this).pageId)
+        binding.consumerIdEditText.setText(SampleAppStorage.getInstance(this).consumerId)
+        binding.pageIdEditText.setText(SampleAppStorage.getInstance(this).pageId)
 
         /////////////// Get Engagement ////////////////////////////
         getEngagementButton.setOnClickListener {
 
             showProgressBar()
             try {
-                val consumerIdFromUI = consumerIdEditText.text.toString()
+                val consumerIdFromUI = binding.consumerIdEditText.text.toString()
 
                 SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdFromUI
 
@@ -91,7 +94,7 @@ class MonitoringActivity : AppCompatActivity() {
 
                         // Store the received campaignId, engagementId, sessionId and visitorId as the current ones. This is used to send them to the Messaging TestApp
                         val engagementList = lpEngagementResponse.engagementDetailsList
-                        if(engagementList != null && engagementList.isNotEmpty()) {
+                        if(!engagementList.isNullOrEmpty()) {
                             // For demo we display the first engagement only
                             currentCampaignId = engagementList[0].campaignId
                             currentEngagementId = engagementList[0].engagementId
@@ -101,7 +104,7 @@ class MonitoringActivity : AppCompatActivity() {
                         }
 
                         updateResult(lpEngagementResponse.toString())
-                        pageIdEditText.setText(lpEngagementResponse.pageId)
+                        binding.pageIdEditText.setText(lpEngagementResponse.pageId)
                         SampleAppStorage.getInstance(this@MonitoringActivity).pageId = lpEngagementResponse.pageId
 
                     }
@@ -119,7 +122,7 @@ class MonitoringActivity : AppCompatActivity() {
         }
 
         //////////////// Send SDE ////////////////////////////
-        sendSdeButton.setOnClickListener {
+        binding.sendSdeButton.setOnClickListener {
 
             if (TextUtils.isEmpty(engagementAttributesEditText?.text.toString())) {
 
@@ -129,7 +132,7 @@ class MonitoringActivity : AppCompatActivity() {
 
             showProgressBar()
             try {
-                val consumerIdFromUI = consumerIdEditText.text.toString()
+                val consumerIdFromUI = binding.consumerIdEditText.text.toString()
 
                 SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdFromUI
                 SampleAppStorage.getInstance(this@MonitoringActivity).pageId = pageIdEditText.text.toString()
@@ -140,7 +143,7 @@ class MonitoringActivity : AppCompatActivity() {
                     override fun onSuccess(lpSdeResponse: LPSdeResponse) {
                         hideProgressBar()
                         updateResult(lpSdeResponse.toString())
-                        pageIdEditText.setText(lpSdeResponse.pageId)
+                        binding.pageIdEditText.setText(lpSdeResponse.pageId)
                     }
 
                     override fun onError(errorType: MonitoringErrorType, exception: Exception?) {
@@ -156,7 +159,7 @@ class MonitoringActivity : AppCompatActivity() {
         }
 
         ///////////// Open Messaging Button //////////////////////////////
-        openMessagingButton.setOnClickListener {
+        binding.openMessagingButton.setOnClickListener {
             // Open the Messaging Activity only if both CampaignId and EngagementId are available
             if (!TextUtils.isEmpty(currentCampaignId) && !TextUtils.isEmpty(currentEngagementId)) {
                 val messagingIntent = Intent(this, MessagingActivity::class.java)
@@ -219,12 +222,12 @@ class MonitoringActivity : AppCompatActivity() {
             entryPoints = JSONArray(entryPoinstsEditText?.text.toString())
         }
 
-        if (!TextUtils.isEmpty(engagement_attributes_edit_text.text.toString())) {
+        if (!TextUtils.isEmpty(binding.engagementAttributesEditText.text.toString())) {
 
             engagementAttributes = JSONArray(engagementAttributesEditText?.text.toString())
         }
 
-        val pageId : String? = if (withPageId)  page_id_edit_text.text.toString() else null
+        val pageId : String? = if (withPageId)  binding.pageIdEditText.text.toString() else null
         return MonitoringParams(pageId, entryPoints, engagementAttributes)
     }
 }

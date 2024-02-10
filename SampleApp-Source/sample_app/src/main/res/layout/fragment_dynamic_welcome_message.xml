@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true">
 
     <LinearLayout
@@ -83,11 +83,143 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
-                android:src="@drawable/ic_add"
-                android:backgroundTint="@color/colorPrimary"
-                app:tint="@android:color/black" />
+                android:src="@drawable/ic_add" />
 
         </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/attach_style_check_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8"
+            android:paddingStart="@dimen/padding_4"
+            android:paddingEnd="@dimen/padding_4"
+            android:text="@string/text_attach_style"
+            />
+
+        <LinearLayout
+            android:id="@+id/option_styles_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_8"
+                android:paddingStart="@dimen/padding_4"
+                android:paddingEnd="@dimen/padding_4"
+                android:text="@string/heading_option_style" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_4">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_color_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/wm_frequency_group"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:hint="@string/hint_option_text_color"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_4">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/border_color_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/wm_frequency_group"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:hint="@string/hint_option_border_color"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_4">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/background_color_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/wm_frequency_group"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:hint="@string/hint_option_background_color"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_8"
+                android:paddingStart="@dimen/padding_4"
+                android:paddingEnd="@dimen/padding_4"
+                android:text="@string/heading_border_radius" />
+
+            <SeekBar
+                android:id="@+id/border_radius_seek_bar"
+                android:layout_marginTop="@dimen/margin_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_8"
+                android:paddingStart="@dimen/padding_4"
+                android:paddingEnd="@dimen/padding_4"
+                android:text="@string/heading_text_style" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_4"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/bold_style_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/text_style_bold" />
+
+                <CheckBox
+                    android:id="@+id/italic_style_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="italic"
+                    android:text="@string/text_style_italic" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8"
+            android:paddingStart="@dimen/padding_4"
+            android:paddingEnd="@dimen/padding_4"
+            android:text="@string/heading_appearance_settings" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -142,8 +274,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/margin_16"
             android:layout_marginBottom="@dimen/margin_16"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@android:color/white"
             android:text="@string/text_action_apply" />
 
     </LinearLayout>

@@ -472,4 +472,7 @@
 
     <bool name="lp_pusher_clear_badge_count">false</bool>
 
+    <!-- Enable or disable separators for auto closed conversations -->
+    <bool name="lp_enable_conversation_resolved_separator_on_auto_close">false</bool>
+
 </resources>

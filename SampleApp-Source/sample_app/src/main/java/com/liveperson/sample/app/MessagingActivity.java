@@ -13,11 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,7 +31,6 @@ import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.ICallback;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.LPConversationsHistoryStateToDisplay;
-import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.callbacks.PKCEParamsCallBack;
@@ -41,8 +38,10 @@ import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
 import com.liveperson.infra.model.PKCEParams;
 import com.liveperson.infra.model.errors.PkceGenerateError;
+import com.liveperson.messaging.sdk.api.LPConfig;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
+import com.liveperson.sample.app.databinding.ActivityMessagingBinding;
 import com.liveperson.sample.app.notification.NotificationUI;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.utils.SampleAppUtils;
@@ -91,10 +90,13 @@ public class MessagingActivity extends AppCompatActivity {
 	private CheckBox mStepupAuthenCheckBox;
 	private SwitchCompat mPkceSwitcher;
 
+	private ActivityMessagingBinding binding;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_messaging);
+		binding = ActivityMessagingBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 
 		initSampleAppViews();
 		initOpenConversationButton();
@@ -178,6 +180,14 @@ public class MessagingActivity extends AppCompatActivity {
 
 		//pkce
 		initPkce();
+
+		if (LPConfig.get(R.bool.lp_is_offline_messaging_enabled)) {
+			binding.checkBoxOfflineMessaging.setChecked(true);
+		}
+
+		binding.checkBoxOfflineMessaging.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			LPConfig.set(R.bool.lp_is_offline_messaging_enabled, isChecked);
+		});
 	}
 
 	private void initAuthTypeSpinner() {
