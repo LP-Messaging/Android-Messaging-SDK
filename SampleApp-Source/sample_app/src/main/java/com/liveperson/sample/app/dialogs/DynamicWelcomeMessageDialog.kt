@@ -11,9 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.RadioGroup
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.IdRes
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -25,9 +28,9 @@ import com.liveperson.infra.configuration.Configuration
 import com.liveperson.infra.model.LPWelcomeMessage
 import com.liveperson.infra.model.LPWelcomeMessage.MessageFrequency
 import com.liveperson.infra.model.MessageOption
+import com.liveperson.infra.model.QuickReplyStyle
 import com.liveperson.messaging.sdk.api.LivePerson
 import com.liveperson.sample.app.R
-
 
 class DynamicWelcomeMessageDialog : BottomSheetDialogFragment() {
 
@@ -58,6 +61,17 @@ class DynamicWelcomeMessageDialog : BottomSheetDialogFragment() {
 
     private lateinit var timeoutTextWatcher: TextWatcher
     private lateinit var welcomeMessageTextWatcher: TextWatcher
+
+    private lateinit var attachStyleCheckBox: CheckBox
+    private lateinit var optionStylesLinearLayout: LinearLayout
+    private lateinit var optionTextColorEditText: EditText
+    private lateinit var optionBorderColorEditText: EditText
+    private lateinit var optionBackgroundColorEditText: EditText
+
+    private lateinit var optionBorderRadiusSeekBar: SeekBar
+
+    private lateinit var optionItalicStyleCheckBox: CheckBox
+    private lateinit var optionBoldStyleCheckBox: CheckBox
 
     private var brandId: String? = null
 
@@ -119,6 +133,21 @@ class DynamicWelcomeMessageDialog : BottomSheetDialogFragment() {
         timeoutEditText = view.findViewById(R.id.timeout_edit_text)
         welcomeMessageFrequencyGroup = view.findViewById(R.id.wm_frequency_group)
         applyWelcomeMessageButton = view.findViewById(R.id.apply_changes_button)
+
+        // region option style initialization
+        attachStyleCheckBox = view.findViewById(R.id.attach_style_check_box)
+        optionStylesLinearLayout = view.findViewById(R.id.option_styles_linear_layout)
+
+        optionTextColorEditText = optionStylesLinearLayout.findViewById(R.id.text_color_edit_text)
+        optionBorderColorEditText = optionStylesLinearLayout.findViewById(R.id.border_color_edit_text)
+        optionBackgroundColorEditText = optionStylesLinearLayout.findViewById(R.id.background_color_edit_text)
+
+        optionBorderRadiusSeekBar = optionStylesLinearLayout.findViewById(R.id.border_radius_seek_bar)
+        optionBoldStyleCheckBox = optionStylesLinearLayout.findViewById(R.id.bold_style_checkbox)
+        optionItalicStyleCheckBox = optionStylesLinearLayout.findViewById(R.id.italic_style_checkbox)
+
+        // endregion option style initialization
+
         // endregion views initialization
 
         // region data apply
@@ -130,6 +159,13 @@ class DynamicWelcomeMessageDialog : BottomSheetDialogFragment() {
         // endregion data apply
 
         // region actions setup
+        attachStyleCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            optionStylesLinearLayout.visibility = when (isChecked) {
+                true -> View.VISIBLE
+                else -> View.GONE
+            }
+        }
+
         addQuickReplyOptionButton.setOnClickListener {
             addChip()
         }
@@ -160,6 +196,7 @@ class DynamicWelcomeMessageDialog : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         timeoutEditText.removeTextChangedListener(timeoutTextWatcher)
         welcomeMessageContentEditText.removeTextChangedListener(welcomeMessageTextWatcher)
+        attachStyleCheckBox.setOnCheckedChangeListener(null)
         addQuickReplyOptionButton.setOnClickListener(null)
         applyWelcomeMessageButton.setOnClickListener(null)
         super.onDestroyView()
@@ -208,13 +245,18 @@ class DynamicWelcomeMessageDialog : BottomSheetDialogFragment() {
 
     private fun addChip() {
         val text = quickReplyOptionEditText.text.toString()
-            .takeUnless { it.isNullOrBlank() } ?: return
+            .takeUnless { it.isNullOrBlank() }
+            ?: return
+
         if (welcomeMessageOptions.size == MAX_OPTIONS_QUANTITY) {
             Toast.makeText(requireContext(), R.string.toast_message_max_options_quanity, Toast.LENGTH_SHORT).show()
             return
         }
 
         val option = optionOf(text)
+        if (attachStyleCheckBox.isChecked) {
+            option.attachStyle()
+        }
         welcomeMessageOptions.add(option)
         quickRepliesChipLayout.visibility = View.VISIBLE
         quickRepliesChipLayout.addView(chipOf(option))
@@ -251,6 +293,17 @@ class DynamicWelcomeMessageDialog : BottomSheetDialogFragment() {
             else -> R.id.every_conversation_radio_button
         }
         check(id)
+    }
+
+    private fun MessageOption.attachStyle() {
+        style = QuickReplyStyle(
+            optionBoldStyleCheckBox.isChecked,
+            optionItalicStyleCheckBox.isChecked,
+            optionTextColorEditText.text.toString(),
+            optionBorderColorEditText.text.toString(),
+            optionBorderRadiusSeekBar.progress,
+            optionBackgroundColorEditText.text.toString()
+        )
     }
 
     private inline fun EditText.addAfterTextChangeListener(crossinline block: (String) -> Unit): TextWatcher {

@@ -44,7 +44,22 @@
     <string name="title_action_set_welcome_message">Set welcome message</string>
     <string name="toast_message_max_options_quanity">Maximum of message options quantity was reached.</string>
 
+    <string name="heading_welcome_message_option_style">Option Style</string>
+    <string name="text_contains_style">Option Style</string>
+    <string name="hint_option_text_color">Text color</string>
+    <string name="hint_option_border_color">Border color</string>
+    <string name="hint_option_background_color">Background color</string>
+    <string name="heading_border_radius">Border radius</string>
+    <string name="heading_text_style">Text style</string>
+    <string name="text_style_bold">Bold</string>
+    <string name="text_style_italic">Italic</string>
+    <string name="heading_appearance_settings">Appearance settings</string>
+    <string name="heading_option_style">Option style</string>
+    <string name="text_attach_style">Attach style</string>
+
     <string name="text_generate_pkce" translatable="false">Generate PKCE</string>
     <string name="pkce_enable" translatable="false">Enable PKCE</string>
+    <string name="enable_stepup_authen">Enable StepUp Authen</string>
+    <string name="enable_offline_messaging">Enable Offline Messaging</string>
 
 </resources>
