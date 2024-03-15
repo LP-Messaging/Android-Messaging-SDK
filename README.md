@@ -18,7 +18,7 @@ The Android Mobile Messaging SDK version 5.20.2 uses:
 
 ## Enhancements
 
-- Support alternatives to swiping in the carousel component for accessibility users. Check [here](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#structured-content-carousel-navigation-buttons) for more info.
+- Support alternatives to swiping in the carousel component for accessibility users. Check [here](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_sc_carousel_navigation_buttons_appearance) for more info.
 - Replace accessibility configuration [`lp_announce_events_sequentially`](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_announce_events_sequentially) by [`lp_announce_events_with_live_region`](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_announce_events_with_live_region).
 - Accessibility improvement on announcing newly received messages.
 
