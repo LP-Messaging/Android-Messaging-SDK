@@ -8,8 +8,8 @@ android {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 5201
-        versionName "5.20.1"
+        versionCode 5202
+        versionName "5.20.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -44,7 +44,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.13.2"
 
-    implementation 'com.liveperson.android:lp_messaging_sdk:5.20.1'
+    implementation 'com.liveperson.android:lp_messaging_sdk:5.20.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

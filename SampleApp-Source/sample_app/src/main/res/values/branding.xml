@@ -475,4 +475,17 @@
     <!-- Enable or disable separators for auto closed conversations -->
     <bool name="lp_enable_conversation_resolved_separator_on_auto_close">false</bool>
 
+    <!-- Enable or disable announcement of SDK events using live region in Polite mode -->
+    <bool name="lp_announce_events_with_live_region">true</bool>
+
+    <!--Carousel navigation buttons -->
+    <integer name="lp_sc_carousel_navigation_buttons_appearance">0</integer>
+    <color name="lp_carousel_navigation_button_color">@color/lp_consumer_action_highLight_color</color>
+    <dimen name="lp_carousel_navigation_button_size">36dp</dimen>
+    <dimen name="lp_carousel_navigation_button_corner_radius">18dp</dimen>
+    <dimen name="lp_carousel_navigation_buttons_margin">8dp</dimen>
+    <color name="lp_carousel_navigation_button_icon_color">@android:color/white</color>
+    <item name="lp_carousel_navigation_move_to_previous_icon" type="drawable">@drawable/ic_carousel_move_to_previous</item>
+    <item name="lp_carousel_navigation_move_to_next_icon" type="drawable">@drawable/ic_carousel_move_next</item>
+
 </resources>
