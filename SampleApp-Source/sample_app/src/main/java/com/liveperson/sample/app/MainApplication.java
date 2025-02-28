@@ -8,6 +8,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.liveperson.api.LivePersonCallbackImpl;
 import com.liveperson.api.LivePersonIntents;
 import com.liveperson.api.response.types.CloseReason;
@@ -35,7 +36,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        FirebaseApp.initializeApp(this);
         Instance = this;
         registerToLivePersonEvents();
     }
