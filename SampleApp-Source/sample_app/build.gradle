@@ -3,18 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.huawei.agconnect'
 
 android {
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "com.liveperson.sample.app"
         minSdkVersion 21
-        targetSdkVersion 34
-        versionCode 5230
-        versionName "5.23.0-beta01"
+        targetSdkVersion 35
+        versionCode 5250
+        versionName "5.25.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildFeatures {
-        viewBinding true
     }
 
     buildTypes {
@@ -32,6 +28,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding true
+    }
     namespace 'com.liveperson.sample.app'
 }
 
@@ -44,7 +49,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.13.2"
 
-    implementation 'com.liveperson.android:lp_messaging_sdk:5.24.0'
+    implementation 'com.liveperson.android:lp_messaging_sdk:5.25.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
