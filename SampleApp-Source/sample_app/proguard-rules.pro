@@ -15,16 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep public class * extends android.app.Activity
--keep public class * extends android.app.Application
--keep public class * extends android.app.Service
--keep public class * extends android.content.BroadcastReceiver
--keep public class * extends android.content.ContentProvider
--keep public class * extends android.preference.Preference
--keep public class * extends android.support.v4.app.Fragment
--keep public class * extends android.support.v4.app.DialogFragment
--keep public class * extends android.app.Fragment
-
 -dontwarn java.nio.file.*
 
 # ------------------ rules for OkHttp -------------------
@@ -47,4 +37,20 @@
 # See https://github.com/square/okhttp/issues/2323#issuecomment-185055040 for more details.
 -keepclassmembers class * implements javax.net.ssl.SSLSocketFactory {
     final javax.net.ssl.SSLSocketFactory delegate;
+}
+
+-keepclasseswithmembers class com.liveperson.infra.InitLivePersonProperties
+-keepclassmembers class **.R$* { public static <fields>; }
+-keep public class * extends androidx.fragment.app.Fragment
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+
+-keep public class * extends android.view.View {
+      public <init>(android.content.Context);
+      public <init>(android.content.Context, android.util.AttributeSet);
+      public <init>(android.content.Context, android.util.AttributeSet, int);
+      public void set*(...);
 }
