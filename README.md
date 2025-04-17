@@ -1,27 +1,25 @@
-**Release date:** February 28, 2025
+**Release date:** April 17, 2025
 
 # Overview
 
-Android Mobile Messaging SDK version 5.25.0 release includes new features, enhancements and bug fixes.
+Android Mobile Messaging SDK version 5.24.1-beta.1 release includes new features, enhancements and bug fixes.
 
 ## Environment requirements
 
-The Android Mobile Messaging SDK version 5.25.0 uses:
+The Android Mobile Messaging SDK version 5.24.1-beta.1 uses:
 
 - Minimum API version 21
-- Compile API version 35
-- Target API version 35
+- Compile API version 34
+- Target API version 34
 - Maps SDK "com.google.android.gms:play-services-maps:18.1.0"
-- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.7”
-- Date Picker Library “com.liveperson.android:lp-date-picker:2.2.2”
-- Appointment List Library "com.liveperson.android:lp-appointment-scheduler:2.0.2"  
-  (compileSdk and targetSdkVersion bumped to 35 to support Android 15)
+- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.7-api34-beta.1”
+- Date Picker Library “com.liveperson.android:lp-date-picker:2.2.2-api34-beta.1”
+- Appointment List Library "com.liveperson.android:lp-appointment-scheduler:2.0.2-api34-beta.1"  
 
 ## New features
 
 - Added support for rich-text features in the in-app SDK. This feature is currently available only for conversations initiated through the Web experience. The new parsing, formatting, and presentation of rich-text messages apply to bot agent messages, human agent messages, and automatic messages.
 - Added support for rendering and responding to [Agent Selectable Responses (previously known as IDavid)](https://knowledge.liveperson.com/secure-forms-studio-overview#Agent%20Selectable%20Responses%20(previously%20known%20as%20IDavid)).
-- Changes to support Android 15. The LivePerson SDK's targetSdkVersion and compileSdkVersion are set to API 35. `ConversationActivity` is now represented correctly on Android 15.
 
 ### New configurations
 
