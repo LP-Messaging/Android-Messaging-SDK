@@ -1,18 +1,18 @@
-**Release date:** April 17, 2025
+**Release date:** May 05, 2025
 
 # Overview
 
-Android Mobile Messaging SDK version 5.24.1-beta.1 release includes new features, enhancements and bug fixes.
+Android Mobile Messaging SDK version 5.24.1-beta.2 release includes new features, enhancements and bug fixes.
 
 ## Environment requirements
 
-The Android Mobile Messaging SDK version 5.24.1-beta.1 uses:
+The Android Mobile Messaging SDK version 5.24.1-beta.2 uses:
 
 - Minimum API version 21
 - Compile API version 34
 - Target API version 34
 - Maps SDK "com.google.android.gms:play-services-maps:18.1.0"
-- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.7-api34-beta.1”
+- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.7-api34-beta.2”
 - Date Picker Library “com.liveperson.android:lp-date-picker:2.2.2-api34-beta.1”
 - Appointment List Library "com.liveperson.android:lp-appointment-scheduler:2.0.2-api34-beta.1"  
 
@@ -61,9 +61,15 @@ The Android Mobile Messaging SDK version 5.24.1-beta.1 uses:
 - Updated proguard rules page.
 - Added new [logOut](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#logout) API where it has LPAuthenticationType as an input.
 - Introduced the [LPNotificationType](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-interface-and-class-definitions.html#notificationtype) property on the [PushMessage](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-interface-and-class-definitions.html#pushmessage) object to detect the type of push notification, such as REGULAR, PROACTIVE, or C2M.
+- Expose branding configurations to adjust the vertical positioning of the structured content carousel’s left and right buttons.
+	- `lp_carousel_navigation_button_gravity`: 0 : top, 1 : middle, 2 : bottom 
 
 ## Bugs fixed
 
+- Fixed the unread indicator shows in different length.
+- Fixed the timestamp in auto message shown as number.
+- Fixed an accessibility issue: losing focus after clicking on on menu.
+- Fixed an issue with broken image preview.
 - Fixed an issue with broken image icon appearance when consumer sends a document file.
 - Fixed an issue with representation of multiple types of links within one message.
 - Fixed crash on Samsung devices when user enters Picture-in-Picture mode and Talkback accessibility service is enabled.

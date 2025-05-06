@@ -487,7 +487,10 @@
     <!--Boolean flag to represent divider for auto-closed conversations.-->
     <bool name="lp_enable_conversation_resolved_separator_on_auto_close">false</bool>
 
-    <integer name="lp_sc_carousel_navigation_buttons_appearance">0</integer>
+    <!-- https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_sc_carousel_navigation_buttons_appearance -->
+    <integer name="lp_sc_carousel_navigation_buttons_appearance">2</integer>
+    <!-- 0 : top, 1 : middle, 2 : bottom -->
+    <integer name="lp_carousel_navigation_button_gravity">2</integer>
     <color name="lp_carousel_navigation_button_color">@color/lp_consumer_action_highLight_color</color>
     <dimen name="lp_carousel_navigation_button_size">36dp</dimen>
     <dimen name="lp_carousel_navigation_button_corner_radius">18dp</dimen>
