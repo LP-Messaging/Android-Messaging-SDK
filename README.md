@@ -82,5 +82,3 @@ The Android Mobile Messaging SDK version 5.25.0 uses:
 - Fixed accessibility announcement of Co-Browse events. Prevented missing of "Co-Browse call ended" event.
 - Fixed auto scroll to quick replies of welcome message.
 - Internal bug fixes.
-
-Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
