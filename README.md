@@ -1,30 +1,30 @@
-**Release date:** February 28, 2025
+**Release date:** May 19, 2025
 
 # Overview
 
-Android Mobile Messaging SDK version 5.25.0 release includes new features, enhancements and bug fixes.
+Android Mobile Messaging SDK version 5.24.1 release includes new features, enhancements and bug fixes.
 
 ## Environment requirements
 
-The Android Mobile Messaging SDK version 5.25.0 uses:
+The Android Mobile Messaging SDK version 5.24.1 uses:
 
 - Minimum API version 21
-- Compile API version 35
-- Target API version 35
+- Compile API version 34
+- Target API version 34
 - Maps SDK "com.google.android.gms:play-services-maps:18.1.0"
-- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.7”
-- Date Picker Library “com.liveperson.android:lp-date-picker:2.2.2”
-- Appointment List Library "com.liveperson.android:lp-appointment-scheduler:2.0.2"  
-  (compileSdk and targetSdkVersion bumped to 35 to support Android 15)
+- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.7-api34”
+- Date Picker Library “com.liveperson.android:lp-date-picker:2.2.2-api34”
+- Appointment List Library "com.liveperson.android:lp-appointment-scheduler:2.0.2-api34"
 
 ## New features
 
 - Added support for rich-text features in the in-app SDK. This feature is currently available only for conversations initiated through the Web experience. The new parsing, formatting, and presentation of rich-text messages apply to bot agent messages, human agent messages, and automatic messages.
-- Added support for rendering and responding to [Agent Selectable Responses (previously known as IDavid)](https://knowledge.liveperson.com/secure-forms-studio-overview#Agent%20Selectable%20Responses%20(previously%20known%20as%20IDavid)).
-- Changes to support Android 15. The LivePerson SDK's targetSdkVersion and compileSdkVersion are set to API 35. `ConversationActivity` is now represented correctly on Android 15.
+- Added support for rendering and responding to [Agent Selectable Responses (previously known as IDavid)](https://community.liveperson.com/kb/articles/1428-secure-forms-studio-overview#Agent%20Selectable%20Responses%20(previously%20known%20as%20IDavid)).
+- Added support for vertical placement of structured content carousel navigation buttons: [lp_carousel_navigation_button_gravity](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_carousel_navigation_button_gravity).
 
 ### New configurations
 
+- Added new a dimen branding configuration [lp_carousel_navigation_buttons_vertical_margin](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_carousel_navigation_buttons_vertical_margin) for vertical margin applied to structured content carousel navigation buttons.
 - Added new a boolean branding configuration [lp_announce_new_message_content](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_announce_new_message_content) to control TalkBack behavior for new messages. When enabled (default behaviour), TalkBack announces the content of new messages; otherwise, it announces only "New Message."
 - Added new configuration for cobrowse background color [lp_cobrowse_toolbar_background_color](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_cobrowse_toolbar_background_color).
 - Added new string resource for cobrowse back/close button's description [lp_accessibility_cobrowse_back_button_description](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-string-localization-string-values.html#:~:text=lp_accessibility_cobrowse_back_button_description).
@@ -60,9 +60,10 @@ The Android Mobile Messaging SDK version 5.25.0 uses:
 - Migrated internal components interaction callbacks with Fragment Result Api.
 - Migrated to a newer kotlin version (1.8.21).
 - Migrated DatePicker component's screen from activity for fragment. 
-- Updated proguard rules page.
+- Updated proguard [rules page](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-configuration-proguard-configuration.html).
 - Added new [logOut](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#logout) API where it has LPAuthenticationType as an input.
 - Introduced the [LPNotificationType](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-interface-and-class-definitions.html#notificationtype) property on the [PushMessage](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-interface-and-class-definitions.html#pushmessage) object to detect the type of push notification, such as REGULAR, PROACTIVE, or C2M.
+- Removed redundant `android:focussableInTouchMode` attribute for clickable views.
 
 ## Bugs fixed
 
@@ -75,10 +76,24 @@ The Android Mobile Messaging SDK version 5.25.0 uses:
 - Fixed content description of download voice message.
 - Fixed accessibility announcement of structured content message sent by bot.
 - Fixed keyboard focusability for file messages.
-- Fixed crash when user tries to select an image from gallery, but no gallery apps are installed on device.
 - Fixed issue with keyboard and accessibility focus when focus is placed behind feedback, Co-Browse, image preview or caption preview screen.
 - Fixed announcement of empty text elements without tooltip and actions inside structured content. Such elements are not accessible by Talkback starting from this version.
 - Fixed record voice button appearance when LP SDK conversation screen is moved to foreground.
 - Fixed accessibility announcement of Co-Browse events. Prevented missing of "Co-Browse call ended" event.
-- Fixed auto scroll to quick replies of welcome message.
-- Internal bug fixes.
+- Fixed auto scroll to welcome message content when conversation is resolved.
+- Fixed appearance of Co-Browse invitation.
+- Fixed presentation of start-end date in date picker range selection flow.  
+- Added missed exported flags values for SDK's activities, services and content providers.
+- Handled crash on Samsung-devices with Android 9 when picture-in-picture mode becomes disabled while talkback is active.
+- Handled crash when device doesn't have a gallery/file manager app to select photo or file.
+- Fixed incorrect appearance of broken file icon for agent/bot image messages.
+- Fixed link highlighting for date headers and system messages.
+- Fixed Incorrect accessibility focus request for controller system messages.
+- Fixed blank conversation screen for unauth users when CSAT Fragment is slided out. 
+- Fixed focus movement when a child fragment appears.
+- Fixed focus movement for agent, bot and consumer messages.
+- Fixed appearance of scroll-to-bottom expanded state.
+- Fixed update of structured content state when user sends a message.
+- Fixed crash when rendering map views in structured content.
+- Fixed appearance of root horizontal layout elements.
+- Fixed button state of disabled structured content carousel.
