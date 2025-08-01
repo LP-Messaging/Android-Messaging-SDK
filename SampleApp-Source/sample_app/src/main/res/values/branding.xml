@@ -510,4 +510,9 @@
     <!-- Proactive messages -->
     <bool name="lp_fetch_pending_proactive_messages">false</bool>
 
+    <!-- Define the visibility of connected agent/bot avatar -->
+    <bool name="lp_show_agent_avatar">true</bool>
+
+    <!-- Define the visibility of brand's avatar when no ongoing conversation exists for consumer -->
+    <bool name="lp_show_brand_avatar">true</bool>
 </resources>
