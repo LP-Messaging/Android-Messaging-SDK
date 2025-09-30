@@ -17,6 +17,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class IntroActivity extends AppCompatActivity {
 
 	EditText mAccountIdEditText;
 	EditText mAppinstallidEditText;
+	boolean isPreload;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,10 @@ public class IntroActivity extends AppCompatActivity {
 
 		mAccountIdEditText.setText(SampleAppStorage.getInstance(this).getAccount());
 		mAppinstallidEditText.setText(SampleAppStorage.getInstance(this).getAppInstallId());
+
+		findViewById(R.id.checkboxPreload).setOnClickListener(v -> {
+			isPreload = ((CheckBox) v).isChecked();
+		});
 
 		// Messaging
 		messagingButton.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +86,7 @@ public class IntroActivity extends AppCompatActivity {
 					public void onInitFailed(Exception e) {
 						Toast.makeText(IntroActivity.this, "Init failed", Toast.LENGTH_SHORT).show();
 					}
-				}));
+				}), isPreload);
 
 			}
 		});
@@ -120,7 +126,7 @@ public class IntroActivity extends AppCompatActivity {
 					public void onInitFailed(Exception e) {
 						Toast.makeText(IntroActivity.this, "Init failed", Toast.LENGTH_SHORT).show();
 					}
-				}));
+				}), isPreload);
 
 			}
 		});
