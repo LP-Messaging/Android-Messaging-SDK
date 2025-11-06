@@ -49,7 +49,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     testImplementation "junit:junit:4.13.2"
 
-    implementation 'com.liveperson.android:lp_messaging_sdk:5.26.0'
+    implementation 'com.liveperson.android:lp_messaging_sdk:5.26.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
