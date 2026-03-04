@@ -4,16 +4,17 @@ import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.firebase.FirebaseApp;
 import com.liveperson.api.LivePersonCallbackImpl;
 import com.liveperson.api.LivePersonIntents;
 import com.liveperson.api.response.types.CloseReason;
-import com.liveperson.api.sdk.PermissionType;
 import com.liveperson.api.sdk.LPConversationData;
+import com.liveperson.api.sdk.PermissionType;
 import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.messaging.LpError;
 import com.liveperson.messaging.TaskType;
@@ -35,10 +36,9 @@ public class MainApplication extends Application {
 
     @Override
     public void onCreate() {
-        super.onCreate();
         FirebaseApp.initializeApp(this);
+        super.onCreate();
         Instance = this;
-        registerToLivePersonEvents();
     }
 
     public static MainApplication getInstance() {
@@ -47,8 +47,22 @@ public class MainApplication extends Application {
 
     public void registerToLivePersonEvents(){
         createLivePersonReceiver();
-        LocalBroadcastManager.getInstance(getApplicationContext())
-                .registerReceiver(mLivePersonReceiver, LivePersonIntents.getIntentFilterForAllEvents());
+        try {
+            LocalBroadcastManager.getInstance(this).registerReceiver(
+                    mLivePersonReceiver,
+                    LivePersonIntents.getIntentFilterForAllEvents()
+            );
+        } catch (Exception exception) {
+            Log.e(TAG, "registerToLivePersonEvents issue: ", exception);
+        }
+    }
+
+    public void unregisterToLivePersonEvents() {
+        if (mLivePersonReceiver != null) try {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mLivePersonReceiver);
+        } catch (Exception exception) {
+            Log.e(TAG, "unregisterToLivePersonEvents issue: ", exception);
+        }
     }
 
     private void createLivePersonReceiver() {
@@ -141,16 +155,16 @@ public class MainApplication extends Application {
                         onTokenExpired();
                         break;
 
-					case LivePersonIntents.ILivePersonIntentAction.LP_ON_USER_DENIED_PERMISSION:
-						PermissionType deniedPermissionType = LivePersonIntents.getPermissionType(intent);
-						boolean doNotShowAgainMarked = LivePersonIntents.getPermissionDoNotShowAgainMarked(intent);
-						onUserDeniedPermission(deniedPermissionType, doNotShowAgainMarked);
-						break;
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_USER_DENIED_PERMISSION:
+                        PermissionType deniedPermissionType = LivePersonIntents.getPermissionType(intent);
+                        boolean doNotShowAgainMarked = LivePersonIntents.getPermissionDoNotShowAgainMarked(intent);
+                        onUserDeniedPermission(deniedPermissionType, doNotShowAgainMarked);
+                        break;
 
-					case LivePersonIntents.ILivePersonIntentAction.LP_ON_USER_ACTION_ON_PREVENTED_PERMISSION:
-						PermissionType preventedPermissionType = LivePersonIntents.getPermissionType(intent);
-						onUserActionOnPreventedPermission(preventedPermissionType);
-						break;
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_USER_ACTION_ON_PREVENTED_PERMISSION:
+                        PermissionType preventedPermissionType = LivePersonIntents.getPermissionType(intent);
+                        onUserActionOnPreventedPermission(preventedPermissionType);
+                        break;
 
                     case LivePersonIntents.ILivePersonIntentAction.LP_ON_STRUCTURED_CONTENT_LINK_CLICKED: {
                         String uri = LivePersonIntents.getLinkUri(intent);
@@ -162,7 +176,7 @@ public class MainApplication extends Application {
                         onLinkClicked(uri);
                         break;
                     }
-				}
+                }
 
             }
         };
@@ -171,6 +185,10 @@ public class MainApplication extends Application {
     public void registerToLivePersonCallbacks(){
         createLivePersonCallback();
         LivePerson.setCallback(livePersonCallback);
+    }
+
+    public void unregisterToLivePersonCallbacks(){
+        LivePerson.removeCallBack();
     }
 
     private void createLivePersonCallback() {
@@ -233,12 +251,12 @@ public class MainApplication extends Application {
                 MainApplication.this.onAgentDetailsChanged(agentData);
             }
 
-			@Override
-			public void onCsatLaunched() {
-				MainApplication.this.onCsatLaunched();
-			}
+            @Override
+            public void onCsatLaunched() {
+                MainApplication.this.onCsatLaunched();
+            }
 
-			@Override
+            @Override
             public void onCsatDismissed() {
                 MainApplication.this.onCsatDismissed();
             }
@@ -248,12 +266,12 @@ public class MainApplication extends Application {
                 MainApplication.this.onCsatSubmitted(conversationId, starRating);
             }
 
-			@Override
-			public void onCsatSkipped() {
-				MainApplication.this.onCsatSkipped();
-			}
+            @Override
+            public void onCsatSkipped() {
+                MainApplication.this.onCsatSkipped();
+            }
 
-			@Override
+            @Override
             public void onConversationMarkedAsUrgent() {
                 MainApplication.this.onConversationMarkedAsUrgent();
             }
@@ -274,25 +292,25 @@ public class MainApplication extends Application {
 
             }
 
-			@Override
-			public void onUserDeniedPermission(PermissionType permissionType, boolean doNotShowAgainMarked) {
-				MainApplication.this.onUserDeniedPermission(permissionType, doNotShowAgainMarked);
-			}
+            @Override
+            public void onUserDeniedPermission(PermissionType permissionType, boolean doNotShowAgainMarked) {
+                MainApplication.this.onUserDeniedPermission(permissionType, doNotShowAgainMarked);
+            }
 
-			@Override
-			public void onUserActionOnPreventedPermission(PermissionType permissionType) {
-				MainApplication.this.onUserActionOnPreventedPermission(permissionType);
-			}
+            @Override
+            public void onUserActionOnPreventedPermission(PermissionType permissionType) {
+                MainApplication.this.onUserActionOnPreventedPermission(permissionType);
+            }
 
-			@Override
-			public void onStructuredContentLinkClicked(String uri) {
-				MainApplication.this.onStructuredContentLinkClicked(uri);
-			}
-		};
+            @Override
+            public void onStructuredContentLinkClicked(String uri) {
+                MainApplication.this.onStructuredContentLinkClicked(uri);
+            }
+        };
     }
 
 
-	public void setShowToastOnCallback(boolean showToastOnCallback) {
+    public void setShowToastOnCallback(boolean showToastOnCallback) {
         this.showToastOnCallback = showToastOnCallback;
     }
     private void showToast(String message) {
@@ -332,9 +350,9 @@ public class MainApplication extends Application {
         showToast("on CSAT Dismissed");
     }
 
-	private void onCsatSkipped() {
-		showToast("on CSAT Skipped");
-	}
+    private void onCsatSkipped() {
+        showToast("on CSAT Skipped");
+    }
 
     private void onAgentDetailsChanged(AgentData agentData) {
         showToast("Agent Details Changed " + agentData);
@@ -377,17 +395,17 @@ public class MainApplication extends Application {
         showToast("error type " + lpError.name() + "\n error message: " + message);
     }
 
-	private void onUserDeniedPermission(PermissionType permissionType, boolean doNotShowAgainMarked) {
-		showToast("onUserDeniedPermission " + permissionType.name() + " doNotShowAgainMarked = " + doNotShowAgainMarked);
-	}
+    private void onUserDeniedPermission(PermissionType permissionType, boolean doNotShowAgainMarked) {
+        showToast("onUserDeniedPermission " + permissionType.name() + " doNotShowAgainMarked = " + doNotShowAgainMarked);
+    }
 
-	private void onUserActionOnPreventedPermission(PermissionType permissionType) {
-		showToast("onUserActionOnPreventedPermission " + permissionType.name());
-	}
+    private void onUserActionOnPreventedPermission(PermissionType permissionType) {
+        showToast("onUserActionOnPreventedPermission " + permissionType.name());
+    }
 
-	private void onStructuredContentLinkClicked(String uri) {
-		showToast("onStructuredContentLinkClicked. Uri: " + uri);
-	}
+    private void onStructuredContentLinkClicked(String uri) {
+        showToast("onStructuredContentLinkClicked. Uri: " + uri);
+    }
 
     private void onLinkClicked(String uri) {
         showToast("onLinkClicked. Uri: " + uri);

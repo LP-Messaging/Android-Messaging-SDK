@@ -1,14 +1,9 @@
-package com.liveperson.sample.app;
+package com.liveperson.sample.app.activities;
+
+import static com.liveperson.sample.app.utils.InsetsUtilsKt.applyInsets;
 
 import android.Manifest;
 import android.content.Intent;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -21,37 +16,40 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.MonitoringInitParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
-import com.liveperson.sample.app.utils.SampleAppStorage;
+import com.liveperson.sample.app.R;
 import com.liveperson.sample.app.notification.NotificationUI;
+import com.liveperson.sample.app.utils.SampleAppStorage;
 
-public class IntroActivity extends AppCompatActivity {
+public class IntroActivity extends BaseActivity {
 
 	EditText mAccountIdEditText;
 	EditText mAppinstallidEditText;
-	boolean isPreload;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_intro);
+		applyInsets(this);
 
 		mAccountIdEditText = findViewById(R.id.account_id_edit_text);
 		mAppinstallidEditText = findViewById(R.id.appinstallid_edit_text);
 		Button messagingButton = findViewById(R.id.messaging_button);
 		Button monitoringButton = findViewById(R.id.monitoring_button);
 		Button logoutButton = findViewById(R.id.logout_button);
+		CheckBox checkBox = findViewById(R.id.perform_preload_checkbox);
 
 		mAccountIdEditText.setText(SampleAppStorage.getInstance(this).getAccount());
 		mAppinstallidEditText.setText(SampleAppStorage.getInstance(this).getAppInstallId());
-
-		findViewById(R.id.checkboxPreload).setOnClickListener(v -> {
-			isPreload = ((CheckBox) v).isChecked();
-		});
 
 		// Messaging
 		messagingButton.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +70,7 @@ public class IntroActivity extends AppCompatActivity {
 
 				storeParams();
 
-				LivePerson.initialize(getApplicationContext(), new InitLivePersonProperties(mAccountIdEditText.getText().toString(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, monitoringInitParams, new InitLivePersonCallBack() {
+				InitLivePersonProperties properties = new InitLivePersonProperties(mAccountIdEditText.getText().toString(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, monitoringInitParams, new InitLivePersonCallBack() {
 
 					@Override
 					public void onInitSucceed() {
@@ -86,7 +84,9 @@ public class IntroActivity extends AppCompatActivity {
 					public void onInitFailed(Exception e) {
 						Toast.makeText(IntroActivity.this, "Init failed", Toast.LENGTH_SHORT).show();
 					}
-				}), isPreload);
+				});
+
+				LivePerson.initialize(getApplicationContext(), properties, checkBox.isChecked());
 
 			}
 		});
@@ -126,7 +126,7 @@ public class IntroActivity extends AppCompatActivity {
 					public void onInitFailed(Exception e) {
 						Toast.makeText(IntroActivity.this, "Init failed", Toast.LENGTH_SHORT).show();
 					}
-				}), isPreload);
+				}));
 
 			}
 		});
@@ -200,8 +200,7 @@ public class IntroActivity extends AppCompatActivity {
 		ActivityResultLauncher<String> requestPermissionLauncher =
 				registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
 					if (isGranted) {
-						// Permission is granted. Continue the action or workflow in your
-						// app.
+						// Permission is granted.
 					} else {
 						// Explain to the user that the feature is unavailable because the
 						// features requires a permission that the user has denied. At the
@@ -224,7 +223,6 @@ public class IntroActivity extends AppCompatActivity {
 								.show();
 					}
 				});
-
 		requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
 	}
 }

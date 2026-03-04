@@ -31,7 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".IntroActivity"
+            android:name=".activities.IntroActivity"
             android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>
@@ -41,24 +41,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MessagingActivity"
+            android:name=".activities.MessagingActivity"
             android:launchMode="singleTop"
-            android:label="@string/messaging_title"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="your_redirect_uri" android:pathPrefix="/pathPrefix if needed" />
-            </intent-filter>
+            android:label="@string/messaging_title">
         </activity>
         <activity
-            android:name=".MonitoringActivity"
+            android:name=".activities.MonitoringActivity"
             android:label="@string/monitoring_title"/>
         <activity
-            android:name=".FragmentContainerActivity"
+            android:name=".activities.FragmentContainerActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".DeepLinkActivity"
+        <activity android:name=".activities.DeepLinkActivity"
             tools:ignore="AppLinkUrlError"
             android:exported="true">
             <!-- Error ignored because our sample app doesn't need to be indexed by Google for any reason. -->

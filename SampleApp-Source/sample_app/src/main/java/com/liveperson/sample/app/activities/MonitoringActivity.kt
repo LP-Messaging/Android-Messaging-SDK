@@ -1,12 +1,14 @@
-package com.liveperson.sample.app
+package com.liveperson.sample.app.activities
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import com.liveperson.monitoring.model.LPMonitoringIdentity
 import com.liveperson.monitoring.sdk.MonitoringParams
 import com.liveperson.monitoring.sdk.api.LivepersonMonitoring
@@ -15,12 +17,14 @@ import com.liveperson.monitoring.sdk.callbacks.MonitoringErrorType
 import com.liveperson.monitoring.sdk.callbacks.SdeCallback
 import com.liveperson.monitoring.sdk.responses.LPEngagementResponse
 import com.liveperson.monitoring.sdk.responses.LPSdeResponse
+import com.liveperson.sample.app.R
 import com.liveperson.sample.app.databinding.ActivityMonitoringBinding
 import com.liveperson.sample.app.utils.SampleAppStorage
+import com.liveperson.sample.app.utils.applyInsets
 import org.json.JSONArray
 import org.json.JSONException
 
-class MonitoringActivity : AppCompatActivity() {
+class MonitoringActivity : BaseActivity() {
 
     companion object {
         private const val TAG = "MonitoringActivity"
@@ -44,18 +48,7 @@ class MonitoringActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMonitoringBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Buttons
-        val getEngagementButton = findViewById<Button>(R.id.get_engagement_button)
-        val sendSdeButton = findViewById<Button>(R.id.send_sde_button)
-        val openMessagingButton = findViewById<Button>(R.id.open_messaging_button)
-
-        // EditTexts
-        val consumerIdEditText = findViewById<EditText>(R.id.consumer_id_edit_text)
-        val pageIdEditText = findViewById<EditText>(R.id.page_id_edit_text)
-
-        // TextViews
-        val sdkVersionTextView = findViewById<TextView>(R.id.sdk_version_text_view)
+        applyInsets()
 
         entryPoinstsEditText = findViewById(R.id.entry_points_edit_text)
         engagementAttributesEditText = findViewById(R.id.engagement_attributes_edit_text)
@@ -77,7 +70,7 @@ class MonitoringActivity : AppCompatActivity() {
         binding.pageIdEditText.setText(SampleAppStorage.getInstance(this).pageId)
 
         /////////////// Get Engagement ////////////////////////////
-        getEngagementButton.setOnClickListener {
+        binding.getEngagementButton.setOnClickListener {
 
             showProgressBar()
             try {
@@ -94,7 +87,7 @@ class MonitoringActivity : AppCompatActivity() {
 
                         // Store the received campaignId, engagementId, sessionId and visitorId as the current ones. This is used to send them to the Messaging TestApp
                         val engagementList = lpEngagementResponse.engagementDetailsList
-                        if(!engagementList.isNullOrEmpty()) {
+                        if(engagementList != null && engagementList.isNotEmpty()) {
                             // For demo we display the first engagement only
                             currentCampaignId = engagementList[0].campaignId
                             currentEngagementId = engagementList[0].engagementId
@@ -135,7 +128,7 @@ class MonitoringActivity : AppCompatActivity() {
                 val consumerIdFromUI = binding.consumerIdEditText.text.toString()
 
                 SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdFromUI
-                SampleAppStorage.getInstance(this@MonitoringActivity).pageId = pageIdEditText.text.toString()
+                SampleAppStorage.getInstance(this@MonitoringActivity).pageId = binding.pageIdEditText.text.toString()
 
                 val identity = LPMonitoringIdentity(consumerIdFromUI)
 

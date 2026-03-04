@@ -1,15 +1,16 @@
 package com.liveperson.sample.app.utils;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.widget.Button;
+
+import androidx.annotation.Nullable;
 
 import com.liveperson.infra.BadArgumentException;
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.auth.LPAuthenticationType;
-import com.liveperson.sample.app.FragmentContainerActivity;
-import com.liveperson.sample.app.MessagingActivity;
+import com.liveperson.sample.app.activities.FragmentContainerActivity;
+import com.liveperson.sample.app.activities.MessagingActivity;
 import com.liveperson.sample.app.push.PushRegistration;
 
 /**
