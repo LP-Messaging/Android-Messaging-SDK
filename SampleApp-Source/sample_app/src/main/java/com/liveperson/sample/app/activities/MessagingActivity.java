@@ -1,6 +1,7 @@
-package com.liveperson.sample.app;
+package com.liveperson.sample.app.activities;
 
-import android.app.Notification;
+import static com.liveperson.sample.app.utils.InsetsUtilsKt.applyInsets;
+
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
@@ -34,6 +35,8 @@ import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
+import com.liveperson.sample.app.MainApplication;
+import com.liveperson.sample.app.R;
 import com.liveperson.sample.app.databinding.ActivityMessagingBinding;
 import com.liveperson.sample.app.notification.NotificationUI;
 import com.liveperson.sample.app.proactive.PendingProactiveMessagesActivity;
@@ -52,7 +55,7 @@ import java.util.Locale;
  * <p>
  * The main activity of the sample app
  */
-public class MessagingActivity extends AppCompatActivity {
+public class MessagingActivity extends BaseActivity {
 
 	private static final String TAG = MessagingActivity.class.getSimpleName();
 
@@ -71,6 +74,7 @@ public class MessagingActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		binding = ActivityMessagingBinding.inflate(getLayoutInflater());
 		setContentView(binding.getRoot());
+		applyInsets(this);
 
 		initSampleAppViews();
 		initOpenConversationButton();
@@ -117,7 +121,7 @@ public class MessagingActivity extends AppCompatActivity {
 		binding.pendingPRMSGButton.setOnClickListener(v -> {
 			storeData();
 			startActivity(new Intent(this, PendingProactiveMessagesActivity.class));
-		});
+        });
 
 		updateTime();
 		initLocaleSpinner();
@@ -277,6 +281,8 @@ public class MessagingActivity extends AppCompatActivity {
 	 * Calling to "showConversation" API
 	 */
 	private void openActivity() {
+		MainApplication.getInstance().unregisterToLivePersonCallbacks();
+		MainApplication.getInstance().registerToLivePersonEvents();
 		if (isFromPush) {
 			LivePerson.setPushNotificationTapped(notificationId);
 			isFromPush = false;
@@ -298,10 +304,11 @@ public class MessagingActivity extends AppCompatActivity {
 		LivePerson.setUserProfile(consumerProfile);
 
 		//Constructing the notification builder for the upload/download foreground service and passing it to the SDK.
-		Notification.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(getApplicationContext());
-		Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
+		NotificationCompat.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(getApplicationContext());
+		NotificationCompat.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
 		LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
 		LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
+
 	}
 
 	@SuppressWarnings("unused")

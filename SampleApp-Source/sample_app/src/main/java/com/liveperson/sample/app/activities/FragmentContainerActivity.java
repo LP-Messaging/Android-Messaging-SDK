@@ -1,18 +1,13 @@
-package com.liveperson.sample.app;
+package com.liveperson.sample.app.activities;
 
-import android.app.Notification;
+import static com.liveperson.sample.app.utils.InsetsUtilsKt.applyInsets;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -25,6 +20,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.ICallback;
@@ -36,6 +36,8 @@ import com.liveperson.infra.model.MessageOption;
 import com.liveperson.messaging.hybrid.commands.exceptions.HybridSDKException;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
+import com.liveperson.sample.app.MainApplication;
+import com.liveperson.sample.app.R;
 import com.liveperson.sample.app.dialogs.DynamicWelcomeMessageDialog;
 import com.liveperson.sample.app.notification.NotificationUI;
 import com.liveperson.sample.app.utils.SampleAppStorage;
@@ -51,7 +53,7 @@ import kotlin.Unit;
  *
  * Used as an example of how to use SDK "Fragment mode"
  */
-public class FragmentContainerActivity extends AppCompatActivity {
+public class FragmentContainerActivity extends BaseActivity {
 
     private static final String TAG = FragmentContainerActivity.class.getSimpleName();
     private static final String LIVEPERSON_FRAGMENT = "liveperson_fragment";
@@ -73,6 +75,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
+        applyInsets(this);
         if (savedInstanceState == null) {
             mIsReadonlyMode = isReadOnly();
         } else {
@@ -90,24 +93,25 @@ public class FragmentContainerActivity extends AppCompatActivity {
                     String messageId = getIntent().getStringExtra(NotificationUI.NOTIFICATION_MESSAGE_ID);
                     LivePerson.setPushNotificationTapped(messageId);
                 }
-
+                MainApplication.getInstance().unregisterToLivePersonEvents();
+                MainApplication.getInstance().registerToLivePersonCallbacks();
                 runOnUiThread(() -> initFragment());
-                setCallBack();
+
                 SampleAppUtils.handlePusherRegistration(FragmentContainerActivity.this);
                 String firstName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getFirstName();
                 String lastName = SampleAppStorage.getInstance(FragmentContainerActivity.this).getLastName();
                 String phoneNumber = SampleAppStorage.getInstance(FragmentContainerActivity.this).getPhoneNumber();
 
-                ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
-                        .setFirstName(firstName)
-                        .setLastName(lastName)
-                        .setPhoneNumber(phoneNumber)
-                        .build();
+				ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
+						.setFirstName(firstName)
+						.setLastName(lastName)
+						.setPhoneNumber(phoneNumber)
+						.build();
                 LivePerson.setUserProfile(consumerProfile);
 
                 //Constructing the notification builder for the upload/download foreground service and passing it to the SDK.
-                Notification.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(getApplicationContext());
-                Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
+                NotificationCompat.Builder uploadBuilder = NotificationUI.createUploadNotificationBuilder(getApplicationContext());
+                NotificationCompat.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
                 LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
                 LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
             }
@@ -184,6 +188,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        MainApplication.getInstance().unregisterToLivePersonCallbacks();
         if (mChangeReadOnlyModeSwitch != null) {
             mChangeReadOnlyModeSwitch.setOnCheckedChangeListener(null);
         }
@@ -216,44 +221,44 @@ public class FragmentContainerActivity extends AppCompatActivity {
         mConversationFragment = (ConversationFragment) getSupportFragmentManager().findFragmentByTag(LIVEPERSON_FRAGMENT);
         Log.d(TAG, "initFragment. mConversationFragment = "+ mConversationFragment);
         if (mConversationFragment == null) {
-            CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
+			CampaignInfo campaignInfo = SampleAppUtils.getCampaignInfo(this);
             ConversationViewParams params = new ConversationViewParams().setCampaignInfo(campaignInfo).setReadOnlyMode(isReadOnly());
 //            setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
             mConversationFragment = (ConversationFragment) LivePerson.getConversationFragment(SampleAppUtils.createLPAuthParams(this), params);
 
             if (isValidState()) {
 
-                // Pending intent for image foreground service
-                Intent notificationIntent = new Intent(this, FragmentContainerActivity.class);
-                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				// Pending intent for image foreground service
+				Intent notificationIntent = new Intent(this, FragmentContainerActivity.class);
+				notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 int intentFlags = 0;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     intentFlags = PendingIntent.FLAG_IMMUTABLE;
                 }
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, intentFlags);
-                LivePerson.setImageServicePendingIntent(pendingIntent);
+				PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, intentFlags);
+				LivePerson.setImageServicePendingIntent(pendingIntent);
 
-                // Notification builder for image upload foreground service
-                Notification.Builder uploadBuilder = 	new Notification.Builder(this.getApplicationContext());
-                Notification.Builder downloadBuilder = 	new Notification.Builder(this.getApplicationContext());
-                uploadBuilder.setContentTitle("Uploading image")
-                        .setSmallIcon(android.R.drawable.arrow_up_float)
-                        .setContentIntent(pendingIntent)
-                        .setProgress(0, 0, true);
+				// Notification builder for image upload foreground service
+                NotificationCompat.Builder uploadBuilder = new NotificationCompat.Builder(this.getApplicationContext());
+                NotificationCompat.Builder downloadBuilder = new NotificationCompat.Builder(this.getApplicationContext());
+				uploadBuilder.setContentTitle("Uploading image")
+						.setSmallIcon(android.R.drawable.arrow_up_float)
+						.setContentIntent(pendingIntent)
+						.setProgress(0, 0, true);
 
-                downloadBuilder.setContentTitle("Downloading image")
-                        .setSmallIcon(android.R.drawable.arrow_down_float)
-                        .setContentIntent(pendingIntent)
-                        .setProgress(0, 0, true);
+				downloadBuilder.setContentTitle("Downloading image")
+						.setSmallIcon(android.R.drawable.arrow_down_float)
+						.setContentIntent(pendingIntent)
+						.setProgress(0, 0, true);
 
-                LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
-                LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
+				LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
+				LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
 
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.add(R.id.custom_fragment_container, mConversationFragment, LIVEPERSON_FRAGMENT).commitAllowingStateLoss();
             }
         }else{
-            attachFragment();
+             attachFragment();
         }
     }
 
@@ -292,11 +297,6 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
-    private void setCallBack() {
-        //register via callback, also available to listen via BroadCastReceiver in Main Application
-        MainApplication.getInstance().registerToLivePersonCallbacks();
-    }
-
     private void showWelcomeMessageSettings() {
         String account = SampleAppStorage.getInstance(this).getAccount();
         DynamicWelcomeMessageDialog dialog = DynamicWelcomeMessageDialog.newInstance(account);
@@ -325,16 +325,6 @@ public class FragmentContainerActivity extends AppCompatActivity {
             return true;
         } else {
             return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_WELCOME_MESSAGE_DIALOG);
-        if (fragment != null) {
-            super.onBackPressed();
-        } else if (mConversationFragment == null || !mConversationFragment.onBackPressed()) {
-            super.onBackPressed();
         }
     }
 

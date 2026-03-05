@@ -98,22 +98,6 @@ public class SampleAppStorage {
         mDefaultSharedPreferences.edit().putString(AUTH_CODE, authCode).apply();
     }
 
-    public void setCodeVerifier(String code_verifier) {
-        mDefaultSharedPreferences.edit().putString(CODE_VERIFIER, code_verifier).apply();
-    }
-
-    public String getCodeVerifier() {
-        return mDefaultSharedPreferences.getString(CODE_VERIFIER, null);
-    }
-
-    public void setPkceEnabled(boolean isChecked) {
-        mDefaultSharedPreferences.edit().putBoolean(PKCE_ENABLED, isChecked).apply();
-    }
-
-    public boolean isPkceEnabled() {
-        return mDefaultSharedPreferences.getBoolean(PKCE_ENABLED, false);
-    }
-
     public void setPublicKey(String publicKey) {
         mDefaultSharedPreferences.edit().putString(PUBLIC_KEY, publicKey).apply();
     }
@@ -220,7 +204,7 @@ public class SampleAppStorage {
 		mInteractionContextId = interactionContextId;
 	}
 
-    public void setPerformStepUpAuthentication(boolean enable) {
+	public void setPerformStepUpAuthentication(boolean enable) {
         mDefaultSharedPreferences.edit().putBoolean(PERFORM_STEP_UP_AUTHENTICATION, enable).apply();
     }
 

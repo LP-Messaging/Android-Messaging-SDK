@@ -1,7 +1,7 @@
 package com.liveperson.sample.app.notification;
 
+import android.Manifest;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -9,20 +9,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.text.TextUtils;
 
-import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationChannelCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
-import com.liveperson.sample.app.MessagingActivity;
 import com.liveperson.sample.app.R;
-import com.liveperson.sample.app.push.PushUtils;
+import com.liveperson.sample.app.activities.MessagingActivity;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK *****
@@ -39,62 +40,68 @@ public class NotificationUI {
     private static final String CHANNEL_PUSH_NOTIFICATION_ID = "channel_push_notification";
     public static final String NOTIFICATION_MESSAGE_ID = "notification_message_id";
 
+    public static final int SAMMARY_NOTIFICATION_ID = 12342144;
 
-	public static void showPushNotification(Context ctx, PushMessage pushMessage) {
-        Notification.Builder builder = createNotificationBuilder(ctx, CHANNEL_PUSH_NOTIFICATION_ID, "Push Notification", true);
 
-        builder.setContentIntent(getPendingIntent(ctx, pushMessage.getPushMessageId())).
-            setContentTitle(pushMessage.getMessage()).
-            setAutoCancel(true).
-            setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS).
-            setSmallIcon(R.mipmap.ic_launcher).
-            setNumber(pushMessage.getCurrentUnreadMessagesCounter()).
-            setStyle(new Notification.InboxStyle()
+    public static void showPushNotification(Context ctx, PushMessage pushMessage) {
+        NotificationCompat.Builder builder = createNotificationBuilder(ctx, CHANNEL_PUSH_NOTIFICATION_ID, "Push Notification", true);
 
-                    .addLine(TextUtils.isEmpty(pushMessage.getTitle()) ? "" : pushMessage.getMessage())
-                    .addLine(pushMessage.getFrom())
-                    .addLine(pushMessage.getBrandId())
-                    .addLine(pushMessage.getConversationId())
-                    .addLine(pushMessage.getBackendService())
-                    .addLine(pushMessage.getCollapseKey())
-                    .addLine("Unread messages : " + LivePerson.getNumUnreadMessages(pushMessage.getBrandId()))
+        builder.setContentIntent(getPendingIntent(ctx, pushMessage.getPushMessageId()))
+                .setContentTitle(pushMessage.getMessage())
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setTimeoutAfter(pushMessage.getLookBackPeriod())
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .addLine(TextUtils.isEmpty(pushMessage.getTitle()) ? pushMessage.getMessage() : pushMessage.getTitle())
+                        .addLine(pushMessage.getFrom())
+                        .addLine(pushMessage.getBrandId())
+                        .addLine(pushMessage.getConversationId())
+                        .addLine(pushMessage.getBackendService())
+                        .addLine(pushMessage.getCollapseKey())
+                        .addLine("id: " + pushMessage.getPushMessageId())
+                )
+                .setGroup(pushMessage.getConversationId());
 
-            );
+        int unreadMessages = pushMessage.getCurrentUnreadMessagesCounter();
+        Notification summaryNotification = new NotificationCompat.Builder(ctx, CHANNEL_PUSH_NOTIFICATION_ID)
+                .setContentTitle("You have " + unreadMessages + " unread messages")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setGroup(pushMessage.getConversationId())
+                .setGroupSummary(true)
+                .setNumber(unreadMessages)
+                .setOnlyAlertOnce(true)
+                .build();
 
         // If payload contains title and message, set title as contentTitle
         if (!TextUtils.isEmpty(pushMessage.getTitle())) {
-            builder.setContentTitle(pushMessage.getTitle()).
-                    setContentText(pushMessage.getMessage());
+            builder.setContentTitle(pushMessage.getTitle()).setContentText(pushMessage.getMessage());
         }
 
-		if (Build.VERSION.SDK_INT >= 21) {
-            builder = builder.
-                    setCategory(Notification.CATEGORY_MESSAGE).
-                    setPriority(Notification.PRIORITY_HIGH);
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            int id = UUID.randomUUID().hashCode();
+            NotificationManagerCompat manager = NotificationManagerCompat.from(ctx);
+            manager.notify(id, builder.build());
+            manager.notify(SAMMARY_NOTIFICATION_ID, summaryNotification);
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setTimeoutAfter(pushMessage.getLookBackPeriod());
-        }
-
-        getNotificationManager(ctx).notify(PUSH_NOTIFICATION_ID, builder.build());
     }
 
-    public static Notification.Builder createUploadNotificationBuilder(Context ctx) {
+    public static NotificationCompat.Builder createUploadNotificationBuilder(Context ctx) {
         return createServiceNotificationBuilder(ctx, "Uploading image", android.R.drawable.arrow_up_float);
     }
 
-    public static Notification.Builder createDownloadNotificationBuilder(Context ctx) {
+    public static NotificationCompat.Builder createDownloadNotificationBuilder(Context ctx) {
         return createServiceNotificationBuilder(ctx, "Downloading image", android.R.drawable.arrow_down_float);
     }
 
     public static void hideNotification(Context ctx){
-        getNotificationManager(ctx).cancel(PUSH_NOTIFICATION_ID);
-
+        NotificationManagerCompat.from(ctx).cancel(PUSH_NOTIFICATION_ID);
     }
 
-    private static Notification.Builder createServiceNotificationBuilder(Context ctx, String contentTitle, int smallIcon) {
-        Notification.Builder notificationBuilder = createNotificationBuilder(ctx, CHANNEL_SERVICE_NOTIFICATION_ID, "Foreground Service", false);
+    private static NotificationCompat.Builder createServiceNotificationBuilder(Context ctx, String contentTitle, int smallIcon) {
+        NotificationCompat.Builder notificationBuilder = createNotificationBuilder(ctx, CHANNEL_SERVICE_NOTIFICATION_ID, "Foreground Service", false);
 
         notificationBuilder
                 .setContentIntent(getPendingIntent(ctx, null))
@@ -108,29 +115,34 @@ public class NotificationUI {
     /**
      * Create notification builder according to platform level.
      */
-    private static Notification.Builder createNotificationBuilder(Context ctx, String channelId, String channelName, boolean isHighImportance) {
-        Notification.Builder builder;
-        if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
-            builder = new Notification.Builder(ctx);
-        } else {
-            //Create a channel for the notification.
-            createNotificationChannel(ctx, channelId, channelName, isHighImportance);
-            builder = new Notification.Builder(ctx, channelId);
-        }
-
-        return builder;
+    private static NotificationCompat.Builder createNotificationBuilder(Context ctx, String channelId, String channelName, boolean isHighImportance) {
+        createNotificationChannel(ctx, channelId, channelName, isHighImportance);
+        return new NotificationCompat.Builder(ctx, channelId);
     }
 
     /**
      * Creates a notification channel with the given parameters.
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static void createNotificationChannel(Context context, String channelId, String channelName, boolean isHighImportance) {
-        NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-        if (isHighImportance) {
-            notificationChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
-        }
-        getNotificationManager(context).createNotificationChannel(notificationChannel);
+    /**
+     * Creates a notification channel with the given parameters.
+     */
+    private static void createNotificationChannel(
+            Context context,
+            String channelId,
+            String channelName,
+            boolean isHighImportance
+    ) {
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+        int importance = isHighImportance
+                ? NotificationManagerCompat.IMPORTANCE_HIGH
+                : NotificationManagerCompat.IMPORTANCE_DEFAULT;
+        NotificationChannelCompat notificationChannel;
+        notificationChannel = new NotificationChannelCompat.Builder(channelId, importance)
+                .setName(channelName)
+                .setVibrationEnabled(isHighImportance)
+                .setShowBadge(true)
+                .build();
+        manager.createNotificationChannel(notificationChannel);
     }
 
     private static NotificationManager getNotificationManager(Context ctx) {
@@ -144,13 +156,7 @@ public class NotificationUI {
         showIntent.putExtra(NOTIFICATION_MESSAGE_ID, pushMessageId);
 
         int intentFlags;
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
-            // Workaround for KitKat notification action Pending Intent fails after application re-install
-            intentFlags = PendingIntent.FLAG_ONE_SHOT;
-        } else {
-            intentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
-        }
-
+        intentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             intentFlags |= PendingIntent.FLAG_IMMUTABLE;
         }
