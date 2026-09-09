@@ -15,6 +15,16 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.preference.Preference
+-keep public class * extends androidx.fragment.app.Fragment
+-keep public class * extends androidx.fragment.app.DialogFragment
+-keep public class * extends android.app.Fragment
+
 -dontwarn java.nio.file.*
 
 # ------------------ rules for OkHttp -------------------
@@ -24,6 +34,7 @@
 -dontwarn javax.annotation.**
 
 # A resource is loaded with a relative path so the package of this class must be preserved.
+#noinspection ShrinkerUnresolvedReference
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 # Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
@@ -39,7 +50,17 @@
     final javax.net.ssl.SSLSocketFactory delegate;
 }
 
--keepclasseswithmembers class com.liveperson.infra.InitLivePersonProperties
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE
+
+
 -keepclassmembers class **.R$* { public static <fields>; }
 -keep public class * extends androidx.fragment.app.Fragment
 -keep public class * extends android.app.Activity
