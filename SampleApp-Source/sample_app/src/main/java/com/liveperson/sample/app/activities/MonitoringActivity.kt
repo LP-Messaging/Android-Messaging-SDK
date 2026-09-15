@@ -102,7 +102,7 @@ class MonitoringActivity : BaseActivity() {
 
                     }
 
-                    override fun onError(errorType: MonitoringErrorType, exception: Exception?) {
+                    override fun onError(errorType: MonitoringErrorType, exception: Exception) {
                         hideProgressBar()
                         updateResult("getEngagement failed. ${errorType.name}, ${exception?.message ?: ""}")
                     }
@@ -139,7 +139,7 @@ class MonitoringActivity : BaseActivity() {
                         binding.pageIdEditText.setText(lpSdeResponse.pageId)
                     }
 
-                    override fun onError(errorType: MonitoringErrorType, exception: Exception?) {
+                    override fun onError(errorType: MonitoringErrorType, exception: Exception) {
                         hideProgressBar()
                         updateResult("sendSde failed. ${errorType.name}, ${exception?.message ?: ""}")
                     }
